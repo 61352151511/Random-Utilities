@@ -1,0 +1,21 @@
+[
+{
+  "modid": "RandomUtilities",
+  "name": "Random Utilities",
+  "description": "Adds miscellaneous useful items.",
+  "version": "1.1.0",
+  "mcversion": "1.8",
+  "url": "https://github.com/61352151511/Random-Utilities",
+  "updateUrl": "",
+  "authorList": [
+    "Six-One-Three"
+  ],
+  "credits": "Six-One-Three",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
