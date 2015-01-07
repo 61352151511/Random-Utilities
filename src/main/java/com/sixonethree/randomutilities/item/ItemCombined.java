@@ -105,11 +105,9 @@ public class ItemCombined extends ItemBase {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (stack.getItemDamage() == 0) { // LUNCHBOX
-			return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(stack.hasTagCompound() ? stack.getTagCompound().hasKey("Color") ? stack.getTagCompound().getInteger("Color") : 16 : 16);
-		} else { // HEART CANISTER
-			return pass == 0 ? 0xFFFFFF : 0x00FFFF;
-		}
+		if (pass == 1) return 0x00FFFF;
+		if (pass == 2) return ColorLogic.getColorFromMeta(stack.hasTagCompound() ? stack.getTagCompound().hasKey("Color") ? stack.getTagCompound().getInteger("Color") : 16 : 16);
+		return 0xFFFFFF;
 	}
 	
 	public float getMaxStorage(ItemStack stack, String type) {

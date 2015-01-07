@@ -2,8 +2,6 @@ package com.sixonethree.randomutilities;
 
 public class TODO {
 	//TODO Squash RecipesCombin******** into one file
-	//TODO Fix combined.png D: I can't believe I messed up
-	//TODO combined_overlay1 (heartCanister)
-	//TODO combined_overlay2 (lunchbox)
-	//TODO Color multiplier for combined
+	//TODO Automatic health modifying should only take health if your max health is more than 2
+	//TODO Deactivate automatic items with shift + right click
 }

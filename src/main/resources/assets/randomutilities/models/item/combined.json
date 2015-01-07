@@ -1,7 +1,9 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "randomutilities:items/combined"
+        "layer0": "randomutilities:items/combined",
+        "layer1": "randomutilities:items/combined_overlay1",
+        "layer2": "randomutilities:items/combined_overlay2"
     },
     "display": {
         "thirdperson": {
