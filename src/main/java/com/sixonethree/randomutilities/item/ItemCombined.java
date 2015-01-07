@@ -2,7 +2,6 @@ package com.sixonethree.randomutilities.item;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -102,10 +101,6 @@ public class ItemCombined extends ItemBase {
 				player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
 				stack.getTagCompound().setFloat("Food Stored", StoredFood - FoodToGive);
 			}
-			
-			/* TEMP FIX */
-			
-			stack.setItemDamage(getTicksExisted() % 40 < 20 ? 0 : 1);
 		}
 	}
 	
@@ -115,10 +110,6 @@ public class ItemCombined extends ItemBase {
 		} else { // HEART CANISTER
 			return pass == 0 ? 0xFFFFFF : 0x00FFFF;
 		}
-	}
-	
-	private int getTicksExisted() {
-		return Minecraft.getMinecraft().thePlayer.ticksExisted;
 	}
 	
 	public float getMaxStorage(ItemStack stack, String type) {

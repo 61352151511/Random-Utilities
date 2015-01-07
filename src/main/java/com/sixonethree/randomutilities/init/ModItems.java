@@ -26,7 +26,6 @@ public class ModItems {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(heartCanister, 1, new ModelResourceLocation("randomutilities:heartCanister", "inventory"));
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(heartCanister, 2, new ModelResourceLocation("randomutilities:heartCanister", "inventory"));
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(heartCanister, 3, new ModelResourceLocation("randomutilities:heartCanister", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(combined, 0, new ModelResourceLocation("randomutilities:lunchbox", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(combined, 1, new ModelResourceLocation("randomutilities:heartCanister", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(combined, 0, new ModelResourceLocation("randomutilities:combined", "inventory"));
 	}
 }
