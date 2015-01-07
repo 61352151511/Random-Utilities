@@ -1,0 +1,15 @@
+/.classpath
+/.project
+/.settings/
+/.gradle/
+/.gitmodules
+/asm/
+/bin/
+/build/
+/config/
+/crash-reports/
+/logs/
+/mods/
+/saves/
+/options.txt
+/usernamecache.json
