@@ -12,7 +12,7 @@ public class CommandDepth extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		Integer Depth = doubleToInt(player.posY) - 63;
 		outputMessage(player, (Depth > 0 ? "abovesea" : (Depth < 0 ? "belowsea" : "sealevel")), true, true, (Depth > 0 ? Depth : Depth < 0 ? (-Depth) : null));
 	}

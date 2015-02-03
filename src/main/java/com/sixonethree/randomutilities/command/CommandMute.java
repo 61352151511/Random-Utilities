@@ -16,7 +16,7 @@ public class CommandMute extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
 			EntityPlayer RequestedPlayer = getPlayer(sender, args[0]);
 			boolean Result = MutedPlayers.Toggle(RequestedPlayer.getUniqueID());

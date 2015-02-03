@@ -13,7 +13,7 @@ public class CommandKillPlayer extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 	
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
 			getPlayer(sender, args[0]).attackEntityFrom(new DamageSourceCustom("pissedOffAdmin", getLocalBase() + "pissedoffadmin"), Float.MAX_VALUE);
 		} else {

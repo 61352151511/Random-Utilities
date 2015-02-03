@@ -16,7 +16,7 @@ public class CommandBack extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		EntityPlayerMP playermp = (EntityPlayerMP) player;
 		if (LastLocations.Get(playermp) != null) {
 			Location loc = LastLocations.Get(playermp);

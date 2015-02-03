@@ -12,7 +12,7 @@ public class CommandEnderChest extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		player.displayGUIChest(player.getInventoryEnderChest());
 	}
 }

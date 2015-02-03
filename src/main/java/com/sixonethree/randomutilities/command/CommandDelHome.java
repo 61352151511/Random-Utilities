@@ -19,7 +19,7 @@ public class CommandDelHome extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (args.length > 0) {
 			String RequestedHome = args[0];
 			if (HomePoint.getHome(player.getUniqueID().toString() + RequestedHome) != null) {

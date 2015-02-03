@@ -15,7 +15,7 @@ public class CommandSetHome extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (args.length > 0) {
 			String HomeName = args[0];
 			HomePoint.setHome((EntityPlayerMP) player, HomeName);

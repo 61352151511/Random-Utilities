@@ -12,7 +12,7 @@ public class CommandPvP extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 
 	@Override
-	public void execute(ICommandSender sender, String[] args) {
+	public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length > 0) {
 			ServerInstance.setAllowPvp(args[0].equalsIgnoreCase("on") ? true : false);
 			messageAll((args[0].equalsIgnoreCase("on") ? "enabled" : "disabled"), true, true);

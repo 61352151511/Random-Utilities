@@ -20,7 +20,7 @@ public class CommandTpAccept extends ModCommandBase implements ICommand {
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (TeleportRequests.Pending(player.getUniqueID())) {
 			List playerlist = ConfigHandler.playerEntityList;
 			Boolean PlayerFound = false;

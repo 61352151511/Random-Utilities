@@ -15,7 +15,7 @@ public class CommandTpa extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) throws CommandException {
+	public void processCommandPlayer(EntityPlayer player, String[] args) throws CommandException {
 		if (args.length > 0) {
 			EntityPlayer RequestedPlayer = getPlayer(player, args[0]);
 			if (RequestedPlayer.equals(player)) {

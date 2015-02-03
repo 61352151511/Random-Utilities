@@ -14,7 +14,7 @@ public class CommandFeed extends ModCommandBase implements ICommand {
 	@Override public boolean isOpOnly() { return true; }
 
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
 			EntityPlayer RequestedPlayer = getPlayer(sender, args[0]);
 			RequestedPlayer.getFoodStats().addStats(20, 1);

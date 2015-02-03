@@ -12,7 +12,7 @@ public class CommandSuicide extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		player.attackEntityFrom(new DamageSourceCustom("suicide", "command.suicide.bidfarewell"), Float.MAX_VALUE);
 	}
 }

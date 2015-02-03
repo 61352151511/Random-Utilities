@@ -12,7 +12,7 @@ public class CommandMore extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (player.getCurrentEquippedItem() != null) {
 			player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().getMaxStackSize();
 		}

@@ -36,11 +36,11 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	/* One Liners */
 	
-	public String getLocalBase() { return "command." + getName().toLowerCase() + "."; }
+	public String getLocalBase() { return "command." + getCommandName().toLowerCase() + "."; }
 	
-	public void executeCommandPlayer(EntityPlayer player, String[] args) throws CommandException {}
-	public void executeCommandConsole(ICommandSender sender, String[] args) {}
-	public void executeCommandBlock(TileEntityCommandBlock block, String[] args) { executeCommandConsole((ICommandSender) block, args); }
+	public void processCommandPlayer(EntityPlayer player, String[] args) throws CommandException {}
+	public void processCommandConsole(ICommandSender sender, String[] args) {}
+	public void processCommandBlock(TileEntityCommandBlock block, String[] args) { processCommandConsole((ICommandSender) block, args); }
 	
 	public abstract boolean canConsoleUseCommand();
 	public abstract boolean isOpOnly();
@@ -60,7 +60,7 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	public static Integer doubleToInt(double d) { return Double.valueOf(d).intValue(); }
 	
-	@Override public String getName() { return this.getClass().getSimpleName().replace("Command", "").toLowerCase(); }
+	@Override public String getCommandName() { return this.getClass().getSimpleName().replace("Command", "").toLowerCase(); }
 	@Override public boolean isUsernameIndex(String[] par1ArrayOfStr, int par1) { return true; }
 	@Override public int compareTo(Object o) { return (o instanceof ICommand) ? this.compareTo((ICommand) o) : 0; }
 	
@@ -69,18 +69,18 @@ public abstract class ModCommandBase extends CommandBase {
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
 		if (getUsageType() == 0) { return getLocalBase() + "usage"; }
-		else { return "/" + getName(); }
+		else { return "/" + getCommandName(); }
 	}
 	
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
-		if (sender instanceof EntityPlayer) { executeCommandPlayer((EntityPlayer) sender, args); }
-		else if (sender instanceof TileEntityCommandBlock) { executeCommandBlock((TileEntityCommandBlock) sender, args); }
-		else { executeCommandConsole(sender, args); }
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+		if (sender instanceof EntityPlayer) { processCommandPlayer((EntityPlayer) sender, args); }
+		else if (sender instanceof TileEntityCommandBlock) { processCommandBlock((TileEntityCommandBlock) sender, args); }
+		else { processCommandConsole(sender, args); }
 	}
 	
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 		if (sender instanceof EntityPlayer) { return canPlayerUseCommand((EntityPlayer) sender); }
 		else if (sender instanceof TileEntityCommandBlock) { return canCommandBlockUseCommand((TileEntityCommandBlock) sender); }
 		else { return canConsoleUseCommand(); }

@@ -20,7 +20,7 @@ public class CommandExtinguish extends ModCommandBase implements ICommand {
 	@Override public List getAliases() { return Arrays.asList(new String[] {"ext"}); }
 	
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
 			EntityPlayer player = getPlayer(sender, args[0]);
 			player.extinguish();

@@ -17,7 +17,7 @@ public class CommandWhoIs extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 	
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
 			EntityPlayer player = getPlayer(sender, args[0]);
 			outputMessage(sender, "statson", true, true, ColorPlayer(player));

@@ -14,7 +14,7 @@ public class CommandBurn extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 	
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 1) {
 			EntityPlayer player = getPlayer(sender, args[0]);
 			Integer burnTime = parseInt(args[1]);

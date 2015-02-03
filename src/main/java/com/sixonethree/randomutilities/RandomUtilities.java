@@ -42,6 +42,6 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	
 	@Mod.EventHandler public void serverStarting(FMLServerStartingEvent event) {
 		proxy.init();
-		Commands.init(event, ConfigurationHandler.getEnabledCommands());
+		Commands.init(event);
 	}
 }

@@ -13,7 +13,7 @@ public class CommandPing extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		outputMessage(player, String.valueOf(((EntityPlayerMP) player).ping), false, false);
 	}
 }

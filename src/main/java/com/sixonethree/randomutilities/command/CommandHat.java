@@ -13,7 +13,7 @@ public class CommandHat extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		ItemStack is = player.getCurrentArmor(3);
 		ItemStack hat = player.getCurrentEquippedItem();
 		ItemStack oldhat = null;

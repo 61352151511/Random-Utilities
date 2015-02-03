@@ -1,8 +1,5 @@
 package com.sixonethree.randomutilities.init;
 
-import java.util.HashMap;
-
-import net.minecraft.command.ICommand;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import com.sixonethree.randomutilities.command.CommandAfk;
@@ -22,7 +19,6 @@ import com.sixonethree.randomutilities.command.CommandMute;
 import com.sixonethree.randomutilities.command.CommandPing;
 import com.sixonethree.randomutilities.command.CommandPvP;
 import com.sixonethree.randomutilities.command.CommandRepair;
-import com.sixonethree.randomutilities.command.CommandSetBiome;
 import com.sixonethree.randomutilities.command.CommandSetHome;
 import com.sixonethree.randomutilities.command.CommandSuicide;
 import com.sixonethree.randomutilities.command.CommandTpAccept;
@@ -31,41 +27,29 @@ import com.sixonethree.randomutilities.command.CommandTpa;
 import com.sixonethree.randomutilities.command.CommandWhoIs;
 
 public class Commands {
-	public static void init(FMLServerStartingEvent e, HashMap<String, Boolean> EnabledCommands) {
-		HashMap<String, ICommand> Commands = new HashMap<String, ICommand>() {
-			private static final long serialVersionUID = 868343478939626591L;
-			{
-				put("Afk", new CommandAfk());
-				put("Back", new CommandBack());
-				put("Burn", new CommandBurn());
-				put("DelHome", new CommandDelHome());
-				put("Depth", new CommandDepth());
-				put("EnderChest", new CommandEnderChest());
-				put("Extinguish", new CommandExtinguish());
-				put("Feed", new CommandFeed());
-				put("Hat", new CommandHat());
-				put("Heal", new CommandHeal());
-				put("Home", new CommandHome());
-				put("KillPlayer", new CommandKillPlayer());
-				put("More", new CommandMore());
-				put("Mute", new CommandMute());
-				put("Ping", new CommandPing());
-				put("PvP", new CommandPvP());
-				put("Repair", new CommandRepair());
-				put("SetBiome", new CommandSetBiome());
-				put("SetHome", new CommandSetHome());
-				put("Suicide", new CommandSuicide());
-				put("Tpa", new CommandTpa());
-				put("TpAccept", new CommandTpAccept());
-				put("TpDeny", new CommandTpDeny());
-				put("WhoIs", new CommandWhoIs());
-			}
-		};
-		
-		for (String CommandName : EnabledCommands.keySet()) {
-			if (EnabledCommands.get(CommandName).booleanValue() == true) {
-				e.registerServerCommand(Commands.get(CommandName));
-			}
-		}
+	public static void init(FMLServerStartingEvent e) {
+		e.registerServerCommand(new CommandAfk());
+		e.registerServerCommand(new CommandBack());
+		e.registerServerCommand(new CommandBurn());
+		e.registerServerCommand(new CommandDelHome());
+		e.registerServerCommand(new CommandDepth());
+		e.registerServerCommand(new CommandEnderChest());
+		e.registerServerCommand(new CommandExtinguish());
+		e.registerServerCommand(new CommandFeed());
+		e.registerServerCommand(new CommandHat());
+		e.registerServerCommand(new CommandHeal());
+		e.registerServerCommand(new CommandHome());
+		e.registerServerCommand(new CommandKillPlayer());
+		e.registerServerCommand(new CommandMore());
+		e.registerServerCommand(new CommandMute());
+		e.registerServerCommand(new CommandPing());
+		e.registerServerCommand(new CommandPvP());
+		e.registerServerCommand(new CommandRepair());
+		e.registerServerCommand(new CommandSetHome());
+		e.registerServerCommand(new CommandSuicide());
+		e.registerServerCommand(new CommandTpa());
+		e.registerServerCommand(new CommandTpAccept());
+		e.registerServerCommand(new CommandTpDeny());
+		e.registerServerCommand(new CommandWhoIs());
 	}
 }

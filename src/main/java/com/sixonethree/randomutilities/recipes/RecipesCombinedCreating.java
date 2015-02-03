@@ -36,7 +36,7 @@ public class RecipesCombinedCreating implements IRecipe {
 				}
 			}
 		}
-		if (l > 1 && h > 1) {
+		if (l >= 1 && h >= 1) {
 			float fs = 0F;
 			float mfs = 0F;
 			float hs = 0F;

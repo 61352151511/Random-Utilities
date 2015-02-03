@@ -13,7 +13,7 @@ public class CommandRepair extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return false; }
 	
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		ItemStack is = player.getCurrentEquippedItem();
 		if (is != null) {
 			if (is.getItem().isDamageable()) {

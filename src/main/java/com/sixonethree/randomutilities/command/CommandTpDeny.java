@@ -18,7 +18,7 @@ public class CommandTpDeny extends ModCommandBase implements ICommand {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void executeCommandPlayer(EntityPlayer player, String[] args) {
+	public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (TeleportRequests.Pending(player.getUniqueID())) {
 			outputMessage(player, "youdenied", true, true);
 			TeleportRequests.Remove(player.getUniqueID());

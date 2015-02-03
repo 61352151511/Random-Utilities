@@ -24,7 +24,7 @@ public class ChatEvents {
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;
 			if (MutedPlayers.isMuted(player.getUniqueID())) {
-				if (event.command.getName().equalsIgnoreCase("tell")) {
+				if (event.command.getCommandName().equalsIgnoreCase("tell")) {
 					event.setCanceled(true);
 				}
 			}
