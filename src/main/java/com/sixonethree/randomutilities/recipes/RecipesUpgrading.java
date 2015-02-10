@@ -1,16 +1,15 @@
 package com.sixonethree.randomutilities.recipes;
 
-import com.sixonethree.randomutilities.init.ModItems;
-import com.sixonethree.randomutilities.item.ItemHeartCanister;
-import com.sixonethree.randomutilities.item.ItemLunchbox;
-
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
+
+import com.sixonethree.randomutilities.init.ModItems;
+import com.sixonethree.randomutilities.item.ItemHeartCanister;
+import com.sixonethree.randomutilities.item.ItemLunchbox;
 
 public class RecipesUpgrading implements IRecipe {
 	
@@ -25,10 +24,10 @@ public class RecipesUpgrading implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (stack != null) {
-				if (u == 0 && stack.getItem() == ModItems.heartCanister && stack.getItemDamage() < 2) {
+				if (u == 0 && stack.getItem() == ModItems.heartCanister && stack.getCurrentDurability() < 2) {
 					u ++;
 					upgrade = stack;
-				} else if (u == 0 && stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == 0) {
+				} else if (u == 0 && stack.getItem() == ModItems.lunchbox && stack.getCurrentDurability() == 0) {
 					u ++;
 					upgrade = stack;
 				} else if (stack.getItem() == Items.nether_star) {
@@ -53,7 +52,7 @@ public class RecipesUpgrading implements IRecipe {
 			if (t == 1) mfs = upgrade.hasTagCompound() ? upgrade.getTagCompound().hasKey("Maximum Food Stored") ? upgrade.getTagCompound().getFloat("Maximum Food Stored") : ((ItemLunchbox) upgrade.getItem()).getMaxStorage(upgrade) : ((ItemLunchbox) upgrade.getItem()).getMaxStorage(upgrade);
 			if (t == 1 && c == -1) c = upgrade.hasTagCompound() ? upgrade.getTagCompound().hasKey("Color") ? upgrade.getTagCompound().getInteger("Color") : -1 : -1;
 			
-			this.result = new ItemStack(upgrade.getItem(), 1, t == 0 ? upgrade.getItemDamage() + 2 : 1);
+			this.result = new ItemStack(upgrade.getItem(), 1, t == 0 ? upgrade.getCurrentDurability() + 2 : 1);
 			NBTTagCompound tag = new NBTTagCompound();
 			if (t == 0) tag.setFloat("Health Stored", hs);
 			if (t == 0) tag.setFloat("Maximum Health Stored", mhs);
@@ -76,14 +75,5 @@ public class RecipesUpgrading implements IRecipe {
 	
 	public ItemStack getRecipeOutput() {
 		return this.result;
-	}
-	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
-		}
-		return retstack;
 	}
 }

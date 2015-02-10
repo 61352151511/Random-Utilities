@@ -1,6 +1,5 @@
 package com.sixonethree.randomutilities.command;
 
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +15,7 @@ public class CommandMute extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length > 0) {
 			EntityPlayer RequestedPlayer = getPlayer(sender, args[0]);
 			boolean Result = MutedPlayers.Toggle(RequestedPlayer.getUniqueID());

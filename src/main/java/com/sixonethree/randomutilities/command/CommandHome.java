@@ -8,7 +8,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
 
 import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 import com.sixonethree.randomutilities.utility.HomePoint;
@@ -50,7 +49,7 @@ public class CommandHome extends ModCommandBase implements ICommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
 		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 }

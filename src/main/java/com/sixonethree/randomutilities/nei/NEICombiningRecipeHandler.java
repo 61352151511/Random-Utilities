@@ -79,7 +79,7 @@ public class NEICombiningRecipeHandler extends TemplateRecipeHandler {
 	@Override public void loadCraftingRecipes(ItemStack result) {
 		for (ItemCombiningRecipe recipe : ItemCombiningRecipeRegistry.combiningRecipes) {
 			if (recipe.getResult() != null) {
-				if (Utilities.areItemStacksEqualIgnoreNBT(recipe.getResult(), result) && recipe.getResult().getItemDamage() == result.getItemDamage()) {
+				if (Utilities.areItemStacksEqualIgnoreNBT(recipe.getResult(), result) && recipe.getResult().getCurrentDurability() == result.getCurrentDurability()) {
 					arecipes.add(new CachedCombiningRecipe(recipe));
 				}
 			}
@@ -89,7 +89,7 @@ public class NEICombiningRecipeHandler extends TemplateRecipeHandler {
 	@Override public void loadUsageRecipes(ItemStack ingredient) {
 		for (ItemCombiningRecipe recipe : ItemCombiningRecipeRegistry.combiningRecipes) {
 			for (ItemStack stack : recipe.getIngredients()) {
-				if (Utilities.areItemStacksEqualIgnoreNBT(stack, ingredient) && stack.getItemDamage() == ingredient.getItemDamage()) {
+				if (Utilities.areItemStacksEqualIgnoreNBT(stack, ingredient) && stack.getCurrentDurability() == ingredient.getCurrentDurability()) {
 					arecipes.add(new CachedCombiningRecipe(recipe));
 					return;
 				}

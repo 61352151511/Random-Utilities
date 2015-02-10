@@ -2,16 +2,15 @@ package com.sixonethree.randomutilities.recipes;
 
 import java.util.ArrayList;
 
-import com.sixonethree.randomutilities.init.ModItems;
-import com.sixonethree.randomutilities.item.ItemHeartCanister;
-import com.sixonethree.randomutilities.item.ItemLunchbox;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
+
+import com.sixonethree.randomutilities.init.ModItems;
+import com.sixonethree.randomutilities.item.ItemHeartCanister;
+import com.sixonethree.randomutilities.item.ItemLunchbox;
 
 public class RecipesCombinedCreating implements IRecipe {
 	
@@ -25,10 +24,10 @@ public class RecipesCombinedCreating implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (stack != null) {
-				if (stack.getItem() == ModItems.heartCanister && stack.getItemDamage() == 3) {
+				if (stack.getItem() == ModItems.heartCanister && stack.getCurrentDurability() == 3) {
 					h ++;
 					s.add(stack);
-				} else if (stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == 1) {
+				} else if (stack.getItem() == ModItems.lunchbox && stack.getCurrentDurability() == 1) {
 					l ++;
 					s.add(stack);
 				} else {
@@ -75,14 +74,5 @@ public class RecipesCombinedCreating implements IRecipe {
 	
 	public ItemStack getRecipeOutput() {
 		return this.result;
-	}
-	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
-		}
-		return retstack;
 	}
 }

@@ -1,13 +1,5 @@
 package com.sixonethree.randomutilities;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-
 import com.sixonethree.randomutilities.handler.ConfigurationHandler;
 import com.sixonethree.randomutilities.init.Commands;
 import com.sixonethree.randomutilities.init.ModItems;
@@ -16,7 +8,15 @@ import com.sixonethree.randomutilities.proxy.IProxy;
 import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.LogHelper;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION) public class RandomUtilities {
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS) public class RandomUtilities {
 	@Mod.Instance(Reference.MOD_ID) public static RandomUtilities instance;
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY) public static IProxy proxy;
@@ -25,12 +25,12 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 		
+		ModItems.init();
 		LogHelper.info("Pre-Init Complete");
 	}
 	
 	@Mod.EventHandler public void init(FMLInitializationEvent event) {
 		proxy.init();
-		ModItems.init();
 		Recipes.init();
 		LogHelper.info("Init Complete");
 	}

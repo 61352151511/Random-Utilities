@@ -17,7 +17,7 @@ public class CommandRepair extends ModCommandBase implements ICommand {
 		ItemStack is = player.getCurrentEquippedItem();
 		if (is != null) {
 			if (is.getItem().isDamageable()) {
-				is.setItemDamage(0);
+				is.setMetadata(0);
 			}
 		}
 	}

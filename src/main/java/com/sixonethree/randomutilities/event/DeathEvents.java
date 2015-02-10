@@ -4,9 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DeathEvents {
 	@SubscribeEvent

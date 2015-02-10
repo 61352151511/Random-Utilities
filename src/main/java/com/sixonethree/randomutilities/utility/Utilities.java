@@ -16,7 +16,7 @@ public class Utilities {
 	public static boolean areItemStacksEqualIgnoreNBTUseMeta(ItemStack is1, ItemStack is2) {
 		if (is1 != null && is2 != null) {
 			if (is1.getItem() == is2.getItem()) {
-				if (is1.getItemDamage() == is2.getItemDamage()) { return true; }
+				if (is1.getCurrentDurability() == is2.getCurrentDurability()) { return true; }
 			}
 		}
 		return false;

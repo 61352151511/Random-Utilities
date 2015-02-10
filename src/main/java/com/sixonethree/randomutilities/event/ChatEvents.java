@@ -5,9 +5,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ChatEvents {
 	@SubscribeEvent

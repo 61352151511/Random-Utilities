@@ -7,12 +7,13 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
 import com.sixonethree.randomutilities.utility.HomePoint;
 import com.sixonethree.randomutilities.utility.SaveFile;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerEvents {
 	
@@ -26,7 +27,7 @@ public class PlayerEvents {
 		}
 	}
 	
-	private static IChatComponent ColorPlayer(EntityPlayer player) { return player.getDisplayName(); }
+	private static IChatComponent ColorPlayer(EntityPlayer player) { return player.getFormattedCommandSenderName(); }
 	
 	@SubscribeEvent
 	public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {

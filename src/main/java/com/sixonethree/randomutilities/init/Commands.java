@@ -1,7 +1,5 @@
 package com.sixonethree.randomutilities.init;
 
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-
 import com.sixonethree.randomutilities.command.CommandAfk;
 import com.sixonethree.randomutilities.command.CommandBack;
 import com.sixonethree.randomutilities.command.CommandBurn;
@@ -25,6 +23,8 @@ import com.sixonethree.randomutilities.command.CommandTpAccept;
 import com.sixonethree.randomutilities.command.CommandTpDeny;
 import com.sixonethree.randomutilities.command.CommandTpa;
 import com.sixonethree.randomutilities.command.CommandWhoIs;
+
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class Commands {
 	public static void init(FMLServerStartingEvent e) {

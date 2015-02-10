@@ -2,11 +2,7 @@ package com.sixonethree.randomutilities.command;
 
 import java.util.List;
 
-import com.sixonethree.randomutilities.utility.Location;
-import com.sixonethree.randomutilities.utility.TeleporterHome;
-
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ICommandSender;
@@ -16,13 +12,16 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import com.sixonethree.randomutilities.utility.Location;
+import com.sixonethree.randomutilities.utility.TeleporterHome;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public abstract class ModCommandBase extends CommandBase {
 	
@@ -38,7 +37,7 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	public String getLocalBase() { return "command." + getCommandName().toLowerCase() + "."; }
 	
-	public void processCommandPlayer(EntityPlayer player, String[] args) throws CommandException {}
+	public void processCommandPlayer(EntityPlayer player, String[] args) {}
 	public void processCommandConsole(ICommandSender sender, String[] args) {}
 	public void processCommandBlock(TileEntityCommandBlock block, String[] args) { processCommandConsole((ICommandSender) block, args); }
 	
@@ -50,19 +49,18 @@ public abstract class ModCommandBase extends CommandBase {
 	public boolean canCommandBlockUseCommand(TileEntityCommandBlock block) { return canConsoleUseCommand(); }
 	public boolean canPlayerUseCommand(EntityPlayer player) { return isOpOnly() ? checkOp(player) : true; }
 	
-	public static boolean checkOp(EntityPlayer player) {
-		return ConfigHandler.canSendCommands(((EntityPlayerMP) player).getGameProfile());
-	}
+	public static boolean checkOp(EntityPlayer player) { return ConfigHandler.canSendCommands(((EntityPlayerMP) player).getGameProfile()); }
 	
-	public static IChatComponent ColorPlayer(EntityPlayer player) { return player.getDisplayName(); }
-	public static IChatComponent ColorPlayer(ICommandSender sender) { return sender.getDisplayName(); }
-	public static IChatComponent ColorPlayer(EntityLivingBase entity) { return entity.getDisplayName(); }
+	public static IChatComponent ColorPlayer(EntityPlayer player) { return player.getFormattedCommandSenderName(); }
+	public static IChatComponent ColorPlayer(ICommandSender sender) { return sender.getFormattedCommandSenderName(); }
+	public static IChatComponent ColorPlayer(EntityLivingBase entity) { return entity.getFormattedCommandSenderName(); }
 	
 	public static Integer doubleToInt(double d) { return Double.valueOf(d).intValue(); }
 	
 	@Override public String getCommandName() { return this.getClass().getSimpleName().replace("Command", "").toLowerCase(); }
 	@Override public boolean isUsernameIndex(String[] par1ArrayOfStr, int par1) { return true; }
 	@Override public int compareTo(Object o) { return (o instanceof ICommand) ? this.compareTo((ICommand) o) : 0; }
+	
 	
 	/* Functions */
 	
@@ -73,7 +71,7 @@ public abstract class ModCommandBase extends CommandBase {
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) {
 		if (sender instanceof EntityPlayer) { processCommandPlayer((EntityPlayer) sender, args); }
 		else if (sender instanceof TileEntityCommandBlock) { processCommandBlock((TileEntityCommandBlock) sender, args); }
 		else { processCommandConsole(sender, args); }
@@ -88,7 +86,7 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
 		if (TabCompletesOnlinePlayers()) {
 			return args.length >= 1 ? getListOfStringsMatchingLastWord(args, ServerInstance.getAllUsernames()) : null;
 		}
@@ -130,7 +128,7 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	public static void TransferDimension(EntityPlayerMP player, Location loc) {
 		ConfigHandler.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.worldObj, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
-		player = ConfigHandler.getPlayerByUsername(player.getName());
+		player = ConfigHandler.getPlayerByUsername(player.getCommandSenderName());
 		if (player.dimension == 1) {
 			if (player.isEntityAlive()) {
 				WorldServer worldObj = ConfigHandler.getServerInstance().worldServerForDimension(loc.dimension);

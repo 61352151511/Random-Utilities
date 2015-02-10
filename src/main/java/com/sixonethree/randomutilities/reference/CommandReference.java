@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import com.sixonethree.randomutilities.utility.Location;
+
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class CommandReference {
 	public static class LastLocations {

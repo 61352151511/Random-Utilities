@@ -31,5 +31,6 @@ public class TeleporterHome extends Teleporter {
 		par1Entity.motionX = par1Entity.motionY = par1Entity.motionZ = 0.0D;
 	}
 	
-	@Override public void removeStalePortalLocations(long par1) {}
+	@Override
+	public void removeStalePortalLocations(long par1) {}
 }

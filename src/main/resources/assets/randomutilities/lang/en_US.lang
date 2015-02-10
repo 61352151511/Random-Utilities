@@ -1,3 +1,26 @@
+itemGroup.randomUtilities=Random Utilities
+
+item.randomutilities:heartCanister.name=Heart Canister
+item.randomutilities:heartCanister_auto.name=Automatic Heart Canister
+item.randomutilities:heartCanister_large.name=Large Heart Canister
+item.randomutilities:heartCanister_large_auto.name=Automatic Large Heart Canister
+
+item.randomutilities:lunchbox.name=Lunchbox
+item.randomutilities:lunchbox_auto.name=Automatic Lunchbox
+
+item.randomutilities:combined.name=Automatic Lunchbox & Heart Canister
+
+tooltip.heartcanister.stores=Stores health for later
+tooltip.heartcanister.auto=Auto-Drains/Fills
+tooltip.heartcanister.rclick=Right click to store hearts
+tooltip.heartcanister.rclick2=Shift-Right click to use hearts
+tooltip.heartcanister.stored=%s / %s Hearts Stored
+
+tooltip.lunchbox.stores=Stores food for later
+tooltip.lunchbox.auto=Automatically feeds you
+tooltip.lunchbox.fill=Combine with food to fill
+tooltip.lunchbox.stored=%s / %s Food Stored
+
 gui.randomutilities.text=Random Utilities
 
 command.afk.nowafk=%s is now AFK.
@@ -20,9 +43,9 @@ command.extinguish.usage=/extinguish [Player]
 command.extinguish.extinguished=You have been extinguished.
 command.extinguish.other=Extinguished player %s.
 
-command.feed.usage=/feed [Player]
-command.feed.otherfed=%s has been fed
-command.feed.fed=You have been fed
+command.feed.usage=/feed [Player].
+command.feed.otherfed=%s has been fed.
+command.feed.fed=You have been fed.
 
 command.heal.usage=/heal [Player]
 command.heal.healed=You have been healed.
@@ -79,26 +102,3 @@ command.whois.dimension=Dimension: %s
 homes.message.nohomecalled=You do not have a home called %s.
 homes.message.nohome=You have no homes
 homes.message.yourhomes=Your homes: %s
-
-item.randomutilities:lunchbox.name=Lunchbox
-item.randomutilities:lunchbox_auto.name=Automatic Lunchbox
-
-item.randomutilities:heartCanister.name=Heart Canister
-item.randomutilities:heartCanister_auto.name=Automatic Heart Canister
-item.randomutilities:heartCanister_large.name=Large Heart Canister
-item.randomutilities:heartCanister_large_auto.name=Automatic Large Heart Canister
-
-item.randomutilities:combined_lunchbox_heart_canister.name=Automatic Lunchbox & Heart Canister
-
-itemGroup.randomUtilities=Random Utilities
-
-tooltip.lunchbox.stores=Stores food for later.
-tooltip.lunchbox.fill=Add food in workbench.
-tooltip.lunchbox.stored=%s / %s Food.
-tooltip.lunchbox.auto=Automatically feeds you.
-
-tooltip.heartcanister.stores=Stores health for later.
-tooltip.heartcanister.auto=Auto-Drains/Fills.
-tooltip.heartcanister.rclick=Right click to store hearts.
-tooltip.heartcanister.rclick2=Shift-Right click to use hearts.
-tooltip.heartcanister.stored=%s / %s Hearts Stored.

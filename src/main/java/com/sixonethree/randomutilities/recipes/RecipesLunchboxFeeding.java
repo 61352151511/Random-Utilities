@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import com.sixonethree.randomutilities.init.ModItems;
 
@@ -36,7 +35,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 		}
 		if (l == 1 && f >= 1 && s != null) {
 			NBTTagCompound tag1, tag2;
-			this.result = new ItemStack(s.getItem(), 1, s.getItemDamage());
+			this.result = new ItemStack(s.getItem(), 1, s.getCurrentDurability());
 			if (!this.result.hasTagCompound()) this.result.setTagCompound(new NBTTagCompound());
 			tag1 = s.getTagCompound();
 			tag2 = this.result.getTagCompound();
@@ -81,14 +80,5 @@ public class RecipesLunchboxFeeding implements IRecipe {
 	
 	public ItemStack getRecipeOutput() {
 		return this.result;
-	}
-	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
-		}
-		return retstack;
-	}
+	}	
 }

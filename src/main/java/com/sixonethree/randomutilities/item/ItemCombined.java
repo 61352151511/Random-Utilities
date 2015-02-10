@@ -2,23 +2,29 @@ package com.sixonethree.randomutilities.item;
 
 import java.util.List;
 
+import morph.api.Api;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.sixonethree.randomutilities.client.ColorLogic;
 import com.sixonethree.randomutilities.utility.Utilities;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ItemCombined extends ItemBase {
+	public IIcon[] itemIcons = new IIcon[3];
+	
 	public ItemCombined() {
 		super();
 		setMaxStackSize(1);
-		setUnlocalizedName("combined_lunchbox_heart_canister");
+		setUnlocalizedName("combined");
 		setFull3D();
 	}
 	
@@ -60,54 +66,50 @@ public class ItemCombined extends ItemBase {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			
-			/* HEART CANISTER */
-			
-			float StoredHealth = stack.hasTagCompound() ? stack.getTagCompound().getFloat("Health Stored") : 0F;
-			float MaxStoredHealth = getMaxStorage(stack, "Maximum Health Stored");
-			float PlayerHealth = player.getHealth();
-			
-			if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-			
-			if (PlayerHealth < player.getMaxHealth() - 2F) {
-				float HealthToGive = (player.getMaxHealth() - 2F) - PlayerHealth;
-				if (HealthToGive > StoredHealth) {
-					HealthToGive = StoredHealth;
+			if (Api.morphProgress(player.getCommandSenderName(), false) == 1.0F) {
+				/* HEART CANISTER */
+				
+				float StoredHealth = stack.hasTagCompound() ? stack.getTagCompound().getFloat("Health Stored") : 0F;
+				float MaxStoredHealth = getMaxStorage(stack, "Maximum Health Stored");
+				float PlayerHealth = player.getHealth();
+				
+				if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
+				
+				if (PlayerHealth < player.getMaxHealth() - 2F) {
+					float HealthToGive = (player.getMaxHealth() - 2F) - PlayerHealth;
+					if (HealthToGive > StoredHealth) {
+						HealthToGive = StoredHealth;
+					}
+					player.setHealth(PlayerHealth + HealthToGive);
+					float SetTo = StoredHealth - HealthToGive;
+					stack.getTagCompound().setFloat("Health Stored", SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
+					stack.getTagCompound().setFloat("Max Health Stored", MaxStoredHealth);
 				}
-				player.setHealth(PlayerHealth + HealthToGive);
-				float SetTo = StoredHealth - HealthToGive;
-				stack.getTagCompound().setFloat("Health Stored", SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
-				stack.getTagCompound().setFloat("Max Health Stored", MaxStoredHealth);
-			}
-			if (PlayerHealth > player.getMaxHealth() - 2F) {
-				float HealthToTake = PlayerHealth - (player.getMaxHealth() - 2F);
-				if (StoredHealth + HealthToTake > MaxStoredHealth) {
-					HealthToTake = MaxStoredHealth - StoredHealth;
+				if (PlayerHealth > player.getMaxHealth() - 2F) {
+					float HealthToTake = PlayerHealth - (player.getMaxHealth() - 2F);
+					if (StoredHealth + HealthToTake > MaxStoredHealth) {
+						HealthToTake = MaxStoredHealth - StoredHealth;
+					}
+					player.setHealth(PlayerHealth - HealthToTake);
+					float SetTo = StoredHealth + HealthToTake;
+					stack.getTagCompound().setFloat("Health Stored", SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
+					stack.getTagCompound().setFloat("Max Health Stored", MaxStoredHealth);
 				}
-				player.setHealth(PlayerHealth - HealthToTake);
-				float SetTo = StoredHealth + HealthToTake;
-				stack.getTagCompound().setFloat("Health Stored", SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
-				stack.getTagCompound().setFloat("Max Health Stored", MaxStoredHealth);
-			}
-			
-			/* LUNCHBOX */
-			
-			int PlayerFood = player.getFoodStats().getFoodLevel();
-			if (PlayerFood < 20) {
-				int StoredFood = (int) Math.floor(stack.hasTagCompound() ? stack.getTagCompound().getFloat("Food Stored") : 0F);
-				int FoodToGive = 20 - PlayerFood;
-				if (FoodToGive > StoredFood) {
-					FoodToGive = StoredFood;
+				
+				/* LUNCHBOX */
+				
+				int PlayerFood = player.getFoodStats().getFoodLevel();
+				if (PlayerFood < 20) {
+					int StoredFood = (int) Math.floor(stack.hasTagCompound() ? stack.getTagCompound().getFloat("Food Stored") : 0F);
+					int FoodToGive = 20 - PlayerFood;
+					if (FoodToGive > StoredFood) {
+						FoodToGive = StoredFood;
+					}
+					player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
+					stack.getTagCompound().setFloat("Food Stored", StoredFood - FoodToGive);
 				}
-				player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
-				stack.getTagCompound().setFloat("Food Stored", StoredFood - FoodToGive);
 			}
 		}
-	}
-	
-	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (pass == 1) return 0x00FFFF;
-		if (pass == 2) return ColorLogic.getColorFromMeta(stack.hasTagCompound() ? stack.getTagCompound().hasKey("Color") ? stack.getTagCompound().getInteger("Color") : 16 : 16);
-		return 0xFFFFFF;
 	}
 	
 	public float getMaxStorage(ItemStack stack, String type) {
@@ -119,5 +121,33 @@ public class ItemCombined extends ItemBase {
 			return type == "Maximum Health Stored" ? 2000F : 200F;
 		}
 		return Maximum;
+	}
+	
+	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
+		if (pass == 1) return 0x00FFFF;
+		if (pass == 2) return ColorLogic.getColorFromMeta(stack.hasTagCompound() ? stack.getTagCompound().hasKey("Color") ? stack.getTagCompound().getInteger("Color") : 16 : 16);
+		return 0xFFFFFF;
+	}
+	
+	/* STUFF REMOVED IN 1.8 */
+	
+	@SideOnly(Side.CLIENT) public void registerIcons(IIconRegister register) {
+		String BaseName = getUnlocalizedName().substring(getUnlocalizedName().indexOf(".") + 1);
+		itemIcon = itemIcons[0];
+		itemIcons[0] = register.registerIcon(BaseName);
+		itemIcons[1] = register.registerIcon(BaseName + "_overlay1");
+		itemIcons[2] = register.registerIcon(BaseName + "_overlay2");
+	}
+	
+	@Override @SideOnly(Side.CLIENT) public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+	
+	@Override public int getRenderPasses(int meta) {
+		return 3;
+	}
+	
+	@Override public IIcon getIcon(ItemStack stack, int pass) {
+		return itemIcons[pass];
 	}
 }

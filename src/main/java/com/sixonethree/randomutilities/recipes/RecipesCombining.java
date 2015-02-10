@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import com.sixonethree.randomutilities.init.ModItems;
 import com.sixonethree.randomutilities.item.ItemHeartCanister;
@@ -26,14 +25,14 @@ public class RecipesCombining implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (stack != null) {
-				if ((m == -1 && stack.getItem() == ModItems.lunchbox) || (stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == m)) {
+				if ((m == -1 && stack.getItem() == ModItems.lunchbox) || (stack.getItem() == ModItems.lunchbox && stack.getCurrentDurability() == m)) {
 					l ++;
 					s.add(stack);
-					if (m == -1) m = (byte) stack.getItemDamage();
-				} else if ((m == -1 && stack.getItem() == ModItems.heartCanister) || (stack.getItem() == ModItems.heartCanister && stack.getItemDamage() == m)) {
+					if (m == -1) m = (byte) stack.getCurrentDurability();
+				} else if ((m == -1 && stack.getItem() == ModItems.heartCanister) || (stack.getItem() == ModItems.heartCanister && stack.getCurrentDurability() == m)) {
 					h ++;
 					s.add(stack);
-					if (m == -1) m = (byte) stack.getItemDamage();
+					if (m == -1) m = (byte) stack.getCurrentDurability();
 				} else {
 					return false;
 				}
@@ -56,7 +55,7 @@ public class RecipesCombining implements IRecipe {
 					mhs += stack.hasTagCompound() ? stack.getTagCompound().hasKey("Maximum Health Stored") ? stack.getTagCompound().getFloat("Maximum Health Stored") : ((ItemHeartCanister) stack.getItem()).getMaxStorage(stack) : ((ItemHeartCanister) stack.getItem()).getMaxStorage(stack);
 				}
 			}
-			this.result = new ItemStack(t == 0 ? ModItems.heartCanister : ModItems.lunchbox, 1, s.get(0).getItemDamage());
+			this.result = new ItemStack(t == 0 ? ModItems.heartCanister : ModItems.lunchbox, 1, s.get(0).getCurrentDurability());
 			NBTTagCompound tag = new NBTTagCompound();
 			if (t == 0) tag.setFloat("Health Stored", hs);
 			if (t == 0) tag.setFloat("Maximum Health Stored", mhs);
@@ -79,14 +78,5 @@ public class RecipesCombining implements IRecipe {
 	
 	public ItemStack getRecipeOutput() {
 		return this.result;
-	}
-	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
-		}
-		return retstack;
 	}
 }

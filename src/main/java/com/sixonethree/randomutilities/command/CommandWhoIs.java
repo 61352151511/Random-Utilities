@@ -1,6 +1,5 @@
 package com.sixonethree.randomutilities.command;
 
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +16,7 @@ public class CommandWhoIs extends ModCommandBase implements ICommand {
 	@Override public boolean TabCompletesOnlinePlayers() { return true; }
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length > 0) {
 			EntityPlayer player = getPlayer(sender, args[0]);
 			outputMessage(sender, "statson", true, true, ColorPlayer(player));

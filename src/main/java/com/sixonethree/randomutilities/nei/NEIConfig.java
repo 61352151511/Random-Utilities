@@ -12,7 +12,7 @@ public class NEIConfig implements IConfigureNEI {
 	}
 	
 	@Override public String getName() {
-		return "Random Utilities";
+		return "Snapshot NEI";
 	}
 	
 	@Override public String getVersion() {
