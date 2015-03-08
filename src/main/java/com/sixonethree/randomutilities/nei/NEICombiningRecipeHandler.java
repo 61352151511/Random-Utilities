@@ -1,4 +1,4 @@
-package com.sixonethree.randomutilities.nei;
+/*package com.sixonethree.randomutilities.nei;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -173,4 +173,4 @@ public class NEICombiningRecipeHandler extends TemplateRecipeHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 		return new Dimension(mc.displayWidth, mc.displayHeight);
 	}
-}
+}*/

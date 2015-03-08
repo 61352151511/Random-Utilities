@@ -25,7 +25,6 @@ public class ItemCombined extends ItemBase {
 		super();
 		setMaxStackSize(1);
 		setUnlocalizedName("combined");
-		setFull3D();
 	}
 	
 	@Override public boolean hasEffect(ItemStack stack) { return true; }

@@ -6,23 +6,28 @@ import java.util.UUID;
 
 import com.sixonethree.randomutilities.utility.Location;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class CommandReference {
 	public static class LastLocations {
-		private static HashMap<UUID, Location> LastPlaces = new HashMap<UUID, Location>();
 		public static void Set(EntityPlayerMP player, Location loc) {
-			LastPlaces.put(player.getUniqueID(), loc);
+			NBTTagCompound persistentData = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			persistentData.setString("last_location", loc.toString());
+			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentData);
 		}
 		
 		public static void Set(EntityPlayerMP player, double X, double Y, double Z, int dim) {
-			LastPlaces.put(player.getUniqueID(), new Location(X, Y, Z, dim));
+			NBTTagCompound persistentData = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			persistentData.setString("last_location", new Location(X, Y, Z, dim).toString());
+			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentData);
 		}
 		
 		public static Location Get(EntityPlayerMP player) {
-			UUID puid = player.getUniqueID();
-			if (LastPlaces.containsKey(puid)) {
-				return LastPlaces.get(puid);
+			NBTTagCompound persistentData = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			if (persistentData.hasKey("last_location")) {
+				return new Location(persistentData.getString("last_location"));
 			}
 			return null;
 		}

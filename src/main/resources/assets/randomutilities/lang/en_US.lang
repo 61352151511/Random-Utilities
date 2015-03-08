@@ -10,6 +10,8 @@ item.randomutilities:lunchbox_auto.name=Automatic Lunchbox
 
 item.randomutilities:combined.name=Automatic Lunchbox & Heart Canister
 
+block.magicchest.name=Magic Chest
+
 tooltip.heartcanister.stores=Stores health for later
 tooltip.heartcanister.auto=Auto-Drains/Fills
 tooltip.heartcanister.rclick=Right click to store hearts

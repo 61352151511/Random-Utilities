@@ -1,4 +1,4 @@
-package com.sixonethree.randomutilities.nei;
+/*package com.sixonethree.randomutilities.nei;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
@@ -12,7 +12,7 @@ public class NEIConfig implements IConfigureNEI {
 	}
 	
 	@Override public String getName() {
-		return "Snapshot NEI";
+		return "Random Utilities NEI";
 	}
 	
 	@Override public String getVersion() {
@@ -23,4 +23,4 @@ public class NEIConfig implements IConfigureNEI {
 		API.registerRecipeHandler(handler);
 		API.registerUsageHandler(handler);
 	}
-}
+}*/
