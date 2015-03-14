@@ -31,9 +31,6 @@ command.heal.healedplayer=You have healed %s.
 command.home.usage=/home <Home>
 command.home.statewhichhome=Please state which home you would like to teleport to
 
-command.killplayer.pissedoffadmin=%s pissed off an admin
-command.killplayer.usage=/killplayer <Player>
-
 command.mute.usage=/mute <Player>
 command.mute.mutedby=%s has been muted by %s
 command.mute.unmutedby=%s has been un-muted by %s

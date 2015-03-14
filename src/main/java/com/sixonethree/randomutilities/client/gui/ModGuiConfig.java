@@ -5,7 +5,7 @@ import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiConfig;
 
-import com.sixonethree.randomutilities.handler.ConfigurationHandler;
+import com.sixonethree.randomutilities.common.handler.ConfigurationHandler;
 import com.sixonethree.randomutilities.reference.Reference;
 
 public class ModGuiConfig extends GuiConfig {

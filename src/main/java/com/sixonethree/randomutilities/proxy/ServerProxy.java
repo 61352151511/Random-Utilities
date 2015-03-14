@@ -2,8 +2,8 @@ package com.sixonethree.randomutilities.proxy;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import com.sixonethree.randomutilities.event.ChatEvents;
-import com.sixonethree.randomutilities.event.DeathEvents;
+import com.sixonethree.randomutilities.common.event.ChatEvents;
+import com.sixonethree.randomutilities.common.event.DeathEvents;
 
 public class ServerProxy extends CommonProxy {
 	@Override public void init() {
