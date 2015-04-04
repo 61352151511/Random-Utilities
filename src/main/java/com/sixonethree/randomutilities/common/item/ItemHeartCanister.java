@@ -7,15 +7,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.utility.Utilities;
 
-public class ItemHeartCanister extends ItemBase {
+public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	public ItemHeartCanister() {
 		super();
 		setMaxStackSize(1);
@@ -31,8 +31,8 @@ public class ItemHeartCanister extends ItemBase {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (stack.getItemDamage() < 2) {
 			if (!player.isSneaking()) { // TAKE HEALTH
-				float StoredHealth = stack.hasTagCompound() ? stack.getTagCompound().getFloat("Health Stored") : 0F;
-				float MaxStoredHealth = getMaxStorage(stack);
+				float StoredHealth = getCurrentHealthStorage(stack);
+				float MaxStoredHealth = getMaxHealthStorage(stack);
 				float PlayerHealth = player.getHealth();
 				float HealthToTake = PlayerHealth - 2F;
 				
@@ -40,21 +40,16 @@ public class ItemHeartCanister extends ItemBase {
 				if (StoredHealth + HealthToTake > MaxStoredHealth) HealthToTake -= (StoredHealth + HealthToTake) - MaxStoredHealth;
 				
 				player.setHealth(PlayerHealth - HealthToTake);
-				if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setFloat("Health Stored", StoredHealth + HealthToTake);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, StoredHealth + HealthToTake);
 			} else { // GIVE HEALTH
-				float StoredHealth = stack.hasTagCompound() ? stack.getTagCompound().getFloat("Health Stored") : 0F;
+				float StoredHealth = getCurrentHealthStorage(stack);
 				float PlayerHealth = player.getHealth();
 				float HealthToGive = player.getMaxHealth() - PlayerHealth;
 				
-				if (HealthToGive > StoredHealth) {
-					HealthToGive = StoredHealth;
-				}
+				if (HealthToGive > StoredHealth) HealthToGive = StoredHealth;
 				
 				player.setHealth(PlayerHealth + HealthToGive);
-				
-				if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setFloat("Health Stored", StoredHealth - HealthToGive);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, StoredHealth - HealthToGive);
 			}
 		}
 		return stack;
@@ -62,8 +57,8 @@ public class ItemHeartCanister extends ItemBase {
 	
 	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
 		list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.heartcanister.stores"));
-		float StoredHealth = stack.hasTagCompound() ? stack.getTagCompound().getFloat("Health Stored") : 0F;
-		float MaxStoredHealth = getMaxStorage(stack);
+		float StoredHealth = getCurrentHealthStorage(stack);
+		float MaxStoredHealth = getMaxHealthStorage(stack);
 		if (stack.getItemDamage() > 1) {
 			list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.heartcanister.auto"));
 		} else {
@@ -82,10 +77,7 @@ public class ItemHeartCanister extends ItemBase {
 	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
-		list.add(new ItemStack(item, 1, 0));
-		list.add(new ItemStack(item, 1, 1));
-		list.add(new ItemStack(item, 1, 2));
-		list.add(new ItemStack(item, 1, 3));
+		for (int i = 0; i <= 3; i ++) list.add(new ItemStack(item, 1, i));
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
@@ -116,46 +108,41 @@ public class ItemHeartCanister extends ItemBase {
 		if (stack.getItemDamage() > 1 && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			
-			float StoredHealth = stack.hasTagCompound() ? stack.getTagCompound().getFloat("Health Stored") : 0F;
-			float MaxStoredHealth = getMaxStorage(stack);
+			float StoredHealth = getCurrentHealthStorage(stack);
+			float MaxStoredHealth = getMaxHealthStorage(stack);
 			float PlayerHealth = player.getHealth();
 			
 			if (PlayerHealth < player.getMaxHealth() - 2F) {
 				float HealthToGive = (player.getMaxHealth() - 2F) - PlayerHealth;
-				if (HealthToGive > StoredHealth) {
-					HealthToGive = StoredHealth;
-				}
+				if (HealthToGive > StoredHealth) HealthToGive = StoredHealth;
+				
 				player.setHealth(PlayerHealth + HealthToGive);
 				float SetTo = StoredHealth - HealthToGive;
 				
-				if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setFloat("Health Stored", SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
-				stack.getTagCompound().setFloat("Max Health Stored", MaxStoredHealth);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
+				stack.getTagCompound().setFloat(NBTTagKeys.MAX_HEALTH_STORED, MaxStoredHealth);
 			}
+			
 			if (PlayerHealth > player.getMaxHealth() - 2F) {
 				float HealthToTake = PlayerHealth - (player.getMaxHealth() - 2F);
-				if (StoredHealth + HealthToTake > MaxStoredHealth) {
-					HealthToTake = MaxStoredHealth - StoredHealth;
-				}
+				if (StoredHealth + HealthToTake > MaxStoredHealth) HealthToTake = MaxStoredHealth - StoredHealth;
+				
 				player.setHealth(PlayerHealth - HealthToTake);
 				float SetTo = StoredHealth + HealthToTake;
 				
-				if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setFloat("Health Stored", SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
-				stack.getTagCompound().setFloat("Max Health Stored", MaxStoredHealth);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
+				stack.getTagCompound().setFloat(NBTTagKeys.MAX_HEALTH_STORED, MaxStoredHealth);
 			}
 		}
 	}
-	
-	public float getMaxStorage(ItemStack stack) {
-		float Maximum = 0F;
-		if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-		if (stack.getTagCompound().hasKey("Maximum Health Stored")) {
-			Maximum = stack.getTagCompound().getFloat("Maximum Health Stored");
-		} else {
-			if ((stack.getItemDamage() % 2) + 1 == 1) return 200F;
-			if ((stack.getItemDamage() % 2) + 1 == 2) return 2000F;
-		}
-		return Maximum;
+
+	@Override public float getCurrentHealthStorage(ItemStack stack) {
+		tagCompoundVerification(stack);
+		return tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F);
+	}
+
+	@Override public float getMaxHealthStorage(ItemStack stack) {
+		tagCompoundVerification(stack);
+		return tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, ((stack.getItemDamage() % 2) + 1) == 1 ? 200F : 2000F);
 	}
 }

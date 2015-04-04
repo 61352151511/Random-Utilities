@@ -1,4 +1,4 @@
-package com.sixonethree.randomutilities.common.block;
+package com.sixonethree.randomutilities.client;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

@@ -10,8 +10,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import com.sixonethree.randomutilities.common.init.ModItems;
-import com.sixonethree.randomutilities.common.item.ItemHeartCanister;
-import com.sixonethree.randomutilities.common.item.ItemLunchbox;
+import com.sixonethree.randomutilities.common.item.IHeartCanister;
+import com.sixonethree.randomutilities.common.item.ILunchbox;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class RecipesCombinedCombining implements IRecipe {
 	
@@ -48,31 +49,32 @@ public class RecipesCombinedCombining implements IRecipe {
 			int co = -1;
 			for (ItemStack stack : s) {
 				if (stack.getItem() == ModItems.combined) {
-					NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-					fs += tag.hasKey("Food Stored") ? tag.getFloat("Food Stored") : 0F;
-					mfs += tag.hasKey("Maximum Food Stored") ? tag.getFloat("Maximum Food Stored") : 200F;
-					hs += tag.hasKey("Health Stored") ? tag.getFloat("Health Stored") : 0F;
-					mhs += tag.hasKey("Maximum Health Stored") ? tag.getFloat("Maximum Health Stored") : 2000F;
-					co = (co != -1) ? co : tag.hasKey("Color") ? tag.getInteger("Color") : -1;
+					ILunchbox cast1 = (ILunchbox) stack.getItem();
+					IHeartCanister cast2 = (IHeartCanister) stack.getItem();
+					fs += cast1.getCurrentFoodStorage(stack);
+					mfs += cast1.getMaxFoodStorage(stack);
+					hs += cast2.getCurrentHealthStorage(stack);
+					mhs += cast2.getMaxHealthStorage(stack);
+					if (co == -1 && cast1.hasColor(stack)) co = cast1.getColor(stack);
 				} else if (stack.getItem() == ModItems.heartCanister) {
-					NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-					hs += tag.hasKey("Health Stored") ? tag.getFloat("Health Stored") : 0F;
-					mhs += tag.hasKey("Maximum Health Stored") ? tag.getFloat("Maximum Health Stored") : ((ItemHeartCanister) stack.getItem()).getMaxStorage(stack);
+					IHeartCanister cast = (IHeartCanister) stack.getItem();
+					hs += cast.getCurrentHealthStorage(stack);
+					mhs += cast.getMaxHealthStorage(stack);
 				} else if (stack.getItem() == ModItems.lunchbox) {
-					NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-					fs += tag.hasKey("Food Stored") ? tag.getFloat("Food Stored") : 0F;
-					mfs += tag.hasKey("Maximum Food Stored") ? tag.getFloat("Maximum Food Stored") : ((ItemLunchbox) stack.getItem()).getMaxStorage(stack);
-					co = (co != -1) ? co : tag.hasKey("Color") ? tag.getInteger("Color") : -1;
+					ILunchbox cast = (ILunchbox) stack.getItem();
+					fs += cast.getCurrentFoodStorage(stack);
+					mfs += cast.getMaxFoodStorage(stack);
+					if (co == -1 && cast.hasColor(stack)) co = cast.getColor(stack);
 				}
 			}
 			this.result = new ItemStack(ModItems.combined, 1, 0);
 			if (!this.result.hasTagCompound()) this.result.setTagCompound(new NBTTagCompound());
 			NBTTagCompound tag = this.result.getTagCompound();
-			tag.setFloat("Food Stored", fs);
-			tag.setFloat("Maximum Food Stored", mfs);
-			tag.setFloat("Health Stored", hs);
-			tag.setFloat("Maximum Health Stored", mhs);
-			if (co > -1) tag.setInteger("Color", co);
+			tag.setFloat(NBTTagKeys.CURRENT_FOOD_STORED, fs);
+			tag.setFloat(NBTTagKeys.MAX_FOOD_STORED, mfs);
+			tag.setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, hs);
+			tag.setFloat(NBTTagKeys.MAX_HEALTH_STORED, mhs);
+			if (co > -1) tag.setInteger(NBTTagKeys.COLOR, co);
 			this.result.setTagCompound(tag);
 			return true;
 		}

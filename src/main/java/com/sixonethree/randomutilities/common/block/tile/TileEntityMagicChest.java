@@ -100,6 +100,7 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 	}
 	
 	@Override public Packet getDescriptionPacket() {
+		this.worldObj.markBlockForUpdate(this.pos);
 		return PacketHandler.getPacket(this);
 	}
 	
@@ -198,7 +199,7 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 	}
 
 	@Override public String getCommandSenderName() {
-		return null;
+		return "Magic Chest";
 	}
 
 	@Override public int getField(int id) {

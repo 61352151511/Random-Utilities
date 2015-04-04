@@ -15,7 +15,6 @@ import com.sixonethree.randomutilities.utility.HomePoint;
 import com.sixonethree.randomutilities.utility.SaveFile;
 
 public class PlayerEvents {
-	
 	private static void messageAll(String message, Object...formatargs) {
 		List<?> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 		for (int i = 0; i < players.size(); i++) {

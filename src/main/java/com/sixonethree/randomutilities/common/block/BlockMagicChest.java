@@ -1,7 +1,5 @@
 package com.sixonethree.randomutilities.common.block;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,13 +14,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.sixonethree.randomutilities.RandomUtilities;
-import com.sixonethree.randomutilities.client.creativetab.CreativeTab;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 
-public class BlockMagicChest extends BlockContainer {
+public class BlockMagicChest extends BlockContainerBase {
 	public BlockMagicChest() {
-		super(Material.rock);
-		this.setCreativeTab(CreativeTab.randomUtilitiesTab);
+		super();
+		this.setUnlocalizedName("magicChest");
 		this.setHardness(1.5F);
 	}
 	
@@ -31,7 +28,7 @@ public class BlockMagicChest extends BlockContainer {
 	}
 	
 	@Override public int getRenderType() {
-		return -1;
+		return 2;
 	}
 	
 	@Override public boolean isOpaqueCube() {
@@ -94,7 +91,6 @@ public class BlockMagicChest extends BlockContainer {
 	@Override public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te == null || !(te instanceof TileEntityMagicChest)) { return true; }
-		if (world.isSideSolid(pos.add(0, 1, 0), EnumFacing.DOWN, false)) { return true; }
 		if (world.isRemote) { return true; }
 		if (((TileEntityMagicChest) te).isOwner(player.getPersistentID().toString())) player.openGui(RandomUtilities.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;

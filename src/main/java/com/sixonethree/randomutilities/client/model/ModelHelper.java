@@ -1,7 +1,5 @@
 package com.sixonethree.randomutilities.client.model;
 
-import com.sixonethree.randomutilities.utility.LogHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -13,7 +11,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT) public class ModelHelper {
 	public static void registerItem(Item item, int... metadata) {
 		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		LogHelper.warn(item.getUnlocalizedName());
 		for (int i : metadata) {
 			mesher.register(item, i, new ModelResourceLocation(item.getUnlocalizedName().substring(5), "inventory"));
 		}

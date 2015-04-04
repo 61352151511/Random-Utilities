@@ -17,54 +17,63 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.8-2.0.0"
-group= "com.sixonethree.randomutilities" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "RandomUtilities"
+ext.configFile = file('build.properties')
+
+ext.config = parseConfig(configFile)
+
+project.ext.set("buildnum", "local")
+version = "${config.mc_version}-${config.mod_version_major}.${config.mod_version_minor}"
+project.buildnum = "${config.mod_version_build}"
+version += "." + project.buildnum
+
+group= "${config.group}"
+archivesBaseName = "${config.archive_base}"
 
 minecraft {
-    version = "1.8-11.14.0.1295-1.8"
+    version = "${config.mc_version}-${config.forge_version}"
     runDir = "eclipse"
-    mappings = "snapshot_20150130"
+    if (config.mappings == "today") {
+        mappings = "snapshot_" + getDate()
+    } else {
+        mappings = "${config.mappings}"
+    }
 }
 
 repositories {
-    maven {
-        name 'CB Maven FS'
-        url "http://chickenbones.net/maven/"
-    }
     maven {
         name 'ForgeFS'
         url 'http://files.minecraftforge.net/maven'
      }
 }
 
-dependencies {
-    compile "codechicken:CodeChickenLib:1.8-1.1.2.131:dev"
-	compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
-    compile "codechicken:NotEnoughItems:1.8-1.0.5.87:dev"
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-}
+dependencies {}
 
 processResources
 {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
+    inputs.property "version", project.buildnum
     inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
                 
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.buildnum, 'mcversion':project.minecraft.version
     }
         
-    // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+def parseConfig(File config) {
+    config.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        return (new ConfigSlurper().parse(prop))
+    }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd')
+    return formattedDate
 }

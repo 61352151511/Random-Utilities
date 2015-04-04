@@ -6,9 +6,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.EnumMap;
 
-import com.sixonethree.randomutilities.RandomUtilities;
-import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +18,10 @@ import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.sixonethree.randomutilities.RandomUtilities;
+import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
+import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 
 public enum PacketHandler {
 	INSTANCE;
@@ -43,12 +44,17 @@ public enum PacketHandler {
 	private static class RandomUtilitiesMessageHandler extends SimpleChannelInboundHandler<RandomUtilitiesMessage> {
 		@Override protected void channelRead0(ChannelHandlerContext ctx, RandomUtilitiesMessage msg) throws Exception {
 			World world = RandomUtilities.proxy.getClientWorld();
-			if (world != null) {
-				TileEntity te = world.getTileEntity(new BlockPos(msg.x, msg.y, msg.z));
+			TileEntity te = world.getTileEntity(new BlockPos(msg.x, msg.y, msg.z));
+			if (msg.TEType == 0) {
 				if (te instanceof TileEntityMagicChest) {
-					TileEntityMagicChest icte = (TileEntityMagicChest) te;
-					icte.setFacing(msg.facing);
-					icte.handlePacketData(msg.itemStacks);
+					TileEntityMagicChest mcte = (TileEntityMagicChest) te;
+					mcte.handlePacketData(msg.itemStacks);
+				}
+			} else if (msg.TEType == 1) {
+				if (te instanceof TileEntityDisplayTable) {
+					TileEntityDisplayTable sctte = (TileEntityDisplayTable) te;
+					sctte.setFacing(msg.facing);
+					sctte.handlePacketData(msg.itemStacks);
 				}
 			}
 		}
@@ -59,6 +65,7 @@ public enum PacketHandler {
 		int y;
 		int z;
 		int facing;
+		int TEType;
 		ItemStack[] itemStacks;
 	}
 	
@@ -71,17 +78,26 @@ public enum PacketHandler {
 			target.writeInt(msg.x);
 			target.writeInt(msg.y);
 			target.writeInt(msg.z);
+			target.writeInt(msg.TEType);
 			target.writeInt(msg.facing);
-			ByteBufUtils.writeItemStack(target, msg.itemStacks[0]);
-			ByteBufUtils.writeItemStack(target, msg.itemStacks[1]);
+			target.writeInt(msg.itemStacks.length);
+			for (ItemStack stack : msg.itemStacks) {
+				ByteBufUtils.writeItemStack(target, stack);
+			}
 		}
 		
 		@Override public void decodeInto(ChannelHandlerContext ctx, ByteBuf dat, RandomUtilitiesMessage msg) {
 			msg.x = dat.readInt();
 			msg.y = dat.readInt();
 			msg.z = dat.readInt();
+			msg.TEType = dat.readInt();
 			msg.facing = dat.readInt();
-			msg.itemStacks = new ItemStack[] {ByteBufUtils.readItemStack(dat), ByteBufUtils.readItemStack(dat)};
+			int stacksLength = dat.readInt();
+			ItemStack[] stacks = new ItemStack[stacksLength];
+			for (int i = 0; i < stacksLength; i ++) {
+				stacks[i] = ByteBufUtils.readItemStack(dat);
+			}
+			msg.itemStacks = stacks;
 		}
 	}
 	
@@ -90,8 +106,20 @@ public enum PacketHandler {
 		msg.x = temc.getPos().getX();
 		msg.y = temc.getPos().getY();
 		msg.z = temc.getPos().getZ();
-		msg.facing = temc.getFacing();
+		msg.TEType = 0;
+		msg.facing = 0;
 		msg.itemStacks = new ItemStack[] {temc.getStackInSlot(0), temc.getStackInSlot(1)};
+		return INSTANCE.channels.get(Side.SERVER).generatePacketFrom(msg);
+	}
+	
+	public static Packet getPacket(TileEntityDisplayTable tesct) {
+		RandomUtilitiesMessage msg = new RandomUtilitiesMessage();
+		msg.x = tesct.getPos().getX();
+		msg.y = tesct.getPos().getY();
+		msg.z = tesct.getPos().getZ();
+		msg.TEType = 1;
+		msg.facing = tesct.getFacing();
+		msg.itemStacks = tesct.getInventory();
 		return INSTANCE.channels.get(Side.SERVER).generatePacketFrom(msg);
 	}
 }

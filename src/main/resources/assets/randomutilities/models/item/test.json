@@ -1,0 +1,5 @@
+# models/item/test.json
+ 
+{
+    "parent": "builtin/entity"
+}

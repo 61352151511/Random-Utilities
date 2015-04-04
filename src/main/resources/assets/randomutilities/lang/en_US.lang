@@ -1,3 +1,5 @@
+# Testing to see if ñ works
+
 gui.randomutilities.text=Random Utilities
 
 command.afk.nowafk=%s is now AFK.
@@ -85,7 +87,12 @@ item.randomutilities:heartCanister_auto.name=Automatic Heart Canister
 item.randomutilities:heartCanister_large.name=Large Heart Canister
 item.randomutilities:heartCanister_large_auto.name=Automatic Large Heart Canister
 
-item.randomutilities:combined_lunchbox_heart_canister.name=Automatic Lunchbox & Heart Canister
+item.randomutilities:combined.name=Automatic Lunchbox & Heart Canister
+
+item.randomutilities:magicCard.name=Magic Card
+
+tile.randomutilities:magicChest.name=Magic Chest
+tile.randomutilities:displayTable.name=Display Table
 
 itemGroup.randomUtilities=Random Utilities
 

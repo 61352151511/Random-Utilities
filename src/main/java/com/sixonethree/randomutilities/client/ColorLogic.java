@@ -1,7 +1,6 @@
 package com.sixonethree.randomutilities.client;
 
 public class ColorLogic {
-	
 	public static int getColorFromMeta(int meta) {
 		switch (meta) {
 			case 0:

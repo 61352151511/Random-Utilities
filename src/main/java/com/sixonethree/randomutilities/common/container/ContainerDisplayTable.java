@@ -1,6 +1,4 @@
-package com.sixonethree.randomutilities.common.block;
-
-import com.sixonethree.randomutilities.common.init.ModItems;
+package com.sixonethree.randomutilities.common.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,50 +7,54 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerMagicChest extends Container {
+import com.sixonethree.randomutilities.client.ValidatingSlot;
+
+public class ContainerDisplayTable extends Container {
 	private EntityPlayer player;
-	private IInventory chest;
+	private IInventory inventory;
 	
-	public ContainerMagicChest(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize) {
-		chest = chestInventory;
-		player = ((InventoryPlayer) playerInventory).player;
-		chestInventory.openInventory(player);
-		layoutContainer(playerInventory, chestInventory, xSize, ySize);
+	public ContainerDisplayTable(IInventory playerInv, IInventory inventory, int xSize, int ySize) {
+		this.player = ((InventoryPlayer) playerInv).player;
+		this.inventory = inventory;
+		inventory.openInventory(player);
+		layoutContainer(playerInv, inventory, xSize, ySize);
 	}
 	
 	@Override public boolean canInteractWith(EntityPlayer player) {
-		return chest.isUseableByPlayer(player);
+		return inventory.isUseableByPlayer(player);
 	}
 	
-	@Override public ItemStack transferStackInSlot(EntityPlayer p, int i) {
+	@Override public ItemStack transferStackInSlot(EntityPlayer player, int index) {
 		ItemStack itemstack = null;
-		Slot slot = (Slot) inventorySlots.get(i);
+		Slot slot = (Slot) inventorySlots.get(index);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if (i < 1) {
-				if (!mergeItemStack(itemstack1, 1, inventorySlots.size(), true)) { return null; }
-			} else if (!slot.isItemValid(itemstack1)) {
-				return null;
-			} else if (!mergeItemStack(itemstack1, 0, 1, false)) { return null; }
+			if (index < inventory.getSizeInventory()) {
+				if (!mergeItemStack(itemstack1, inventory.getSizeInventory(), inventorySlots.size(), true)) { return null; }
+			} else if (!mergeItemStack(itemstack1, 0, inventory.getSizeInventory(), false)) { return null; }
 			if (itemstack1.stackSize == 0) {
 				slot.putStack(null);
 			} else {
 				slot.onSlotChanged();
 			}
 		}
-		chest.markDirty();
 		return itemstack;
 	}
 	
 	@Override public void onContainerClosed(EntityPlayer entityplayer) {
 		super.onContainerClosed(entityplayer);
-		chest.closeInventory(entityplayer);
+		inventory.closeInventory(entityplayer);
 	}
 	
 	protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize) {
-		addSlotToContainer(new ValidatingSlot(chestInventory, 0, 80, 18, false));
-		addSlotToContainer(new ValidatingSlot(chestInventory, 1, 152, 18, true, new ItemStack(ModItems.magicCard)));
+		int totalSlotsAdded = 0;
+		for (int y = 1; y <= 5; y ++) {
+			for (int x = 1; x <= 5; x ++) {
+				addSlotToContainer(new ValidatingSlot(chestInventory, totalSlotsAdded, 44 + (x * 18), (y * 18) - 2, false));
+				totalSlotsAdded ++;
+			}
+		}
 		
 		int leftCol = (xSize - 162) / 2 + 1;
 		for (int playerInvRow = 0; playerInvRow < 3; playerInvRow ++) {

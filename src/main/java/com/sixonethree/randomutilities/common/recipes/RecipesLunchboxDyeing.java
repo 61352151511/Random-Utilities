@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class RecipesLunchboxDyeing implements IRecipe {
 	
@@ -39,7 +40,7 @@ public class RecipesLunchboxDyeing implements IRecipe {
 			this.result = new ItemStack(s.getItem(), 1, s.getItemDamage());
 			if (!this.result.hasTagCompound()) this.result.setTagCompound(new NBTTagCompound());
 			tag = (NBTTagCompound) s.getTagCompound().copy();
-			tag.setInteger("Color", c);
+			tag.setInteger(NBTTagKeys.COLOR, c);
 			this.result.setTagCompound(tag);
 			return true;
 		}

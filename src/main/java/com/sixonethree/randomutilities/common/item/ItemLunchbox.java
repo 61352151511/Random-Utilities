@@ -8,16 +8,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.sixonethree.randomutilities.client.ColorLogic;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.utility.Utilities;
 
-public class ItemLunchbox extends ItemBase {
+public class ItemLunchbox extends ItemBase implements ILunchbox {
 	public ItemLunchbox() {
 		super();
 		setMaxStackSize(1);
@@ -45,14 +45,13 @@ public class ItemLunchbox extends ItemBase {
 			EntityPlayer player = (EntityPlayer) entity;
 			int PlayerFood = player.getFoodStats().getFoodLevel();
 			if (PlayerFood < 20) {
-				int StoredFood = (int) Math.floor(stack.hasTagCompound() ? stack.getTagCompound().getFloat("Food Stored") : 0F);
+				int StoredFood = (int) getCurrentFoodStorage(stack);
 				int FoodToGive = 20 - PlayerFood;
 				if (FoodToGive > StoredFood) {
 					FoodToGive = StoredFood;
 				}
 				player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
-				if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setFloat("Food Stored", StoredFood - FoodToGive);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, StoredFood - FoodToGive);
 			}
 		}
 	}
@@ -60,21 +59,21 @@ public class ItemLunchbox extends ItemBase {
 	@Override public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
 		int PlayerFood = player.getFoodStats().getFoodLevel();
 		if (PlayerFood < 20) {
-			int StoredFood = (int) Math.floor(stack.hasTagCompound() ? stack.getTagCompound().getFloat("Food Stored") : 0F);
+			int StoredFood = (int) getCurrentFoodStorage(stack);
 			int FoodToGive = 20 - PlayerFood;
 			if (FoodToGive > StoredFood) {
 				FoodToGive = StoredFood;
 			}
 			player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
-			stack.getTagCompound().setFloat("Food Stored", StoredFood - FoodToGive);
+			stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, StoredFood - FoodToGive);
 		}
 		return stack;
 	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
 		list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.lunchbox.stores"));
-		float StoredFood = stack.hasTagCompound() ? stack.getTagCompound().hasKey("Food Stored") ? stack.getTagCompound().getFloat("Food Stored") : 0F : 0F;
-		float Maximum = getMaxStorage(stack);
+		float StoredFood = getCurrentFoodStorage(stack);
+		float Maximum = getMaxFoodStorage(stack);
 		if (stack.getItemDamage() == 1) list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.lunchbox.auto"));
 		list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.lunchbox.fill"));
 		String StoredAsString = String.valueOf(StoredFood / 2);
@@ -86,7 +85,7 @@ public class ItemLunchbox extends ItemBase {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
-		return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(stack.hasTagCompound() ? stack.getTagCompound().hasKey("Color") ? stack.getTagCompound().getInteger("Color") : 16 : 16);
+		return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(getColor(stack));
 	}
 	
 	public int getMaxItemUseDuration(ItemStack stack) {
@@ -98,14 +97,27 @@ public class ItemLunchbox extends ItemBase {
 	}
 	
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (player.canEat(false)) {
-			player.setItemInUse(stack, getMaxItemUseDuration(stack));
-		}
+		if (player.canEat(false)) player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		return stack;
 	}
+
+	@Override public float getCurrentFoodStorage(ItemStack stack) {
+		tagCompoundVerification(stack);
+		return tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F);
+	}
+
+	@Override public float getMaxFoodStorage(ItemStack stack) {
+		tagCompoundVerification(stack);
+		return tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F);
+	}
+
+	@Override public int getColor(ItemStack stack) {
+		tagCompoundVerification(stack);
+		return tagOrDefault(stack, NBTTagKeys.COLOR, 16);
+	}
 	
-	public float getMaxStorage(ItemStack stack) {
-		if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-		return stack.getTagCompound().hasKey("Maximum Food Stored") ? stack.getTagCompound().getFloat("Maximum Food Stored") : 200F;
+	@Override public boolean hasColor(ItemStack stack) {
+		tagCompoundVerification(stack);
+		return stack.getTagCompound().hasKey(NBTTagKeys.COLOR);
 	}
 }
