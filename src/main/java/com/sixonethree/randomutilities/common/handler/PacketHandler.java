@@ -8,6 +8,7 @@ import java.util.EnumMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -101,7 +102,7 @@ public enum PacketHandler {
 		}
 	}
 	
-	public static Packet getPacket(TileEntityMagicChest temc) {
+	@SuppressWarnings("unchecked") public static Packet<INetHandlerPlayClient> getPacket(TileEntityMagicChest temc) {
 		RandomUtilitiesMessage msg = new RandomUtilitiesMessage();
 		msg.x = temc.getPos().getX();
 		msg.y = temc.getPos().getY();
@@ -109,10 +110,10 @@ public enum PacketHandler {
 		msg.TEType = 0;
 		msg.facing = 0;
 		msg.itemStacks = new ItemStack[] {temc.getStackInSlot(0), temc.getStackInSlot(1)};
-		return INSTANCE.channels.get(Side.SERVER).generatePacketFrom(msg);
+		return (Packet<INetHandlerPlayClient>) INSTANCE.channels.get(Side.SERVER).generatePacketFrom(msg);
 	}
 	
-	public static Packet getPacket(TileEntityDisplayTable tesct) {
+	@SuppressWarnings("unchecked") public static Packet<INetHandlerPlayClient> getPacket(TileEntityDisplayTable tesct) {
 		RandomUtilitiesMessage msg = new RandomUtilitiesMessage();
 		msg.x = tesct.getPos().getX();
 		msg.y = tesct.getPos().getY();
@@ -120,6 +121,6 @@ public enum PacketHandler {
 		msg.TEType = 1;
 		msg.facing = tesct.getFacing();
 		msg.itemStacks = tesct.getInventory();
-		return INSTANCE.channels.get(Side.SERVER).generatePacketFrom(msg);
+		return (Packet<INetHandlerPlayClient>) INSTANCE.channels.get(Side.SERVER).generatePacketFrom(msg);
 	}
 }

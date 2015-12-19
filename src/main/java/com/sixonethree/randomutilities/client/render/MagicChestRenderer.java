@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import com.sixonethree.randomutilities.client.model.ModelMagicChest;
@@ -15,25 +14,25 @@ import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.GlManager;
 
-public class MagicChestRenderer extends TileEntitySpecialRenderer {
+public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagicChest> {
 	private final ModelMagicChest model;
 	private RenderManager renderManager;
-	ResourceLocation magicChestTexture = (new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/blocks/MagicChest.png"));
+	ResourceLocation magicChestTexture = (new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/MagicChest.png"));
 	
 	public MagicChestRenderer(RenderManager rm) {
 		this.model = new ModelMagicChest();
 		this.renderManager = rm;
 	}
 	
-	@Override public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-		TileEntityMagicChest magicChest = (TileEntityMagicChest) te;
+	@Override public void renderTileEntityAt(TileEntityMagicChest magicChest, double x, double y, double z, float partialTicks, int destroyStage) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
 		Minecraft.getMinecraft().renderEngine.bindTexture(magicChestTexture);
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		this.model.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GlManager.popMatrix(2);
+		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();
 		
 		/* RENDER THE INSIDE */
 		
@@ -48,7 +47,7 @@ public class MagicChestRenderer extends TileEntitySpecialRenderer {
 		ItemStack stack = magicChest.getStackInSlot(0);
 		if (stack != null) {
 			ItemStack renderStack = stack.copy();
-			EntityItem ghostItem = new EntityItem(te.getWorld(), x, y, z, renderStack);
+			EntityItem ghostItem = new EntityItem(magicChest.getWorld(), x, y, z, renderStack);
 			float rotationAngle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 			renderStack.stackSize = 1;
 			ghostItem.hoverStart = 0F;
@@ -57,6 +56,7 @@ public class MagicChestRenderer extends TileEntitySpecialRenderer {
 			GlStateManager.rotate(rotationAngle, 0, 1, 0);
 			renderManager.doRenderEntity(ghostItem, 0, 0, 0, 0, 0, false);
 		}
-		GlManager.popMatrix(2);
+		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();
 	}
 }

@@ -31,9 +31,9 @@ public class Location {
 		String[] part = info.split("[,]");
 		try {
 			init(Double.parseDouble(part[0]), Double.parseDouble(part[1]), Double.parseDouble(part[2]), Integer.parseInt(part[3]));
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.err.println("Exception on attemping to rebuild Location from String.");
-			init(0,256,0,0);
+			init(0, 256, 0, 0);
 		}
 	}
 	
@@ -53,12 +53,11 @@ public class Location {
 		return (int) Math.floor(pos);
 	}
 	
-	public String toString() {
+	@Override public String toString() {
 		return posX + "," + posY + "," + posZ + "," + dimension;
 	}
 	
-	@Override
-	public boolean equals(Object o) {
+	@Override public boolean equals(Object o) {
 		if (o instanceof Location) {
 			Location location = (Location) o;
 			boolean equal = true;

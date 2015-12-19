@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
@@ -38,7 +39,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		this.inventory = stacks;
 	}
 	
-	@Override public Packet getDescriptionPacket() {
+	@Override public Packet<INetHandlerPlayClient> getDescriptionPacket() {
 		this.worldObj.markBlockForUpdate(this.pos);
 		return PacketHandler.getPacket(this);
 	}
@@ -109,7 +110,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		}
 	}
 	
-	@Override public ItemStack getStackInSlotOnClosing(int index) {
+	@Override public ItemStack removeStackFromSlot(int index) {
 		if (index < 0 || index > this.inventory.length) return null;
 		return this.inventory[index];
 	}
@@ -120,7 +121,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		this.inventory[index] = stack;
 	}
 	
-	@Override public String getCommandSenderName() {
+	@Override public String getName() {
 		return "Display Table";
 	}
 	
@@ -152,21 +153,21 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	@Override public boolean isItemValidForSlot(int index, ItemStack stack) {
 		return true;
 	}
-
+	
 	@Override public IChatComponent getDisplayName() {
 		return new ChatComponentText("Display Table");
 	}
-
+	
 	@Override public int getField(int id) {
 		return 0;
 	}
-
+	
 	@Override public void setField(int id, int value) {}
-
+	
 	@Override public int getFieldCount() {
 		return 0;
 	}
-
+	
 	@Override public void clear() {
 		inventory = new ItemStack[25];
 	}

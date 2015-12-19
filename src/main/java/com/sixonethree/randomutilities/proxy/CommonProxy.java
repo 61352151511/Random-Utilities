@@ -9,9 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import com.sixonethree.randomutilities.common.block.BlockTest;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.common.container.ContainerDisplayTable;
@@ -22,9 +20,7 @@ import com.sixonethree.randomutilities.common.event.PlayerEvents;
 
 public class CommonProxy implements IGuiHandler {
 	
-	public void preInit(FMLPreInitializationEvent event) {
-		GameRegistry.registerBlock(BlockTest.instance, "test");
-	}
+	public void preInit(FMLPreInitializationEvent event) {}
 	
 	public void init(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new PlayerEvents());
@@ -38,10 +34,18 @@ public class CommonProxy implements IGuiHandler {
 	}
 	
 	public void bindTileEntitySpecialRenderers() {}
+	
 	public void registerRenderInformation() {}
+	
 	public void registerItemRenders() {}
-	public World getClientWorld() { return null; }
-	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) { return null; }
+	
+	public World getClientWorld() {
+		return null;
+	}
+	
+	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return null;
+	}
 	
 	@Override public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));

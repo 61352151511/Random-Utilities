@@ -30,7 +30,7 @@ public class HomePoint {
 	
 	public static ArrayList<String> getPlayerHomes(EntityPlayer player) {
 		String playerhomes = "";
-		for (int cur = 0; cur<homes.size(); cur++) {
+		for (int cur = 0; cur < homes.size(); cur ++) {
 			if (homes.get(cur).name.startsWith(player.getUniqueID().toString())) {
 				if (playerhomes.length() == 0) {
 					if (homes.get(cur).location.dimension != player.dimension) {
@@ -60,7 +60,7 @@ public class HomePoint {
 	
 	public static List<String> getPlayerHomesAsList(EntityPlayer player, String currenttyped) {
 		ArrayList<String> playerhomes = new ArrayList<String>();
-		for (int cur = 0; cur<homes.size(); cur++) {
+		for (int cur = 0; cur < homes.size(); cur ++) {
 			if (homes.get(cur).name.startsWith(player.getUniqueID().toString())) {
 				String curhome = homes.get(cur).name.substring(player.getUniqueID().toString().length());
 				if (curhome.startsWith(currenttyped)) {
@@ -73,9 +73,7 @@ public class HomePoint {
 	
 	public static HomePoint getHome(String name) {
 		HomePoint target = new HomePoint(name, null);
-		if (homes.contains(target)) {
-			return homes.get(homes.indexOf(target));
-		}
+		if (homes.contains(target)) { return homes.get(homes.indexOf(target)); }
 		return null;
 	}
 	
@@ -106,7 +104,7 @@ public class HomePoint {
 			homes.add(new HomePoint(info));
 		}
 	}
-
+	
 	public static void saveAll() {
 		homesSaveFile.clear();
 		for (HomePoint home : homes) {
@@ -117,34 +115,28 @@ public class HomePoint {
 	
 	public HomePoint(String info) {
 		try {
-			this.name = info.substring(0,info.indexOf("("));
+			this.name = info.substring(0, info.indexOf("("));
 			String locationInfo = info.substring(info.indexOf("(") + 1, info.indexOf(")"));
 			this.location = new Location(locationInfo);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.err.println("Exception on attemping to rebuild WarpPoint from String.");
 			name = "Error";
 			location = new Location(0, 256, 0, 0);
 		}
 	}
 	
-	public String toString() {
-		if (location == null) {
-			return "";
-		}
+	@Override public String toString() {
+		if (location == null) { return ""; }
 		return name + "(" + location.toString() + ")";
 	}
 	
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof HomePoint) {
-			return name.equals(((HomePoint)o).name);
-		}
+	@Override public boolean equals(Object o) {
+		if (o instanceof HomePoint) { return name.equals(((HomePoint) o).name); }
 		
 		return false;
 	}
 	
-	@Override
-	public int hashCode() {
+	@Override public int hashCode() {
 		return name.hashCode();
 	}
 }

@@ -1,11 +1,11 @@
 package com.sixonethree.randomutilities.common.item;
 
-import com.sixonethree.randomutilities.client.creativetab.CreativeTab;
-import com.sixonethree.randomutilities.reference.Reference;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.sixonethree.randomutilities.client.creativetab.CreativeTab;
+import com.sixonethree.randomutilities.reference.Reference;
 
 public class ItemBase extends Item {
 	public ItemBase() {
@@ -15,10 +15,18 @@ public class ItemBase extends Item {
 		setNoRepair();
 	}
 	
-	@Override public String getUnlocalizedName() { return String.format("item.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName())); }
-	@Override public String getUnlocalizedName(ItemStack itemStack) { return String.format("item.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName())); }
+	@Override public String getUnlocalizedName() {
+		return String.format("item.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+	}
 	
-	protected String getUnwrappedUnlocalizedName(String unlocalizedName) { return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1); }
+	@Override public String getUnlocalizedName(ItemStack itemStack) {
+		return String.format("item.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+	}
+	
+	protected String getUnwrappedUnlocalizedName(String unlocalizedName) {
+		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
+	}
+	
 	public void tagCompoundVerification(ItemStack stack) {
 		if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
 	}

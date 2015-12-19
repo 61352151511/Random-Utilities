@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,12 +17,13 @@ import net.minecraft.world.World;
 import com.sixonethree.randomutilities.RandomUtilities;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 
-
 public class BlockDisplayTable extends BlockContainerBase {
 	public BlockDisplayTable() {
 		super(Material.wood);
+		this.setHardness(1F);
 		this.setUnlocalizedName("displayTable");
 		this.setBlockBounds(0F, 0F, 0F, 1F, (1F / 16) * 15, 1F);
+		this.setParticleBlockState(Blocks.planks.getDefaultState());
 	}
 	
 	@Override public TileEntity createNewTileEntity(World world, int meta) {

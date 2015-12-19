@@ -9,6 +9,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,21 +27,21 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		setHasSubtypes(true);
 	}
 	
-	public boolean hasEffect(ItemStack stack) {
+	@Override public boolean hasEffect(ItemStack stack) {
 		return stack.getItemDamage() == 1;
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
 		list.add(new ItemStack(item, 1, 0));
 		list.add(new ItemStack(item, 1, 1));
 	}
 	
-	public String getUnlocalizedName(ItemStack stack) {
+	@Override public String getUnlocalizedName(ItemStack stack) {
 		String[] NameSuffixes = new String[] {"", "_auto"};
 		return super.getUnlocalizedName() + NameSuffixes[stack.getItemDamage()];
 	}
 	
-	public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
+	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
 		if (stack.getItemDamage() == 1 && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			int PlayerFood = player.getFoodStats().getFoodLevel();
@@ -70,47 +71,47 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		return stack;
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.lunchbox.stores"));
+	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
+		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.stores"));
 		float StoredFood = getCurrentFoodStorage(stack);
 		float Maximum = getMaxFoodStorage(stack);
-		if (stack.getItemDamage() == 1) list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.lunchbox.auto"));
-		list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.lunchbox.fill"));
+		if (stack.getItemDamage() == 1) list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.auto"));
+		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.lunchbox.fill"));
 		String StoredAsString = String.valueOf(StoredFood / 2);
 		String MaximumStoredAsString = String.valueOf(Maximum / 2);
 		if (StoredAsString.contains(".")) StoredAsString = StoredAsString.substring(0, StoredAsString.indexOf(".") + 2);
 		if (StoredAsString.endsWith(".0")) StoredAsString = StoredAsString.replace(".0", "");
 		if (MaximumStoredAsString.endsWith(".0")) MaximumStoredAsString = MaximumStoredAsString.replace(".0", "");
-		list.add(Utilities.TranslateFormatted("tooltip.lunchbox.stored", StoredAsString, MaximumStoredAsString));
+		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", StoredAsString, MaximumStoredAsString));
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
 		return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(getColor(stack));
 	}
 	
-	public int getMaxItemUseDuration(ItemStack stack) {
+	@Override public int getMaxItemUseDuration(ItemStack stack) {
 		return 32;
 	}
 	
-	public EnumAction getItemUseAction(ItemStack stack) {
+	@Override public EnumAction getItemUseAction(ItemStack stack) {
 		return stack.getItemDamage() == 0 ? EnumAction.EAT : EnumAction.NONE;
 	}
 	
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (player.canEat(false)) player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		return stack;
 	}
-
+	
 	@Override public float getCurrentFoodStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F);
 	}
-
+	
 	@Override public float getMaxFoodStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F);
 	}
-
+	
 	@Override public int getColor(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.COLOR, 16);

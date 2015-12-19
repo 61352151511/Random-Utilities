@@ -17,7 +17,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 	
 	private ItemStack result;
 	
-	public boolean matches(InventoryCrafting window, World world) {
+	@Override public boolean matches(InventoryCrafting window, World world) {
 		this.result = null;
 		byte l = 0; // Number of Lunchboxes or Combines
 		byte f = 0; // Number of Food Items
@@ -85,15 +85,15 @@ public class RecipesLunchboxFeeding implements IRecipe {
 		return false;
 	}
 	
-	public ItemStack getCraftingResult(InventoryCrafting window) {
+	@Override public ItemStack getCraftingResult(InventoryCrafting window) {
 		return this.result.copy();
 	}
 	
-	public int getRecipeSize() {
+	@Override public int getRecipeSize() {
 		return 10;
 	}
 	
-	public ItemStack getRecipeOutput() {
+	@Override public ItemStack getRecipeOutput() {
 		return this.result;
 	}
 	

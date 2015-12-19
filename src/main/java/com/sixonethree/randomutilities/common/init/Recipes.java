@@ -52,10 +52,10 @@ public class Recipes {
 			}
 		};
 		
-		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.RecipeHelper(new ItemStack(ModItems.heartCanister, 1, 0), UpgradeComponents), new ItemStack(ModItems.heartCanister, 1, 2));
-		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.RecipeHelper(new ItemStack(ModItems.heartCanister, 1, 1), UpgradeComponents), new ItemStack(ModItems.heartCanister, 1, 3));
-		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.RecipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), UpgradeComponents), new ItemStack(ModItems.lunchbox, 1, 1));
-		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.RecipeHelper(new ItemStack(ModItems.heartCanister, 1, 3), new ItemStack(ModItems.lunchbox, 1, 1)), new ItemStack(ModItems.combined, 1, 0));
+		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.heartCanister, 1, 0), UpgradeComponents), new ItemStack(ModItems.heartCanister, 1, 2));
+		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.heartCanister, 1, 1), UpgradeComponents), new ItemStack(ModItems.heartCanister, 1, 3));
+		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), UpgradeComponents), new ItemStack(ModItems.lunchbox, 1, 1));
+		ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.heartCanister, 1, 3), new ItemStack(ModItems.lunchbox, 1, 1)), new ItemStack(ModItems.combined, 1, 0));
 	}
 	
 	public static void initLunchboxRecipes() {
@@ -69,7 +69,7 @@ public class Recipes {
 					NBTTagCompound Tag = new NBTTagCompound();
 					Tag.setFloat("Food Stored", FoodPoints);
 					lunch.setTagCompound(Tag);
-					ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.RecipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(item, 1, 0)), lunch);
+					ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(item, 1, 0)), lunch);
 				}
 			}
 		}
@@ -78,7 +78,7 @@ public class Recipes {
 			ItemStack Lunchbox = new ItemStack(ModItems.lunchbox, 1, 0);
 			Lunchbox.setTagCompound(new NBTTagCompound());
 			Lunchbox.getTagCompound().setInteger("Color", i);
-			ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.RecipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(Items.dye, 1, i)), Lunchbox);
+			ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(Items.dye, 1, i)), Lunchbox);
 		}
 	}
 }

@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import com.sixonethree.randomutilities.client.model.ModelDisplayTable;
@@ -16,7 +15,7 @@ import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.GlManager;
 
-public class DisplayTableRenderer extends TileEntitySpecialRenderer {
+public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDisplayTable> {
 	private final ModelDisplayTable model;
 	private RenderManager renderManager;
 	
@@ -25,17 +24,17 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer {
 		this.renderManager = rm;
 	}
 	
-	@Override public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
-		TileEntityDisplayTable starCrafting = (TileEntityDisplayTable) te;
+	@Override public void renderTileEntityAt(TileEntityDisplayTable starCrafting, double x, double y, double z, float partialTicks, int destroyStage) {
 		int facing = starCrafting.getFacing();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		ResourceLocation textures = (new ResourceLocation(Reference.MOD_ID.toLowerCase() + ":textures/blocks/StarCraftingTable.png"));
+		ResourceLocation textures = (new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/StarCraftingTable.png"));
 		Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		this.model.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GlManager.popMatrix(2);
+		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();
 		
 		/* RENDER THE INSIDE */
 		
@@ -46,9 +45,9 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer {
 		GlStateManager.scale(0.5, 0.5, 0.5);
 		
 		GlStateManager.pushMatrix();
-		if (facing == 2) GlManager.translateThenRotate(1.8, 1.65, 1.8, 90, 0, 1, 0);
-		if (facing == 3) GlManager.translateThenRotate(0.2, 1.65, 0.2, -90, 0, 1, 0);
-		if (facing == 4) GlManager.translateThenRotate(1.8, 1.65, 0.2, 180, 0, 1, 0);
+		if (facing == 2) GlManager.translateThenRotate(1.8, 1.65, 1.8, 0, 0, 1, 0);
+		if (facing == 3) GlManager.translateThenRotate(0.2, 1.65, 0.2, 0, 0, 1, 0);
+		if (facing == 4) GlManager.translateThenRotate(1.8, 1.65, 0.2, 0, 0, 1, 0);
 		if (facing == 5) GlManager.translateThenRotate(0.2, 1.65, 1.8, 0, 0, 1, 0);
 		GlStateManager.rotate(0, 0, 1, 0);
 		
@@ -59,7 +58,7 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer {
 			if (stack != null) {
 				ItemStack renderStack = stack.copy();
 				renderStack.stackSize = 1;
-				EntityItem ghostItem = new EntityItem(te.getWorld(), x, y, z, renderStack);
+				EntityItem ghostItem = new EntityItem(starCrafting.getWorld(), x, y, z, renderStack);
 				ghostItem.hoverStart = 0F;
 				if (!(stack.getItem() instanceof ItemBlock)) {
 					if (facing == 2) GlStateManager.rotate(-90, 0, 1, 0);
@@ -73,15 +72,23 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer {
 					if (facing == 4) GlStateManager.rotate(-180, 0, 1, 0);
 				}
 			}
-			GlStateManager.translate(0, 0, - 0.4);
-
+			if (facing == 2) GlStateManager.translate(-0.4, 0, 0);
+			if (facing == 3) GlStateManager.translate(0.4, 0, 0);
+			if (facing == 4) GlStateManager.translate(0, 0, 0.4);
+			if (facing == 5) GlStateManager.translate(0, 0, -0.4);
+			
 			translates ++;
 			if (translates == 5) {
 				translates = 0;
-				GlStateManager.translate(0.4, 0, 2);
+				if (facing == 2) GlStateManager.translate(2, 0, -0.4);
+				if (facing == 3) GlStateManager.translate(-2, 0, 0.4);
+				if (facing == 4) GlStateManager.translate(-0.4, 0, -2);
+				if (facing == 5) GlStateManager.translate(0.4, 0, 2);
 			}
 		}
 		
-		GlManager.popMatrix(2);
+		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();
 	}
 }

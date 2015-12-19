@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,14 +23,16 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		setFull3D();
 	}
 	
-	@Override public boolean hasEffect(ItemStack stack) { return true; }
+	@Override public boolean hasEffect(ItemStack stack) {
+		return true;
+	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.heartcanister.stores"));
-		list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.lunchbox.stores"));
-		list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.heartcanister.auto"));
-		list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.lunchbox.auto"));
-		list.add(EnumChatFormatting.RED + Utilities.Translate("tooltip.lunchbox.fill"));
+	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
+		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.heartcanister.stores"));
+		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.stores"));
+		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.auto"));
+		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.lunchbox.auto"));
+		list.add(EnumChatFormatting.RED + StatCollector.translateToLocal("tooltip.lunchbox.fill"));
 		
 		/* Heart Canister */
 		
@@ -52,11 +55,11 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		if (StoredAsFoodString.endsWith(".0")) StoredAsFoodString = StoredAsFoodString.replace(".0", "");
 		if (MaximumStorageFoodString.endsWith(".0")) MaximumStorageFoodString = MaximumStorageFoodString.replace(".0", "");
 		
-		list.add(Utilities.TranslateFormatted("tooltip.heartcanister.stored", StoredHealthAsString, MaxStorageHealthString));
-		list.add(Utilities.TranslateFormatted("tooltip.lunchbox.stored", StoredAsFoodString, MaximumStorageFoodString));
+		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", StoredHealthAsString, MaxStorageHealthString));
+		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", StoredAsFoodString, MaximumStorageFoodString));
 	}
 	
-	public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
+	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			
@@ -104,22 +107,22 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		if (pass == 2) return ColorLogic.getColorFromMeta(getColor(stack));
 		return 0xFFFFFF;
 	}
-
+	
 	@Override public float getCurrentHealthStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F);
 	}
-
+	
 	@Override public float getMaxHealthStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, 2000F);
 	}
-
+	
 	@Override public float getCurrentFoodStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F);
 	}
-
+	
 	@Override public float getMaxFoodStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F);

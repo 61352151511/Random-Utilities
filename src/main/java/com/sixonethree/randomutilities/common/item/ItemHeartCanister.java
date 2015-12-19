@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,11 +25,11 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		setHasSubtypes(true);
 	}
 	
-	public boolean hasEffect(ItemStack stack) {
+	@Override public boolean hasEffect(ItemStack stack) {
 		return stack.getItemDamage() > 1;
 	}
 	
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (stack.getItemDamage() < 2) {
 			if (!player.isSneaking()) { // TAKE HEALTH
 				float StoredHealth = getCurrentHealthStorage(stack);
@@ -55,15 +56,15 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		return stack;
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		list.add(EnumChatFormatting.AQUA + Utilities.Translate("tooltip.heartcanister.stores"));
+	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
+		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.heartcanister.stores"));
 		float StoredHealth = getCurrentHealthStorage(stack);
 		float MaxStoredHealth = getMaxHealthStorage(stack);
 		if (stack.getItemDamage() > 1) {
-			list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.heartcanister.auto"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.auto"));
 		} else {
-			list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.heartcanister.rclick"));
-			list.add(EnumChatFormatting.GREEN + Utilities.Translate("tooltip.heartcanister.rclick2"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.rclick"));
+			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.rclick2"));
 		}
 		
 		String StoredAsString = String.valueOf(StoredHealth / 2);
@@ -73,11 +74,12 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		if (MaxStorageString.contains(".")) MaxStorageString = MaxStorageString.substring(0, MaxStorageString.indexOf(".") + 2);
 		if (MaxStorageString.endsWith(".0")) MaxStorageString = MaxStorageString.replace(".0", "");
 		
-		list.add(Utilities.TranslateFormatted("tooltip.heartcanister.stored", StoredAsString, MaxStorageString));
+		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", StoredAsString, MaxStorageString));
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i <= 3; i ++) list.add(new ItemStack(item, 1, i));
+	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
+		for (int i = 0; i <= 3; i ++)
+			list.add(new ItemStack(item, 1, i));
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
@@ -99,12 +101,12 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		}
 	}
 	
-	public String getUnlocalizedName(ItemStack stack) {
+	@Override public String getUnlocalizedName(ItemStack stack) {
 		String[] NameSuffixes = new String[] {"", "_large", "_auto", "_large_auto"};
 		return super.getUnlocalizedName() + NameSuffixes[stack.getItemDamage()];
 	}
 	
-	public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
+	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
 		if (stack.getItemDamage() > 1 && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			
@@ -135,12 +137,12 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 			}
 		}
 	}
-
+	
 	@Override public float getCurrentHealthStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F);
 	}
-
+	
 	@Override public float getMaxHealthStorage(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, ((stack.getItemDamage() % 2) + 1) == 1 ? 200F : 2000F);

@@ -9,8 +9,7 @@ import com.sixonethree.randomutilities.common.item.ItemLunchbox;
 import com.sixonethree.randomutilities.common.item.ItemMagicCard;
 import com.sixonethree.randomutilities.reference.Reference;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
-public class ModItems {
+@GameRegistry.ObjectHolder(Reference.MOD_ID) public class ModItems {
 	public static final ItemBase lunchbox = new ItemLunchbox();
 	public static final ItemBase heartCanister = new ItemHeartCanister();
 	public static final ItemBase combined = new ItemCombined();

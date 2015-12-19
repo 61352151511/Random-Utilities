@@ -10,16 +10,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
 
 public class ChatEvents {
-	@SubscribeEvent
-	public void onPlayerChat(ServerChatEvent event) {
+	@SubscribeEvent public void onPlayerChat(ServerChatEvent event) {
 		EntityPlayerMP mrchattypants = event.player;
 		if (MutedPlayers.isMuted(mrchattypants.getUniqueID())) {
 			event.setCanceled(true);
 		}
 	}
 	
-	@SubscribeEvent
-	public void onPlayerCommand(CommandEvent event) {
+	@SubscribeEvent public void onPlayerCommand(CommandEvent event) {
 		ICommandSender sender = event.sender;
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;

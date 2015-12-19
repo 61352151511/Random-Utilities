@@ -18,7 +18,7 @@ public class RecipesCombining implements IRecipe {
 	
 	private ItemStack result;
 	
-	public boolean matches(InventoryCrafting window, World world) {
+	@Override public boolean matches(InventoryCrafting window, World world) {
 		this.result = null;
 		byte l = 0;
 		byte h = 0;
@@ -72,15 +72,15 @@ public class RecipesCombining implements IRecipe {
 		return false;
 	}
 	
-	public ItemStack getCraftingResult(InventoryCrafting window) {
+	@Override public ItemStack getCraftingResult(InventoryCrafting window) {
 		return this.result.copy();
 	}
 	
-	public int getRecipeSize() {
+	@Override public int getRecipeSize() {
 		return 10;
 	}
 	
-	public ItemStack getRecipeOutput() {
+	@Override public ItemStack getRecipeOutput() {
 		return this.result;
 	}
 	

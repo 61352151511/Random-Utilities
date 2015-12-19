@@ -1,12 +1,12 @@
 package com.sixonethree.randomutilities.common.block;
 
-import com.sixonethree.randomutilities.reference.Reference;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import com.sixonethree.randomutilities.reference.Reference;
 
 public class BlockBase extends Block implements ITileEntityProvider {
 	public BlockBase(Material materialIn) {
@@ -18,7 +18,7 @@ public class BlockBase extends Block implements ITileEntityProvider {
 	}
 	
 	@Override public String getUnlocalizedName() {
-		return String.format("tile.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("tile.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	public String getUnwrappedUnlocalizedName(String unlocalizedName) {

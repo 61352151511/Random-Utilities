@@ -9,17 +9,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.sixonethree.randomutilities.common.handler.PacketHandler;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
-public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerListBox, IInventory {
+public class TileEntityMagicChest extends TileEntity implements ITickable, IInventory {
 	
 	private String[] owners;
 	private String placer;
@@ -37,7 +38,7 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 	
 	// @Override public boolean canUpdate() { return true; }
 	
-	@SuppressWarnings("unchecked") @Override public void update() {
+	@Override public void update() {
 		rotate ++;
 		if (rotate >= 360F) rotate = 0F;
 		if (this.placer.isEmpty() || this.placer.equalsIgnoreCase("")) return;
@@ -65,9 +66,7 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 				if (s.equals(possibleOwner)) return true;
 			}
 			if (possibleOwner.equals(placer)) return true;
-		} else if (compareTo instanceof UUID) {
-			return isOwner(((UUID) compareTo).toString());
-		}
+		} else if (compareTo instanceof UUID) { return isOwner(((UUID) compareTo).toString()); }
 		return false;
 	}
 	
@@ -80,7 +79,9 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 		markDirty();
 	}
 	
-	public String getPlacer() { return this.placer; }
+	public String getPlacer() {
+		return this.placer;
+	}
 	
 	@Override public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
@@ -99,7 +100,7 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 		if (this.inventory[1] != null) compound.setTag("card", inventory[1].writeToNBT(new NBTTagCompound()));
 	}
 	
-	@Override public Packet getDescriptionPacket() {
+	@Override public Packet<INetHandlerPlayClient> getDescriptionPacket() {
 		this.worldObj.markBlockForUpdate(this.pos);
 		return PacketHandler.getPacket(this);
 	}
@@ -108,7 +109,9 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 		this.inventory = stacks;
 	}
 	
-	public int getFacing() { return this.facing; }
+	public int getFacing() {
+		return this.facing;
+	}
 	
 	public void setFacing(int facing2) {
 		this.facing = facing2;
@@ -130,7 +133,9 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 	
 	/* IInventory */
 	
-	@Override public int getSizeInventory() { return this.inventory.length; }
+	@Override public int getSizeInventory() {
+		return this.inventory.length;
+	}
 	
 	@Override public ItemStack getStackInSlot(int slot) {
 		if (slot < 0 || slot > this.inventory.length) return null;
@@ -157,7 +162,7 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 		}
 	}
 	
-	@Override public ItemStack getStackInSlotOnClosing(int slot) {
+	@Override public ItemStack removeStackFromSlot(int slot) {
 		if (slot < 0 || slot > this.inventory.length) return null;
 		return this.inventory[slot];
 	}
@@ -167,9 +172,11 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 		this.inventory[slot] = content;
 	}
 	
-	@Override public IChatComponent getDisplayName() { return new ChatComponentText("Magic Chest"); }
+	@Override public IChatComponent getDisplayName() {
+		return new ChatComponentText("Magic Chest");
+	}
+	
 	@Override public boolean isUseableByPlayer(EntityPlayer player) {
-		//TODO Check the magic card
 		if (worldObj == null) { return true; }
 		if (worldObj.getTileEntity(pos) != this) { return false; }
 		if (player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64D) return isOwner(player.getPersistentID());
@@ -185,32 +192,32 @@ public class TileEntityMagicChest extends TileEntity implements IUpdatePlayerLis
 		if (worldObj == null) return;
 		worldObj.addBlockEvent(pos, ModBlocks.magicChest, 1, 0);
 	}
-
+	
 	@Override public boolean hasCustomName() {
 		return false;
 	}
-
+	
 	@Override public int getInventoryStackLimit() {
 		return 64;
 	}
-
+	
 	@Override public boolean isItemValidForSlot(int index, ItemStack stack) {
 		return true;
 	}
-
-	@Override public String getCommandSenderName() {
+	
+	@Override public String getName() {
 		return "Magic Chest";
 	}
-
+	
 	@Override public int getField(int id) {
 		return 0;
 	}
-
+	
 	@Override public void setField(int id, int value) {}
-
+	
 	@Override public int getFieldCount() {
 		return 0;
 	}
-
+	
 	@Override public void clear() {}
 }

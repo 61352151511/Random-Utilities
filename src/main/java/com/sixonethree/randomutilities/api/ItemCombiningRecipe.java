@@ -5,30 +5,30 @@ import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 
 public class ItemCombiningRecipe {
-	private ArrayList<ItemStack> Ingredients = new ArrayList<ItemStack>();
-	private ItemStack Result;
-	private int Size;
+	private ArrayList<ItemStack> ingredients = new ArrayList<ItemStack>();
+	private ItemStack result;
+	private int size;
 	
 	public ItemCombiningRecipe(ArrayList<ItemStack> Ingredients, ItemStack Result) {
-		this.Ingredients = Ingredients;
-		this.Result = Result;
-		this.Size = Ingredients.size();
+		this.ingredients = Ingredients;
+		this.result = Result;
+		this.size = Ingredients.size();
 	}
 	
 	public ItemStack getIngredient(int IngredientNumber) {
-		return Ingredients.get(IngredientNumber);
+		return ingredients.get(IngredientNumber);
 	}
 	
 	public ArrayList<ItemStack> getIngredients() {
-		return Ingredients;
+		return ingredients;
 	}
 	
 	public ItemStack getResult() {
-		return Result;
+		return result;
 	}
 	
 	public int getSize() {
-		return Size;
+		return size;
 	}
 	
 	public boolean doesRequiredItemMatch(ItemStack compareStack) {

@@ -12,14 +12,23 @@ import com.sixonethree.randomutilities.utility.HomePoint;
 
 public class CommandDelHome extends ModCommandBase implements ICommand {
 	
-	@Override public int getUsageType() { return 0; }
+	@Override public int getUsageType() {
+		return 0;
+	}
 	
-	@Override public boolean canConsoleUseCommand() { return false; }
-	@Override public boolean isOpOnly() { return false; }
-	@Override public boolean TabCompletesOnlinePlayers() { return false; }
-
-	@Override
-	public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public boolean canConsoleUseCommand() {
+		return false;
+	}
+	
+	@Override public boolean isOpOnly() {
+		return false;
+	}
+	
+	@Override public boolean tabCompletesOnlinePlayers() {
+		return false;
+	}
+	
+	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (args.length > 0) {
 			String RequestedHome = args[0];
 			if (HomePoint.getHome(player.getUniqueID().toString() + RequestedHome) != null) {
@@ -34,9 +43,8 @@ public class CommandDelHome extends ModCommandBase implements ICommand {
 			outputMessage(player, homes.get(0), true, false, homes.size() > 1 ? homes.get(1) : null);
 		}
 	}
-
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	
+	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 }

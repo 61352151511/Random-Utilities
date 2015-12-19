@@ -5,15 +5,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class CommandHat extends ModCommandBase implements ICommand {
-
-	@Override public int getUsageType() { return 1; }
 	
-	@Override public boolean canConsoleUseCommand() { return false; }
-	@Override public boolean isOpOnly() { return false; }
-	@Override public boolean TabCompletesOnlinePlayers() { return false; }
+	@Override public int getUsageType() {
+		return 1;
+	}
 	
-	@Override
-	public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public boolean canConsoleUseCommand() {
+		return false;
+	}
+	
+	@Override public boolean isOpOnly() {
+		return false;
+	}
+	
+	@Override public boolean tabCompletesOnlinePlayers() {
+		return false;
+	}
+	
+	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
 		ItemStack is = player.getCurrentArmor(3);
 		ItemStack hat = player.getCurrentEquippedItem();
 		ItemStack oldhat = null;

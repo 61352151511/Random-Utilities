@@ -15,9 +15,9 @@ import com.sixonethree.randomutilities.utility.HomePoint;
 import com.sixonethree.randomutilities.utility.SaveFile;
 
 public class PlayerEvents {
-	private static void messageAll(String message, Object...formatargs) {
+	private static void messageAll(String message, Object... formatargs) {
 		List<?> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
-		for (int i = 0; i < players.size(); i++) {
+		for (int i = 0; i < players.size(); i ++) {
 			Object something = players.get(i);
 			if (something instanceof EntityPlayer) {
 				((EntityPlayer) something).addChatComponentMessage(new ChatComponentTranslation(message, formatargs));
@@ -25,24 +25,23 @@ public class PlayerEvents {
 		}
 	}
 	
-	private static IChatComponent ColorPlayer(EntityPlayer player) { return player.getDisplayName(); }
+	private static IChatComponent ColorPlayer(EntityPlayer player) {
+		return player.getDisplayName();
+	}
 	
-	@SubscribeEvent
-	public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
+	@SubscribeEvent public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
 		HomePoint.homesSaveFile = new SaveFile("/homes.txt", event.playerDirectory.getParent());
 		HomePoint.loadAll();
 	}
 	
-	@SubscribeEvent
-	public void onPlayerSaveToFileEvent(PlayerEvent.SaveToFile event) {
+	@SubscribeEvent public void onPlayerSaveToFileEvent(PlayerEvent.SaveToFile event) {
 		HomePoint.saveAll();
 	}
 	
-	@SubscribeEvent
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
 		EntityPlayer player = event.entityPlayer;
 		if (AfkPlayers.isAfk(player.getUniqueID())) {
-			AfkPlayers.Remove(player.getUniqueID());
+			AfkPlayers.remove(player.getUniqueID());
 			messageAll("command.afk.notafk", ColorPlayer(player));
 		}
 	}

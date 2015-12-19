@@ -11,8 +11,7 @@ import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.reference.Reference;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
-public class ModBlocks {
+@GameRegistry.ObjectHolder(Reference.MOD_ID) public class ModBlocks {
 	public static BlockContainerBase magicChest = new BlockMagicChest();
 	public static BlockContainerBase displayTable = new BlockDisplayTable();
 	

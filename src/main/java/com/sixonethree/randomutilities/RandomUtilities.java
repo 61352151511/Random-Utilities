@@ -1,10 +1,6 @@
 package com.sixonethree.randomutilities;
 
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.common.property.Properties;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -17,7 +13,6 @@ import com.sixonethree.randomutilities.common.handler.ConfigurationHandler;
 import com.sixonethree.randomutilities.common.handler.PacketHandler;
 import com.sixonethree.randomutilities.common.init.Commands;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
-import com.sixonethree.randomutilities.common.init.ModEntities;
 import com.sixonethree.randomutilities.common.init.ModItems;
 import com.sixonethree.randomutilities.common.init.Recipes;
 import com.sixonethree.randomutilities.proxy.CommonProxy;
@@ -28,19 +23,11 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	@Mod.Instance(Reference.MOD_ID) public static RandomUtilities instance;
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY) public static CommonProxy proxy;
 	
-    @SuppressWarnings("unchecked") public static final IUnlistedProperty<Integer>[] properties = new IUnlistedProperty[6];
-    
-    static {
-        for (EnumFacing facing : EnumFacing.values()) {
-            RandomUtilities.properties[facing.ordinal()] = Properties.toUnlisted(PropertyInteger.create(facing.getName(), 0, (1 << (3 * 3)) - 1));
-        }
-    }
-	
 	@Mod.EventHandler public void preInit(FMLPreInitializationEvent event) {
 		proxy.preInit(event);
 		PacketHandler.INSTANCE.ordinal();
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
 
 		LogHelper.info("Pre-Init Complete");
 	}
@@ -48,7 +35,6 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	@Mod.EventHandler public void init(FMLInitializationEvent event) {
 		ModBlocks.init();
 		ModItems.init();
-		ModEntities.init();
 		
 		proxy.init(event);
 		proxy.bindTileEntitySpecialRenderers();
