@@ -31,6 +31,10 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override public void init(FMLInitializationEvent event) {
 		super.init(event);
+		
+		this.bindTileEntitySpecialRenderers();
+		this.registerRenderInformation();
+		this.registerItemRenders();
 	}
 	
 	@Override public void postInit(FMLPostInitializationEvent event) {

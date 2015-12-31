@@ -37,9 +37,6 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 		ModItems.init();
 		
 		proxy.init(event);
-		proxy.bindTileEntitySpecialRenderers();
-		proxy.registerRenderInformation();
-		proxy.registerItemRenders();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 		Recipes.init();
