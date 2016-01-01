@@ -10,9 +10,9 @@ import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 
 public class DeathEvents {
 	@SubscribeEvent public void onPlayerDeath(LivingDeathEvent event) {
-		Entity Dead = event.entity;
-		if (Dead instanceof EntityPlayer) {
-			LastLocations.set((EntityPlayerMP) Dead, Dead.posX, Dead.posY, Dead.posZ, Dead.dimension);
+		Entity dead = event.entity;
+		if (dead instanceof EntityPlayer) {
+			LastLocations.set((EntityPlayerMP) dead, dead.posX, dead.posY, dead.posZ, dead.dimension);
 		}
 	}
 }

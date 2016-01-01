@@ -10,9 +10,9 @@ import com.sixonethree.randomutilities.reference.Reference;
 public class ItemBase extends Item {
 	public ItemBase() {
 		super();
-		setMaxStackSize(1);
-		setCreativeTab(CreativeTab.randomUtilitiesTab);
-		setNoRepair();
+		this.setMaxStackSize(1);
+		this.setCreativeTab(CreativeTab.randomUtilitiesTab);
+		this.setNoRepair();
 	}
 	
 	@Override public String getUnlocalizedName() {
@@ -20,7 +20,7 @@ public class ItemBase extends Item {
 	}
 	
 	@Override public String getUnlocalizedName(ItemStack itemStack) {
-		return String.format("item.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("item.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName(itemStack)));
 	}
 	
 	protected String getUnwrappedUnlocalizedName(String unlocalizedName) {
@@ -32,12 +32,17 @@ public class ItemBase extends Item {
 	}
 	
 	public int tagOrDefault(ItemStack stack, String key, int def) {
-		tagCompoundVerification(stack);
+		this.tagCompoundVerification(stack);
 		return stack.getTagCompound().hasKey(key) ? stack.getTagCompound().getInteger(key) : def;
 	}
 	
 	public float tagOrDefault(ItemStack stack, String key, float def) {
-		tagCompoundVerification(stack);
+		this.tagCompoundVerification(stack);
 		return stack.getTagCompound().hasKey(key) ? stack.getTagCompound().getFloat(key) : def;
+	}
+	
+	public String tagOrDefault(ItemStack stack, String key, String def) {
+		this.tagCompoundVerification(stack);
+		return stack.getTagCompound().hasKey(key) ? stack.getTagCompound().getString(key) : def;
 	}
 }

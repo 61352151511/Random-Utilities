@@ -161,16 +161,11 @@ public abstract class ModCommandBase extends CommandBase {
 	}
 	
 	public static void transferDimension(EntityPlayerMP player, Location loc) {
-		configHandler.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.worldObj, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
-		player = configHandler.getPlayerByUsername(player.getName());
 		if (player.dimension == 1) {
-			if (player.isEntityAlive()) {
-				WorldServer worldObj = configHandler.getServerInstance().worldServerForDimension(loc.dimension);
-				worldObj.spawnEntityInWorld(player);
-				player.setLocationAndAngles(loc.posX, loc.posY, loc.posZ, 0, 0);
-				worldObj.updateEntityWithOptionalForce(player, false);
-				player.fallDistance = 0F;
-			}
+			player.addChatComponentMessage(new ChatComponentTranslation("command.teleport.inend", new Object[0]));
+		} else {
+			configHandler.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.worldObj, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
+			player = configHandler.getPlayerByUsername(player.getName());
 		}
 	}
 	

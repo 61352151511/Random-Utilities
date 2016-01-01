@@ -50,6 +50,8 @@ command.sethome.homeset=Home %s set to your current location
 
 command.suicide.bidfarewell=%s bid farewell cruel world!
 
+command.teleport.inend=You can not teleport out of the end via command!
+
 command.tpa.usage=/tpa <Player>
 command.tpa.notyourself=You may not request to teleport to yourself.
 command.tpa.incomingrequest=%s has requested to teleport to you

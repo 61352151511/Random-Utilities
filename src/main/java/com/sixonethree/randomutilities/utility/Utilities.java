@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 public class Utilities {
-	public static String translateFormatted(String string, Object... formatargs) {
-		return StatCollector.translateToLocalFormatted(string, formatargs);
-	}
 	
 	public static ArrayList<ItemStack> recipeHelper(ItemStack first, ArrayList<ItemStack> rest) {
-		@SuppressWarnings("unchecked") ArrayList<ItemStack> ret = (ArrayList<ItemStack>) rest.clone();
-		ret.add(0, first);
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(first);
+		for (ItemStack existingStack : rest) {
+			ret.add(existingStack.copy());
+		}
 		return ret;
 	}
 
@@ -21,5 +21,9 @@ public class Utilities {
 		ret.add(first);
 		ret.add(second);
 		return ret;
+	}
+	
+	public static String translateFormatted(String string, Object... formatargs) {
+		return StatCollector.translateToLocalFormatted(string, formatargs);
 	}
 }

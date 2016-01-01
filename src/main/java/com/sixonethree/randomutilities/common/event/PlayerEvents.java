@@ -3,6 +3,7 @@ package com.sixonethree.randomutilities.common.event;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -15,18 +16,24 @@ import com.sixonethree.randomutilities.utility.HomePoint;
 import com.sixonethree.randomutilities.utility.SaveFile;
 
 public class PlayerEvents {
+	private static IChatComponent colorPlayer(EntityPlayer player) {
+		return player.getDisplayName();
+	}
+	
 	private static void messageAll(String message, Object... formatargs) {
-		List<?> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+		List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 		for (int i = 0; i < players.size(); i ++) {
-			Object something = players.get(i);
-			if (something instanceof EntityPlayer) {
-				((EntityPlayer) something).addChatComponentMessage(new ChatComponentTranslation(message, formatargs));
-			}
+			EntityPlayerMP player = players.get(i);
+			player.addChatComponentMessage(new ChatComponentTranslation(message, formatargs));
 		}
 	}
 	
-	private static IChatComponent ColorPlayer(EntityPlayer player) {
-		return player.getDisplayName();
+	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
+		EntityPlayer player = event.entityPlayer;
+		if (AfkPlayers.isAfk(player.getUniqueID())) {
+			AfkPlayers.remove(player.getUniqueID());
+			messageAll("command.afk.notafk", colorPlayer(player));
+		}
 	}
 	
 	@SubscribeEvent public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
@@ -36,13 +43,5 @@ public class PlayerEvents {
 	
 	@SubscribeEvent public void onPlayerSaveToFileEvent(PlayerEvent.SaveToFile event) {
 		HomePoint.saveAll();
-	}
-	
-	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
-		EntityPlayer player = event.entityPlayer;
-		if (AfkPlayers.isAfk(player.getUniqueID())) {
-			AfkPlayers.remove(player.getUniqueID());
-			messageAll("command.afk.notafk", ColorPlayer(player));
-		}
 	}
 }

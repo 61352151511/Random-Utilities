@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,13 +17,11 @@ import com.sixonethree.randomutilities.reference.NBTTagKeys;
 public class ItemMagicCard extends ItemBase {
 	public ItemMagicCard() {
 		super();
-		setMaxStackSize(1);
-		setUnlocalizedName("magicCard");
+		this.setUnlocalizedName("magicCard");
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) @Override public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-		String signers1 = stack.getTagCompound().hasKey(NBTTagKeys.MAGIC_CARD_SIGNERS) ? stack.getTagCompound().getString(NBTTagKeys.MAGIC_CARD_SIGNERS) : "";
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
+		String signers1 = this.tagOrDefault(stack, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
 		String[] signers = signers1.split(";");
 		list.add("Signers: ");
 		for (String signer : signers) {
@@ -32,14 +29,17 @@ public class ItemMagicCard extends ItemBase {
 			try {
 				name = UsernameCache.getLastKnownUsername(UUID.fromString(signer));
 			} catch (IllegalArgumentException e) {}
-			if (name != null) list.add(name);
+			if (name != null) {
+				list.add(name);
+			} else {
+				list.add(signer);
+			}
 		}
 	}
 	
 	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (!player.worldObj.isRemote) {
-			if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-			String signersA = stack.getTagCompound().hasKey(NBTTagKeys.MAGIC_CARD_SIGNERS) ? stack.getTagCompound().getString(NBTTagKeys.MAGIC_CARD_SIGNERS) : "";
+			String signersA = this.tagOrDefault(stack, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
 			String[] splitSigners = signersA.split(";");
 			ArrayList<String> signers;
 			if (splitSigners.length == 1) {

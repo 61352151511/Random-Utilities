@@ -20,21 +20,38 @@ public class Location {
 	}
 	
 	public Location(double posX, double posY, double posZ, int dimension) {
-		init(posX, posY, posZ, dimension);
+		this.init(posX, posY, posZ, dimension);
 	}
 	
 	public Location(EntityPlayerMP player) {
-		init(player.posX, player.posY, player.posZ, player.dimension);
+		this.init(player.posX, player.posY, player.posZ, player.dimension);
 	}
 	
 	public Location(String info) {
 		String[] part = info.split("[,]");
 		try {
-			init(Double.parseDouble(part[0]), Double.parseDouble(part[1]), Double.parseDouble(part[2]), Integer.parseInt(part[3]));
+			this.init(Double.parseDouble(part[0]), Double.parseDouble(part[1]), Double.parseDouble(part[2]), Integer.parseInt(part[3]));
 		} catch (Exception e) {
 			System.err.println("Exception on attemping to rebuild Location from String.");
-			init(0, 256, 0, 0);
+			this.init(0, 256, 0, 0);
 		}
+	}
+	
+	@Override public boolean equals(Object o) {
+		if (o instanceof Location) {
+			Location location = (Location) o;
+			boolean equal = true;
+			equal = equal && this.posX == location.posX;
+			equal = equal && this.posY == location.posY;
+			equal = equal && this.posZ == location.posZ;
+			equal = equal && this.dimension == location.dimension;
+			return equal;
+		}
+		return false;
+	}
+	
+	@Override public String toString() {
+		return posX + "," + posY + "," + posZ + "," + dimension;
 	}
 	
 	private void init(double posX, double posY, double posZ, int dimension) {
@@ -51,22 +68,5 @@ public class Location {
 	
 	private static int round(double pos) {
 		return (int) Math.floor(pos);
-	}
-	
-	@Override public String toString() {
-		return posX + "," + posY + "," + posZ + "," + dimension;
-	}
-	
-	@Override public boolean equals(Object o) {
-		if (o instanceof Location) {
-			Location location = (Location) o;
-			boolean equal = true;
-			equal = equal && this.posX == location.posX;
-			equal = equal && this.posY == location.posY;
-			equal = equal && this.posZ == location.posZ;
-			equal = equal && this.dimension == location.dimension;
-			return equal;
-		}
-		return false;
 	}
 }

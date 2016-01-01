@@ -6,23 +6,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CommandBurn extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 0;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return true;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return true;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return true;
-	}
-	
 	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 1) {
 			EntityPlayer player = getPlayer(sender, args[0]);
@@ -34,4 +17,9 @@ public class CommandBurn extends ModCommandBase implements ICommand {
 			outputUsage(sender, true);
 		}
 	}
+	
+	@Override public boolean canConsoleUseCommand() { return true; }
+	@Override public int getUsageType() { return 0; }
+	@Override public boolean isOpOnly() { return true; }
+	@Override public boolean tabCompletesOnlinePlayers() { return true; }
 }

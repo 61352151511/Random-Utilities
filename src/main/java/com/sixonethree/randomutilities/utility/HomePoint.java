@@ -16,7 +16,7 @@ public class HomePoint {
 	
 	public HomePoint(EntityPlayerMP player, String name) {
 		this.name = name;
-		location = new Location(player);
+		this.location = new Location(player);
 	}
 	
 	public HomePoint(EntityPlayer player, String name) {
@@ -26,6 +26,46 @@ public class HomePoint {
 	public HomePoint(String name, Location location) {
 		this.name = name;
 		this.location = location;
+	}
+	
+	public HomePoint(String info) {
+		try {
+			this.name = info.substring(0, info.indexOf("("));
+			String locationInfo = info.substring(info.indexOf("(") + 1, info.indexOf(")"));
+			this.location = new Location(locationInfo);
+		} catch (Exception e) {
+			System.err.println("Exception on attemping to rebuild WarpPoint from String.");
+			this.name = "Error";
+			this.location = new Location(0, 256, 0, 0);
+		}
+	}
+	
+	@Override public boolean equals(Object o) {
+		if (o instanceof HomePoint) { return this.name.equals(((HomePoint) o).name); }
+		return false;
+	}
+	
+	@Override public int hashCode() {
+		return this.name.hashCode();
+	}
+	
+	@Override public String toString() {
+		if (this.location == null) { return ""; }
+		return this.name + "(" + this.location.toString() + ")";
+	}
+	
+	public static void delHome(String name) {
+		HomePoint target = new HomePoint(name, null);
+		if (homes.contains(target)) {
+			homes.remove(target);
+			saveAll();
+		}
+	}
+	
+	public static HomePoint getHome(String name) {
+		HomePoint target = new HomePoint(name, null);
+		if (homes.contains(target)) { return homes.get(homes.indexOf(target)); }
+		return null;
 	}
 	
 	public static ArrayList<String> getPlayerHomes(EntityPlayer player) {
@@ -71,31 +111,6 @@ public class HomePoint {
 		return playerhomes;
 	}
 	
-	public static HomePoint getHome(String name) {
-		HomePoint target = new HomePoint(name, null);
-		if (homes.contains(target)) { return homes.get(homes.indexOf(target)); }
-		return null;
-	}
-	
-	public static void delHome(String name) {
-		HomePoint target = new HomePoint(name, null);
-		if (homes.contains(target)) {
-			homes.remove(target);
-			saveAll();
-		}
-	}
-	
-	public static void setHome(EntityPlayerMP player, String homename) {
-		Location location = new Location(player);
-		HomePoint home = new HomePoint(player.getUniqueID().toString() + homename, location);
-		
-		if (homes.contains(home)) {
-			homes.remove(home);
-		}
-		homes.add(home);
-		saveAll();
-	}
-	
 	public static void loadAll() {
 		homesSaveFile.load();
 		homes.clear();
@@ -113,30 +128,14 @@ public class HomePoint {
 		homesSaveFile.save();
 	}
 	
-	public HomePoint(String info) {
-		try {
-			this.name = info.substring(0, info.indexOf("("));
-			String locationInfo = info.substring(info.indexOf("(") + 1, info.indexOf(")"));
-			this.location = new Location(locationInfo);
-		} catch (Exception e) {
-			System.err.println("Exception on attemping to rebuild WarpPoint from String.");
-			name = "Error";
-			location = new Location(0, 256, 0, 0);
-		}
-	}
-	
-	@Override public String toString() {
-		if (location == null) { return ""; }
-		return name + "(" + location.toString() + ")";
-	}
-	
-	@Override public boolean equals(Object o) {
-		if (o instanceof HomePoint) { return name.equals(((HomePoint) o).name); }
+	public static void setHome(EntityPlayerMP player, String homename) {
+		Location location = new Location(player);
+		HomePoint home = new HomePoint(player.getUniqueID().toString() + homename, location);
 		
-		return false;
-	}
-	
-	@Override public int hashCode() {
-		return name.hashCode();
+		if (homes.contains(home)) {
+			homes.remove(home);
+		}
+		homes.add(home);
+		saveAll();
 	}
 }

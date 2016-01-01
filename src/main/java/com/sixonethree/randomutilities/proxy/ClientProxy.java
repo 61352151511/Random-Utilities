@@ -24,7 +24,7 @@ import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.common.init.ModItems;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends ServerProxy {
 	@Override public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
 	}
@@ -44,27 +44,10 @@ public class ClientProxy extends CommonProxy {
 	@Override public void bindTileEntitySpecialRenderers() {
 		TileEntitySpecialRenderer<TileEntityMagicChest> mcr = new MagicChestRenderer(Minecraft.getMinecraft().getRenderManager());
 		TileEntitySpecialRenderer<TileEntityDisplayTable> dtr = new DisplayTableRenderer(Minecraft.getMinecraft().getRenderManager());
-		ModelHelper.removeblockstate(ModBlocks.magicChest);
-		ModelHelper.removeblockstate(ModBlocks.displayTable);
+		ModelHelper.removeBlockState(ModBlocks.magicChest);
+		ModelHelper.removeBlockState(ModBlocks.displayTable);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicChest.class, mcr);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
-	}
-	
-	@Override public void registerRenderInformation() {
-		TileEntityItemStackRenderer.instance = new ModeledBlockInventoryRenderer();
-	}
-	
-	@Override public void registerItemRenders() {
-		ModelHelper.registerBlock(ModBlocks.magicChest);
-		ModelHelper.registerBlock(ModBlocks.displayTable);
-		ModelHelper.registerItem(ModItems.lunchbox, 0, 1);
-		ModelHelper.registerItem(ModItems.heartCanister, 0, 1, 2, 3);
-		ModelHelper.registerItem(ModItems.combined);
-		ModelHelper.registerItem(ModItems.magicCard);
-	}
-	
-	@Override public World getClientWorld() {
-		return FMLClientHandler.instance().getClient().theWorld;
 	}
 	
 	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -73,5 +56,22 @@ public class ClientProxy extends CommonProxy {
 		if (ID == 0) return GuiManager.GUI.buildGUI(GUI.MAGIC, player.inventory, (TileEntityMagicChest) te);
 		if (ID == 1) return GuiManager.GUI.buildGUI(GUI.DISPLAYTABLE, player.inventory, (TileEntityDisplayTable) te);
 		return null;
+	}
+	
+	@Override public World getClientWorld() {
+		return FMLClientHandler.instance().getClient().theWorld;
+	}
+	
+	@Override public void registerItemRenders() {
+		ModelHelper.registerBlock(ModBlocks.magicChest);
+		ModelHelper.registerBlock(ModBlocks.displayTable);
+		ModelHelper.registerItem(ModItems.lunchbox, new int[] {0, 1});
+		ModelHelper.registerItem(ModItems.heartCanister, new int[] {0, 1, 2, 3});
+		ModelHelper.registerItem(ModItems.combined);
+		ModelHelper.registerItem(ModItems.magicCard);
+	}
+	
+	@Override public void registerRenderInformation() {
+		TileEntityItemStackRenderer.instance = new ModeledBlockInventoryRenderer(TileEntityItemStackRenderer.instance);
 	}
 }

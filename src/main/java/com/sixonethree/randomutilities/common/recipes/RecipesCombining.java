@@ -15,8 +15,20 @@ import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class RecipesCombining implements IRecipe {
-	
 	private ItemStack result;
+	
+	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
+	@Override public ItemStack getRecipeOutput() { return this.result; }
+	@Override public int getRecipeSize() { return 10; }
+	
+	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
+		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
+		for (int i = 0; i < retstack.length; i ++) {
+			ItemStack is = window.getStackInSlot(i);
+			retstack[i] = ForgeHooks.getContainerItem(is);
+		}
+		return retstack;
+	}
 	
 	@Override public boolean matches(InventoryCrafting window, World world) {
 		this.result = null;
@@ -70,26 +82,5 @@ public class RecipesCombining implements IRecipe {
 			return true;
 		}
 		return false;
-	}
-	
-	@Override public ItemStack getCraftingResult(InventoryCrafting window) {
-		return this.result.copy();
-	}
-	
-	@Override public int getRecipeSize() {
-		return 10;
-	}
-	
-	@Override public ItemStack getRecipeOutput() {
-		return this.result;
-	}
-	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
-		}
-		return retstack;
 	}
 }

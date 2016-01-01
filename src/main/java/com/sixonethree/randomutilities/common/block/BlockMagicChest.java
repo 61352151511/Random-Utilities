@@ -11,7 +11,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.sixonethree.randomutilities.RandomUtilities;
@@ -42,25 +41,10 @@ public class BlockMagicChest extends BlockContainerBase {
 	}
 	
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
-		byte chestFacing = 0;
-		int facing = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-		if (facing == 0) {
-			chestFacing = 2;
-		}
-		if (facing == 1) {
-			chestFacing = 5;
-		}
-		if (facing == 2) {
-			chestFacing = 3;
-		}
-		if (facing == 3) {
-			chestFacing = 4;
-		}
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityMagicChest) {
 			TileEntityMagicChest tem = (TileEntityMagicChest) te;
 			tem.setPlacer(entityliving.getPersistentID().toString());
-			tem.setFacing(chestFacing);
 			world.markBlockForUpdate(pos);
 		}
 	}

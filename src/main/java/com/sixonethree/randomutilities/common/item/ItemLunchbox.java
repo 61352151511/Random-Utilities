@@ -19,104 +19,81 @@ import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemLunchbox extends ItemBase implements ILunchbox {
+	String[] nameSuffixes = new String[] {"", "_auto"};
+	
 	public ItemLunchbox() {
 		super();
-		setMaxStackSize(1);
-		setUnlocalizedName("lunchbox");
-		setFull3D();
-		setHasSubtypes(true);
+		this.setUnlocalizedName("lunchbox");
+		this.setFull3D();
+		this.setHasSubtypes(true);
 	}
 	
-	@Override public boolean hasEffect(ItemStack stack) {
-		return stack.getItemDamage() == 1;
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
+		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.stores"));
+		float storedFood = this.getCurrentFoodStorage(stack);
+		float maximum = this.getMaxFoodStorage(stack);
+		if (stack.getItemDamage() == 1) list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.auto"));
+		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.lunchbox.fill"));
+		String storedAsString = String.valueOf(storedFood / 2);
+		String maximumStoredAsString = String.valueOf(maximum / 2);
+		if (storedAsString.contains(".")) storedAsString = storedAsString.substring(0, storedAsString.indexOf(".") + 2);
+		if (storedAsString.endsWith(".0")) storedAsString = storedAsString.replace(".0", "");
+		if (maximumStoredAsString.endsWith(".0")) maximumStoredAsString = maximumStoredAsString.replace(".0", "");
+		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", storedAsString, maximumStoredAsString));
 	}
 	
-	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) { return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(getColor(stack)); }
+	@Override public EnumAction getItemUseAction(ItemStack stack) { return stack.getItemDamage() == 0 ? EnumAction.EAT : EnumAction.NONE; }
+	
+	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
 		list.add(new ItemStack(item, 1, 1));
 	}
 	
-	@Override public String getUnlocalizedName(ItemStack stack) {
-		String[] NameSuffixes = new String[] {"", "_auto"};
-		return super.getUnlocalizedName() + NameSuffixes[stack.getItemDamage()];
-	}
+	@Override public String getUnlocalizedName(ItemStack stack) { return super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()]; }
+	@Override public int getMaxItemUseDuration(ItemStack stack) { return 32; }
+	@Override public boolean hasEffect(ItemStack stack) { return stack.getItemDamage() == 1; }
 	
-	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
-		if (stack.getItemDamage() == 1 && entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entity;
-			int PlayerFood = player.getFoodStats().getFoodLevel();
-			if (PlayerFood < 20) {
-				int StoredFood = (int) getCurrentFoodStorage(stack);
-				int FoodToGive = 20 - PlayerFood;
-				if (FoodToGive > StoredFood) {
-					FoodToGive = StoredFood;
-				}
-				player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
-				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, StoredFood - FoodToGive);
-			}
-		}
+	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if (player.canEat(false)) player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+		return stack;
 	}
 	
 	@Override public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
-		int PlayerFood = player.getFoodStats().getFoodLevel();
-		if (PlayerFood < 20) {
-			int StoredFood = (int) getCurrentFoodStorage(stack);
-			int FoodToGive = 20 - PlayerFood;
-			if (FoodToGive > StoredFood) {
-				FoodToGive = StoredFood;
+		int playerFood = player.getFoodStats().getFoodLevel();
+		if (playerFood < 20) {
+			int storedFood = (int) this.getCurrentFoodStorage(stack);
+			int foodToGive = 20 - playerFood;
+			if (foodToGive > storedFood) {
+				foodToGive = storedFood;
 			}
-			player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
-			stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, StoredFood - FoodToGive);
+			player.getFoodStats().addStats(foodToGive, foodToGive > 0 ? 20F : 0F);
+			stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, storedFood - foodToGive);
 		}
 		return stack;
 	}
 	
-	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
-		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.stores"));
-		float StoredFood = getCurrentFoodStorage(stack);
-		float Maximum = getMaxFoodStorage(stack);
-		if (stack.getItemDamage() == 1) list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.auto"));
-		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.lunchbox.fill"));
-		String StoredAsString = String.valueOf(StoredFood / 2);
-		String MaximumStoredAsString = String.valueOf(Maximum / 2);
-		if (StoredAsString.contains(".")) StoredAsString = StoredAsString.substring(0, StoredAsString.indexOf(".") + 2);
-		if (StoredAsString.endsWith(".0")) StoredAsString = StoredAsString.replace(".0", "");
-		if (MaximumStoredAsString.endsWith(".0")) MaximumStoredAsString = MaximumStoredAsString.replace(".0", "");
-		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", StoredAsString, MaximumStoredAsString));
+	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+		if (stack.getItemDamage() == 1 && entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			int playerFood = player.getFoodStats().getFoodLevel();
+			if (playerFood < 20) {
+				int storedFood = (int) this.getCurrentFoodStorage(stack);
+				int foodToGive = 20 - playerFood;
+				if (foodToGive > storedFood) {
+					foodToGive = storedFood;
+				}
+				player.getFoodStats().addStats(foodToGive, foodToGive > 0 ? 20F : 0F);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, storedFood - foodToGive);
+			}
+		}
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
-		return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(getColor(stack));
-	}
+	/* ILunchbox */
 	
-	@Override public int getMaxItemUseDuration(ItemStack stack) {
-		return 32;
-	}
-	
-	@Override public EnumAction getItemUseAction(ItemStack stack) {
-		return stack.getItemDamage() == 0 ? EnumAction.EAT : EnumAction.NONE;
-	}
-	
-	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (player.canEat(false)) player.setItemInUse(stack, getMaxItemUseDuration(stack));
-		return stack;
-	}
-	
-	@Override public float getCurrentFoodStorage(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F);
-	}
-	
-	@Override public float getMaxFoodStorage(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F);
-	}
-	
-	@Override public int getColor(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.COLOR, 16);
-	}
-	
+	@Override public int getColor(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.COLOR, 16); }
+	@Override public float getCurrentFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F); }
+	@Override public float getMaxFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F); }
 	@Override public boolean hasColor(ItemStack stack) {
 		tagCompoundVerification(stack);
 		return stack.getTagCompound().hasKey(NBTTagKeys.COLOR);

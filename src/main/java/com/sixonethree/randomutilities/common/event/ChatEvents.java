@@ -20,8 +20,8 @@ public class ChatEvents {
 	@SubscribeEvent public void onPlayerCommand(CommandEvent event) {
 		ICommandSender sender = event.sender;
 		if (sender instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) sender;
-			if (MutedPlayers.isMuted(player.getUniqueID())) {
+			EntityPlayer mrchattypants = (EntityPlayer) sender;
+			if (MutedPlayers.isMuted(mrchattypants.getUniqueID())) {
 				if (event.command.getCommandName().equalsIgnoreCase("tell")) {
 					event.setCanceled(true);
 				}

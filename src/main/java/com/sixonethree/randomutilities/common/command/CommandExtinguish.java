@@ -9,24 +9,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CommandExtinguish extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 0;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return true;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return true;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return true;
-	}
-	
-	@SuppressWarnings({"rawtypes", "unchecked"}) @Override public List getCommandAliases() {
+	@Override public List<String> getCommandAliases() {
 		return Arrays.asList(new String[] {"ext"});
 	}
 	
@@ -43,4 +26,9 @@ public class CommandExtinguish extends ModCommandBase implements ICommand {
 			}
 		}
 	}
+	
+	@Override public boolean canConsoleUseCommand() { return true; }
+	@Override public int getUsageType() { return 0; }
+	@Override public boolean isOpOnly() { return true; }
+	@Override public boolean tabCompletesOnlinePlayers() { return true; }
 }

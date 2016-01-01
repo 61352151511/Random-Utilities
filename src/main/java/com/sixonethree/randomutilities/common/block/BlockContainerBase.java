@@ -44,15 +44,11 @@ public class BlockContainerBase extends BlockContainer {
 	}
 	
 	@Override public String getUnlocalizedName() {
-		return String.format("tile.%s%s", Reference.RESOURCE_PREFIX, getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("tile.%s%s", Reference.RESOURCE_PREFIX, this.getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 	
 	public String getUnwrappedUnlocalizedName(String unlocalizedName) {
 		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
-	}
-	
-	protected void setName(String name) {
-		this.setUnlocalizedName(name);
 	}
 	
 	protected void setParticleBlockState(IBlockState state) {
@@ -63,7 +59,7 @@ public class BlockContainerBase extends BlockContainer {
 		if (particleBlockState == null) return true;
 		EnumFacing side = target.sideHit;
 		BlockPos pos = target.getBlockPos();
-		IBlockState iblockstate = particleBlockState;
+		IBlockState iblockstate = this.particleBlockState;
 		
 		int i = pos.getX();
 		int j = pos.getY();
@@ -80,15 +76,15 @@ public class BlockContainerBase extends BlockContainer {
 		if (side == EnumFacing.WEST) d0 = (double) i - (double) f;
 		if (side == EnumFacing.EAST) d0 = (double) i + 1 + (double) f;
 		
-		EntityFX fx = digFX.getEntityFX(0, worldObj, d0, d1, d2, 0, 0, 0, Block.getStateId(iblockstate));
+		EntityFX fx = this.digFX.getEntityFX(0, worldObj, d0, d1, d2, 0, 0, 0, Block.getStateId(iblockstate));
 		EntityDiggingFX dfx = (EntityDiggingFX) fx;
 		effectRenderer.addEffect(dfx.func_174846_a(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 		return true;
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
-		if (particleBlockState == null) return true;
-		IBlockState state = particleBlockState;
+		if (this.particleBlockState == null) return true;
+		IBlockState state = this.particleBlockState;
 		
 		for (int i = 0; i < 4; i ++) {
 			for (int j = 0; j < 4; j ++) {
@@ -96,7 +92,7 @@ public class BlockContainerBase extends BlockContainer {
 					double d0 = (double) pos.getX() + ((double) i + 0.5D) / (double) 4;
 					double d1 = (double) pos.getY() + ((double) j + 0.5D) / (double) 4;
 					double d2 = (double) pos.getZ() + ((double) k + 0.5D) / (double) 4;
-					effectRenderer.addEffect(digFX.getEntityFX(0, world, d0, d1, d2, d0 - (double) pos.getX() - 0.5D, d1 - (double) pos.getY() - 0.5D, d2 - (double) pos.getZ() - 0.5D, Block.getStateId(state)));
+					effectRenderer.addEffect(this.digFX.getEntityFX(0, world, d0, d1, d2, d0 - (double) pos.getX() - 0.5D, d1 - (double) pos.getY() - 0.5D, d2 - (double) pos.getZ() - 0.5D, Block.getStateId(state)));
 				}
 			}
 		}

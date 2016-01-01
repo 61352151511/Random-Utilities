@@ -12,6 +12,11 @@ import com.sixonethree.randomutilities.common.init.ModBlocks;
 public class ModeledBlockInventoryRenderer extends TileEntityItemStackRenderer {
 	private TileEntityMagicChest temc = new TileEntityMagicChest();
 	private TileEntityDisplayTable tedt = new TileEntityDisplayTable();
+	private TileEntityItemStackRenderer superInstance;
+	
+	public ModeledBlockInventoryRenderer(TileEntityItemStackRenderer superInstance) {
+		this.superInstance = superInstance;
+	}
 	
 	@Override public void renderByItem(ItemStack itemStack) {
 		Block block = Block.getBlockFromItem(itemStack.getItem());
@@ -20,7 +25,7 @@ public class ModeledBlockInventoryRenderer extends TileEntityItemStackRenderer {
 		} else if (block == ModBlocks.displayTable) {
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(this.tedt, 0, 0, 0, 0F);
 		} else {
-			super.renderByItem(itemStack);
+			superInstance.renderByItem(itemStack);
 		}
 	}
 }

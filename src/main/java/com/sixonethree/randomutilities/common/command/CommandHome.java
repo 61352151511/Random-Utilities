@@ -15,40 +15,26 @@ import com.sixonethree.randomutilities.utility.HomePoint;
 import com.sixonethree.randomutilities.utility.Location;
 
 public class CommandHome extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 0;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return false;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return false;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return false;
+	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 	
 	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
-		EntityPlayerMP playermp = (EntityPlayerMP) player;
-		UUID puid = player.getUniqueID();
+		EntityPlayerMP playerMP = (EntityPlayerMP) player;
+		UUID playerUUID = player.getUniqueID();
 		if (args.length > 0) {
-			String RequestedHome = args[0];
-			if (HomePoint.getHome(puid + RequestedHome) != null) {
-				Location loc = HomePoint.getHome(puid + RequestedHome).location;
-				LastLocations.set(playermp, new Location(playermp));
+			String requestedHome = args[0];
+			if (HomePoint.getHome(playerUUID + requestedHome) != null) {
+				Location loc = HomePoint.getHome(playerUUID + requestedHome).location;
+				LastLocations.set(playerMP, new Location(playerMP));
 				if (loc.dimension != player.dimension) {
-					transferDimension(playermp, loc);
+					transferDimension(playerMP, loc);
 				} else {
-					if (Math.floor(Math.sqrt(player.getDistanceSq(loc.x, loc.y, loc.z))) > 1000) {}
 					player.setPositionAndUpdate(loc.posX, loc.posY, loc.posZ);
 					player.fallDistance = 0F;
 				}
 			} else {
-				outputMessage(player, noHomeCalled, true, false, RequestedHome);
+				outputMessage(player, noHomeCalled, true, false, requestedHome);
 			}
 		} else {
 			outputMessage(player, "statewhichhome", true, true);
@@ -57,7 +43,10 @@ public class CommandHome extends ModCommandBase implements ICommand {
 		}
 	}
 	
-	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
-	}
+	@Override public boolean canConsoleUseCommand() { return false; }
+	@Override public int getUsageType() { return 0; }
+	@Override public boolean isOpOnly() { return false; }
+	@Override public boolean tabCompletesOnlinePlayers() { return false; }
+	
+	
 }

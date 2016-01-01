@@ -9,23 +9,6 @@ import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
 import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
 
 public class CommandWhoIs extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 0;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return true;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return false;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return true;
-	}
-	
 	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
 			EntityPlayer player = getPlayer(sender, args[0]);
@@ -38,4 +21,9 @@ public class CommandWhoIs extends ModCommandBase implements ICommand {
 			outputMessage(sender, getCommandUsage(sender), true, false);
 		}
 	}
+	
+	@Override public boolean canConsoleUseCommand() { return true; }
+	@Override public int getUsageType() { return 0; }
+	@Override public boolean isOpOnly() { return false; }
+	@Override public boolean tabCompletesOnlinePlayers() { return true; }
 }

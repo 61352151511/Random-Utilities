@@ -9,36 +9,25 @@ public class ItemCombiningRecipe {
 	private ItemStack result;
 	private int size;
 	
-	public ItemCombiningRecipe(ArrayList<ItemStack> Ingredients, ItemStack Result) {
-		this.ingredients = Ingredients;
-		this.result = Result;
-		this.size = Ingredients.size();
-	}
-	
-	public ItemStack getIngredient(int IngredientNumber) {
-		return ingredients.get(IngredientNumber);
-	}
-	
-	public ArrayList<ItemStack> getIngredients() {
-		return ingredients;
-	}
-	
-	public ItemStack getResult() {
-		return result;
-	}
-	
-	public int getSize() {
-		return size;
+	public ItemCombiningRecipe(ArrayList<ItemStack> ingredients, ItemStack result) {
+		this.ingredients = ingredients;
+		this.result = result;
+		this.size = ingredients.size();
 	}
 	
 	public boolean doesRequiredItemMatch(ItemStack compareStack) {
 		if (compareStack != null) {
-			for (int i = 0; i <= getSize() - 1; i ++) {
-				if (getIngredient(i).isItemEqual(compareStack)) {
+			for (int i = 0; i <= this.getSize() - 1; i ++) {
+				if (this.getIngredient(i).isItemEqual(compareStack)) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
+	
+	public ItemStack getIngredient(int position) { return this.ingredients.get(position); }
+	public ArrayList<ItemStack> getIngredients() { return this.ingredients; }
+	public ItemStack getResult() { return this.result; }
+	public int getSize() { return this.size; }
 }

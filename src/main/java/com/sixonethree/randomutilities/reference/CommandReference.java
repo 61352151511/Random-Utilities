@@ -9,22 +9,47 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import com.sixonethree.randomutilities.utility.Location;
 
 public class CommandReference {
+	public static class AfkPlayers {
+		private static ArrayList<UUID> afks = new ArrayList<UUID>();
+		public static void add(UUID target) { afks.add(target); }
+		public static boolean isAfk(UUID target) { return afks.contains(target); }
+		public static void remove(UUID target) {
+			if (isAfk(target)) {
+				afks.remove(target);
+			}
+		}
+		/**
+		 * Toggles AFK Status for a player.
+		 * @param target UUID For Target Player.
+		 * @return false if removed, true if added.
+		 */
+		public static boolean toggle(UUID target) {
+			if (isAfk(target)) {
+				remove(target);
+				return false;
+			} else {
+				add(target);
+				return true;
+			}
+		}
+	}
+	
 	public static class LastLocations {
 		private static HashMap<UUID, Location> LastPlaces = new HashMap<UUID, Location>();
-		public static void set(EntityPlayerMP player, Location loc) {
-			LastPlaces.put(player.getUniqueID(), loc);
-		}
-		
-		public static void set(EntityPlayerMP player, double X, double Y, double Z, int dim) {
-			LastPlaces.put(player.getUniqueID(), new Location(X, Y, Z, dim));
-		}
-		
 		public static Location get(EntityPlayerMP player) {
 			UUID puid = player.getUniqueID();
 			if (LastPlaces.containsKey(puid)) {
 				return LastPlaces.get(puid);
 			}
 			return null;
+		}
+		
+		public static void set(EntityPlayerMP player, Location loc) {
+			LastPlaces.put(player.getUniqueID(), loc);
+		}
+		
+		public static void set(EntityPlayerMP player, double x, double y, double z, int dim) {
+			LastPlaces.put(player.getUniqueID(), new Location(x, y, z, dim));
 		}
 	}
 	
@@ -67,31 +92,6 @@ public class CommandReference {
 				return requests.get(target);
 			}
 			return null;
-		}
-	}
-	
-	public static class AfkPlayers {
-		private static ArrayList<UUID> afks = new ArrayList<UUID>();
-		public static void add(UUID target) { afks.add(target); }
-		public static boolean isAfk(UUID target) { return afks.contains(target); }
-		public static void remove(UUID target) {
-			if (isAfk(target)) {
-				afks.remove(target);
-			}
-		}
-		/**
-		 * Toggles AFK Status for a player.
-		 * @param target UUID For Target Player.
-		 * @return false if removed, true if added.
-		 */
-		public static boolean toggle(UUID target) {
-			if (isAfk(target)) {
-				remove(target);
-				return false;
-			} else {
-				add(target);
-				return true;
-			}
 		}
 	}
 }

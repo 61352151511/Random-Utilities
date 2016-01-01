@@ -26,28 +26,28 @@ import com.sixonethree.randomutilities.common.command.CommandTpa;
 import com.sixonethree.randomutilities.common.command.CommandWhoIs;
 
 public class Commands {
-	public static void init(FMLServerStartingEvent e) {
-		e.registerServerCommand(new CommandAfk());
-		e.registerServerCommand(new CommandBack());
-		e.registerServerCommand(new CommandBurn());
-		e.registerServerCommand(new CommandDelHome());
-		e.registerServerCommand(new CommandDepth());
-		e.registerServerCommand(new CommandEnderChest());
-		e.registerServerCommand(new CommandExtinguish());
-		e.registerServerCommand(new CommandFeed());
-		e.registerServerCommand(new CommandHat());
-		e.registerServerCommand(new CommandHeal());
-		e.registerServerCommand(new CommandHome());
-		e.registerServerCommand(new CommandMore());
-		e.registerServerCommand(new CommandMute());
-		e.registerServerCommand(new CommandPing());
-		e.registerServerCommand(new CommandPvP());
-		e.registerServerCommand(new CommandRepair());
-		e.registerServerCommand(new CommandSetHome());
-		e.registerServerCommand(new CommandSuicide());
-		e.registerServerCommand(new CommandTpa());
-		e.registerServerCommand(new CommandTpAccept());
-		e.registerServerCommand(new CommandTpDeny());
-		e.registerServerCommand(new CommandWhoIs());
+	public static void init(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandAfk());
+		event.registerServerCommand(new CommandBack());
+		event.registerServerCommand(new CommandBurn());
+		event.registerServerCommand(new CommandDelHome());
+		event.registerServerCommand(new CommandDepth());
+		event.registerServerCommand(new CommandEnderChest());
+		event.registerServerCommand(new CommandExtinguish());
+		event.registerServerCommand(new CommandFeed());
+		event.registerServerCommand(new CommandHat());
+		event.registerServerCommand(new CommandHeal());
+		event.registerServerCommand(new CommandHome());
+		event.registerServerCommand(new CommandMore());
+		event.registerServerCommand(new CommandMute());
+		event.registerServerCommand(new CommandPing());
+		event.registerServerCommand(new CommandPvP());
+		event.registerServerCommand(new CommandRepair());
+		event.registerServerCommand(new CommandSetHome());
+		event.registerServerCommand(new CommandSuicide());
+		event.registerServerCommand(new CommandTpa());
+		event.registerServerCommand(new CommandTpAccept());
+		event.registerServerCommand(new CommandTpDeny());
+		event.registerServerCommand(new CommandWhoIs());
 	}
 }

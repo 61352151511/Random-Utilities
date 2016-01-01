@@ -11,43 +11,26 @@ import com.sixonethree.randomutilities.reference.CommandReference.TeleportReques
 import com.sixonethree.randomutilities.utility.Location;
 
 public class CommandTpAccept extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 1;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return false;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return false;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return false;
-	}
-	
-	@SuppressWarnings("rawtypes") @Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
 		if (TeleportRequests.pending(player.getUniqueID())) {
-			List playerlist = configHandler.playerEntityList;
-			Boolean PlayerFound = false;
+			List<EntityPlayerMP> playerlist = configHandler.playerEntityList;
+			Boolean playerFound = false;
 			for (int i = 0; i < playerlist.size(); ++ i) {
-				if (((EntityPlayerMP) playerlist.get(i)).getUniqueID().equals(TeleportRequests.fromWho((player.getUniqueID())))) {
-					PlayerFound = true;
-					EntityPlayerMP teleporter = (EntityPlayerMP) playerlist.get(i);
-					EntityPlayerMP teleportto = (EntityPlayerMP) player;
+				if (playerlist.get(i).getUniqueID().equals(TeleportRequests.fromWho((player.getUniqueID())))) {
+					playerFound = true;
+					EntityPlayerMP teleporter = playerlist.get(i);
+					EntityPlayerMP teleportTo = (EntityPlayerMP) player;
 					LastLocations.set(teleporter, new Location(teleporter));
-					if (teleportto.dimension != teleporter.dimension) {
-						transferDimension(teleporter, new Location(teleportto));
+					if (teleportTo.dimension != teleporter.dimension) {
+						transferDimension(teleporter, new Location(teleportTo));
 					} else {
 						outputMessage(teleporter, "gotaccepted", true, true);
-						outputMessage(teleportto, "youaccepted", true, true);
-						teleporter.setPositionAndUpdate(teleportto.posX, teleportto.posY, teleportto.posZ);
+						outputMessage(teleportTo, "youaccepted", true, true);
+						teleporter.setPositionAndUpdate(teleportTo.posX, teleportTo.posY, teleportTo.posZ);
 					}
 				}
 			}
-			if (!PlayerFound) {
+			if (!playerFound) {
 				outputMessage(player, "notonline", true, true);
 			}
 			TeleportRequests.remove(player.getUniqueID());
@@ -55,4 +38,9 @@ public class CommandTpAccept extends ModCommandBase implements ICommand {
 			outputMessage(player, "nonetoaccept", true, true);
 		}
 	}
+	
+	@Override public boolean canConsoleUseCommand() { return false; }
+	@Override public int getUsageType() { return 1; }
+	@Override public boolean isOpOnly() { return false; }
+	@Override public boolean tabCompletesOnlinePlayers() { return false; }
 }

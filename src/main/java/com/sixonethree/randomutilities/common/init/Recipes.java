@@ -19,19 +19,21 @@ import com.sixonethree.randomutilities.common.recipes.RecipesCombining;
 import com.sixonethree.randomutilities.common.recipes.RecipesLunchboxDyeing;
 import com.sixonethree.randomutilities.common.recipes.RecipesLunchboxFeeding;
 import com.sixonethree.randomutilities.common.recipes.RecipesUpgrading;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.Utilities;
 
 public class Recipes {
 	public static void init() {
-		Category ShapelessCategory = Category.SHAPELESS;
-		String ShapelessDependecy = "after:minecraft:shapeless";
+		Category shapelessCategory = Category.SHAPELESS;
+		String shapelessDependency = "after:minecraft:shapeless";
 		
-		RecipeSorter.register("randomutilities:combined_combining", RecipesCombinedCombining.class, ShapelessCategory, ShapelessDependecy);
-		RecipeSorter.register("randomutilities:combined_creating", RecipesCombinedCreating.class, ShapelessCategory, ShapelessDependecy);
-		RecipeSorter.register("randomutilities:combining", RecipesCombining.class, ShapelessCategory, ShapelessDependecy);
-		RecipeSorter.register("randomutilities:lunchbox_dyeing", RecipesLunchboxDyeing.class, ShapelessCategory, ShapelessDependecy);
-		RecipeSorter.register("randomutilities:lunchbox_feeding", RecipesLunchboxFeeding.class, ShapelessCategory, ShapelessDependecy);
-		RecipeSorter.register("randomutilities:upgrading", RecipesUpgrading.class, ShapelessCategory, ShapelessDependecy);
+		RecipeSorter.register(Reference.RESOURCE_PREFIX + "combined_combining", RecipesCombinedCombining.class, shapelessCategory, shapelessDependency);
+		RecipeSorter.register(Reference.RESOURCE_PREFIX + "combined_creating", RecipesCombinedCreating.class, shapelessCategory, shapelessDependency);
+		RecipeSorter.register(Reference.RESOURCE_PREFIX + "combining", RecipesCombining.class, shapelessCategory, shapelessDependency);
+		RecipeSorter.register(Reference.RESOURCE_PREFIX + "lunchbox_dyeing", RecipesLunchboxDyeing.class, shapelessCategory, shapelessDependency);
+		RecipeSorter.register(Reference.RESOURCE_PREFIX + "lunchbox_feeding", RecipesLunchboxFeeding.class, shapelessCategory, shapelessDependency);
+		RecipeSorter.register(Reference.RESOURCE_PREFIX + "upgrading", RecipesUpgrading.class, shapelessCategory, shapelessDependency);
 		
 		GameRegistry.addRecipe(new RecipesCombinedCombining());
 		GameRegistry.addRecipe(new RecipesCombinedCreating());
@@ -64,21 +66,21 @@ public class Recipes {
 				Item item = (Item) obj;
 				if (item instanceof ItemFood) {
 					ItemFood food = (ItemFood) item;
-					float FoodPoints = food.getHealAmount(new ItemStack(item, 1, 0));
+					float foodPoints = food.getHealAmount(new ItemStack(item, 1, 0));
 					ItemStack lunch = new ItemStack(ModItems.lunchbox, 1, 0);
-					NBTTagCompound Tag = new NBTTagCompound();
-					Tag.setFloat("Food Stored", FoodPoints);
-					lunch.setTagCompound(Tag);
+					NBTTagCompound tag = new NBTTagCompound();
+					tag.setFloat(NBTTagKeys.CURRENT_FOOD_STORED, foodPoints);
+					lunch.setTagCompound(tag);
 					ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(item, 1, 0)), lunch);
 				}
 			}
 		}
 		
 		for (int i = 0; i < 16; i ++) {
-			ItemStack Lunchbox = new ItemStack(ModItems.lunchbox, 1, 0);
-			Lunchbox.setTagCompound(new NBTTagCompound());
-			Lunchbox.getTagCompound().setInteger("Color", i);
-			ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(Items.dye, 1, i)), Lunchbox);
+			ItemStack lunchbox = new ItemStack(ModItems.lunchbox, 1, 0);
+			lunchbox.setTagCompound(new NBTTagCompound());
+			lunchbox.getTagCompound().setInteger(NBTTagKeys.COLOR, i);
+			ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(Items.dye, 1, i)), lunchbox);
 		}
 	}
 }

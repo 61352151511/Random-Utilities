@@ -4,23 +4,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
 public class CommandPvP extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 0;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return true;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return true;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return false;
-	}
-	
 	@Override public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length > 0) {
 			serverInstance.setAllowPvp(args[0].equalsIgnoreCase("on") ? true : false);
@@ -29,4 +12,9 @@ public class CommandPvP extends ModCommandBase implements ICommand {
 			outputUsage(sender, true);
 		}
 	}
+	
+	@Override public boolean canConsoleUseCommand() { return true; }
+	@Override public int getUsageType() { return 0; }
+	@Override public boolean isOpOnly() { return true; }
+	@Override public boolean tabCompletesOnlinePlayers() { return false; }
 }

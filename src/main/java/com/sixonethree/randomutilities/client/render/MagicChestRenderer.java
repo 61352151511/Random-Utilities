@@ -17,7 +17,7 @@ import com.sixonethree.randomutilities.utility.GlManager;
 public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagicChest> {
 	private final ModelMagicChest model;
 	private RenderManager renderManager;
-	ResourceLocation magicChestTexture = (new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/MagicChest.png"));
+	ResourceLocation magicChestTexture = new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/MagicChest.png");
 	
 	public MagicChestRenderer(RenderManager rm) {
 		this.model = new ModelMagicChest();
@@ -27,7 +27,7 @@ public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagi
 	@Override public void renderTileEntityAt(TileEntityMagicChest magicChest, double x, double y, double z, float partialTicks, int destroyStage) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
-		Minecraft.getMinecraft().renderEngine.bindTexture(magicChestTexture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.magicChestTexture);
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		this.model.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
@@ -54,7 +54,7 @@ public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagi
 			
 			GlStateManager.scale(2, 2, 2);
 			GlStateManager.rotate(rotationAngle, 0, 1, 0);
-			renderManager.doRenderEntity(ghostItem, 0, 0, 0, 0, 0, false);
+			this.renderManager.doRenderEntity(ghostItem, 0, 0, 0, 0, 0, false);
 		}
 		GlStateManager.popMatrix();
 		GlStateManager.popMatrix();

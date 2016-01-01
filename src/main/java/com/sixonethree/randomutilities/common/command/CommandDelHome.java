@@ -11,21 +11,8 @@ import net.minecraft.util.BlockPos;
 import com.sixonethree.randomutilities.utility.HomePoint;
 
 public class CommandDelHome extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 0;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return false;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return false;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return false;
+	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 	
 	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
@@ -44,7 +31,8 @@ public class CommandDelHome extends ModCommandBase implements ICommand {
 		}
 	}
 	
-	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
-	}
+	@Override public boolean canConsoleUseCommand() { return false; }
+	@Override public int getUsageType() { return 0; }
+	@Override public boolean isOpOnly() { return false; }
+	@Override public boolean tabCompletesOnlinePlayers() { return false; }
 }

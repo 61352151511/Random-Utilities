@@ -5,29 +5,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class CommandRepair extends ModCommandBase implements ICommand {
-	
-	@Override public int getUsageType() {
-		return 1;
-	}
-	
-	@Override public boolean canConsoleUseCommand() {
-		return false;
-	}
-	
-	@Override public boolean isOpOnly() {
-		return true;
-	}
-	
-	@Override public boolean tabCompletesOnlinePlayers() {
-		return false;
-	}
-	
 	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
-		ItemStack is = player.getCurrentEquippedItem();
-		if (is != null) {
-			if (is.getItem().isDamageable()) {
-				is.setItemDamage(0);
+		ItemStack itemStack = player.getCurrentEquippedItem();
+		if (itemStack != null) {
+			if (itemStack.getItem().isDamageable()) {
+				itemStack.setItemDamage(0);
 			}
 		}
 	}
+	
+	@Override public boolean canConsoleUseCommand() { return false; }
+	@Override public int getUsageType() { return 1; }
+	@Override public boolean isOpOnly() { return true; }
+	@Override public boolean tabCompletesOnlinePlayers() { return false; }
 }

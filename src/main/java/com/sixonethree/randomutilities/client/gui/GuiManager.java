@@ -22,7 +22,8 @@ public class GuiManager extends GuiContainer {
 	}
 	
 	public enum GUI {
-		MAGIC(176, 132, ResourceList.MAGIC), DISPLAYTABLE(212, 199, ResourceList.DISPLAYTABLE);
+		MAGIC(176, 132, ResourceList.MAGIC),
+		DISPLAYTABLE(212, 199, ResourceList.DISPLAYTABLE);
 		
 		private int xSize;
 		private int ySize;
@@ -34,14 +35,12 @@ public class GuiManager extends GuiContainer {
 			this.guiResourceList = guiResourceList;
 		}
 		
+		public static GuiManager buildGUI(GUI type, IInventory playerInventory, IInventory source) { return new GuiManager(type, playerInventory, source); }
+
 		protected Container makeContainer(GUI type, IInventory player, IInventory chest) {
 			if (type == MAGIC) return new ContainerMagicChest(player, chest, xSize, ySize);
 			if (type == DISPLAYTABLE) return new ContainerDisplayTable(player, chest, xSize, ySize);
 			return null;
-		}
-		
-		public static GuiManager buildGUI(GUI type, IInventory playerInventory, IInventory source) {
-			return new GuiManager(type, playerInventory, source);
 		}
 	}
 	
@@ -66,6 +65,6 @@ public class GuiManager extends GuiContainer {
 		this.mc.getTextureManager().bindTexture(type.guiResourceList.location);
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
-		drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 	}
 }

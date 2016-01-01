@@ -18,16 +18,11 @@ import com.sixonethree.randomutilities.utility.Utilities;
 public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister {
 	public ItemCombined() {
 		super();
-		setMaxStackSize(1);
-		setUnlocalizedName("combined");
-		setFull3D();
+		this.setUnlocalizedName("combined");
+		this.setFull3D();
 	}
 	
-	@Override public boolean hasEffect(ItemStack stack) {
-		return true;
-	}
-	
-	@Override @SuppressWarnings({"rawtypes", "unchecked"}) @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
 		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.heartcanister.stores"));
 		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.stores"));
 		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.auto"));
@@ -36,70 +31,27 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		
 		/* Heart Canister */
 		
-		float StoredHealth = getCurrentHealthStorage(stack);
-		float MaxStoredHealth = getMaxHealthStorage(stack);
-		String StoredHealthAsString = String.valueOf(StoredHealth / 2);
-		if (StoredHealthAsString.contains(".")) StoredHealthAsString = StoredHealthAsString.substring(0, StoredHealthAsString.indexOf(".") + 2);
-		if (StoredHealthAsString.endsWith(".0")) StoredHealthAsString = StoredHealthAsString.replace(".0", "");
-		String MaxStorageHealthString = String.valueOf(MaxStoredHealth / 2);
-		if (MaxStorageHealthString.contains(".")) MaxStorageHealthString = MaxStorageHealthString.substring(0, MaxStorageHealthString.indexOf(".") + 2);
-		if (MaxStorageHealthString.endsWith(".0")) MaxStorageHealthString = MaxStorageHealthString.replace(".0", "");
+		float shoredHealth = getCurrentHealthStorage(stack);
+		float maxStoredHealth = getMaxHealthStorage(stack);
+		String storedHealthAsString = String.valueOf(shoredHealth / 2);
+		if (storedHealthAsString.contains(".")) storedHealthAsString = storedHealthAsString.substring(0, storedHealthAsString.indexOf(".") + 2);
+		if (storedHealthAsString.endsWith(".0")) storedHealthAsString = storedHealthAsString.replace(".0", "");
+		String maxStoredHealthAsString = String.valueOf(maxStoredHealth / 2);
+		if (maxStoredHealthAsString.contains(".")) maxStoredHealthAsString = maxStoredHealthAsString.substring(0, maxStoredHealthAsString.indexOf(".") + 2);
+		if (maxStoredHealthAsString.endsWith(".0")) maxStoredHealthAsString = maxStoredHealthAsString.replace(".0", "");
 		
 		/* Lunchbox */
 		
-		float StoredFood = getCurrentFoodStorage(stack);
-		float Maximum = getMaxFoodStorage(stack);
-		String StoredAsFoodString = String.valueOf(StoredFood / 2);
-		String MaximumStorageFoodString = String.valueOf(Maximum / 2);
-		if (StoredAsFoodString.contains(".")) StoredAsFoodString = StoredAsFoodString.substring(0, StoredAsFoodString.indexOf(".") + 2);
-		if (StoredAsFoodString.endsWith(".0")) StoredAsFoodString = StoredAsFoodString.replace(".0", "");
-		if (MaximumStorageFoodString.endsWith(".0")) MaximumStorageFoodString = MaximumStorageFoodString.replace(".0", "");
+		float storedFood = getCurrentFoodStorage(stack);
+		float maxStoredFood = getMaxFoodStorage(stack);
+		String storedFoodAsString = String.valueOf(storedFood / 2);
+		String maxStoredFoodAsString = String.valueOf(maxStoredFood / 2);
+		if (storedFoodAsString.contains(".")) storedFoodAsString = storedFoodAsString.substring(0, storedFoodAsString.indexOf(".") + 2);
+		if (storedFoodAsString.endsWith(".0")) storedFoodAsString = storedFoodAsString.replace(".0", "");
+		if (maxStoredFoodAsString.endsWith(".0")) maxStoredFoodAsString = maxStoredFoodAsString.replace(".0", "");
 		
-		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", StoredHealthAsString, MaxStorageHealthString));
-		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", StoredAsFoodString, MaximumStorageFoodString));
-	}
-	
-	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int param4, boolean param5) {
-		if (entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entity;
-			
-			/* HEART CANISTER */
-			
-			float StoredHealth = getCurrentHealthStorage(stack);
-			float MaxStoredHealth = getMaxHealthStorage(stack);
-			float PlayerHealth = player.getHealth();
-			
-			if (PlayerHealth < player.getMaxHealth() - 2F) {
-				float HealthToGive = (player.getMaxHealth() - 2F) - PlayerHealth;
-				if (HealthToGive > StoredHealth) HealthToGive = StoredHealth;
-				
-				player.setHealth(PlayerHealth + HealthToGive);
-				float SetTo = StoredHealth - HealthToGive;
-				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
-				stack.getTagCompound().setFloat(NBTTagKeys.MAX_HEALTH_STORED, MaxStoredHealth);
-			}
-			if (PlayerHealth > player.getMaxHealth() - 2F) {
-				float HealthToTake = PlayerHealth - (player.getMaxHealth() - 2F);
-				if (StoredHealth + HealthToTake > MaxStoredHealth) {
-					HealthToTake = MaxStoredHealth - StoredHealth;
-				}
-				player.setHealth(PlayerHealth - HealthToTake);
-				float SetTo = StoredHealth + HealthToTake;
-				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, SetTo <= MaxStoredHealth ? SetTo : MaxStoredHealth);
-				stack.getTagCompound().setFloat(NBTTagKeys.MAX_HEALTH_STORED, MaxStoredHealth);
-			}
-			
-			/* LUNCHBOX */
-			
-			int PlayerFood = player.getFoodStats().getFoodLevel();
-			if (PlayerFood < 20) {
-				int StoredFood = (int) getCurrentFoodStorage(stack);
-				int FoodToGive = 20 - PlayerFood;
-				if (FoodToGive > StoredFood) FoodToGive = StoredFood;
-				player.getFoodStats().addStats(FoodToGive, FoodToGive > 0 ? 20F : 0F);
-				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, StoredFood - FoodToGive);
-			}
-		}
+		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", storedHealthAsString, maxStoredHealthAsString));
+		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", storedFoodAsString, maxStoredFoodAsString));
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
@@ -108,33 +60,63 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		return 0xFFFFFF;
 	}
 	
-	@Override public float getCurrentHealthStorage(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F);
+	@Override public boolean hasEffect(ItemStack stack) { return true; }
+	
+	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			
+			/* HEART CANISTER */
+			
+			float storedHealth = getCurrentHealthStorage(stack);
+			float maxStoredHealth = getMaxHealthStorage(stack);
+			float playerHealth = player.getHealth();
+			
+			if (playerHealth < player.getMaxHealth() - 2F) {
+				float healthToGive = (player.getMaxHealth() - 2F) - playerHealth;
+				if (healthToGive > storedHealth) healthToGive = storedHealth;
+				
+				player.setHealth(playerHealth + healthToGive);
+				float setTo = storedHealth - healthToGive;
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, setTo <= maxStoredHealth ? setTo : maxStoredHealth);
+				stack.getTagCompound().setFloat(NBTTagKeys.MAX_HEALTH_STORED, maxStoredHealth);
+			}
+			if (playerHealth > player.getMaxHealth() - 2F) {
+				float healthToTake = playerHealth - (player.getMaxHealth() - 2F);
+				if (storedHealth + healthToTake > maxStoredHealth) {
+					healthToTake = maxStoredHealth - storedHealth;
+				}
+				player.setHealth(playerHealth - healthToTake);
+				float setTo = storedHealth + healthToTake;
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, setTo <= maxStoredHealth ? setTo : maxStoredHealth);
+				stack.getTagCompound().setFloat(NBTTagKeys.MAX_HEALTH_STORED, maxStoredHealth);
+			}
+			
+			/* LUNCHBOX */
+			
+			int playerFood = player.getFoodStats().getFoodLevel();
+			if (playerFood < 20) {
+				int storedFood = (int) getCurrentFoodStorage(stack);
+				int foodToGive = 20 - playerFood;
+				if (foodToGive > storedFood) foodToGive = storedFood;
+				player.getFoodStats().addStats(foodToGive, foodToGive > 0 ? 20F : 0F);
+				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, storedFood - foodToGive);
+			}
+		}
 	}
 	
-	@Override public float getMaxHealthStorage(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, 2000F);
-	}
-	
-	@Override public float getCurrentFoodStorage(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F);
-	}
-	
-	@Override public float getMaxFoodStorage(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F);
-	}
-	
-	@Override public int getColor(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return tagOrDefault(stack, NBTTagKeys.COLOR, 16);
-	}
+	/* ILunchbox */
+	@Override public int getColor(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.COLOR, 16); }
+	@Override public float getCurrentFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F); }
+	@Override public float getMaxFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F); }
 	
 	@Override public boolean hasColor(ItemStack stack) {
-		tagCompoundVerification(stack);
+		this.tagCompoundVerification(stack);
 		return stack.getTagCompound().hasKey(NBTTagKeys.COLOR);
 	}
+	
+	/* IHeartCanister */
+	
+	@Override public float getCurrentHealthStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F); }
+	@Override public float getMaxHealthStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, 2000F); }
 }

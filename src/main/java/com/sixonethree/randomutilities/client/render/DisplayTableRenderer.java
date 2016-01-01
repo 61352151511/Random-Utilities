@@ -18,25 +18,25 @@ import com.sixonethree.randomutilities.utility.GlManager;
 public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDisplayTable> {
 	private final ModelDisplayTable model;
 	private RenderManager renderManager;
+	ResourceLocation displayTableTexture = new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/DisplayTable.png");
 	
 	public DisplayTableRenderer(RenderManager rm) {
 		this.model = new ModelDisplayTable();
 		this.renderManager = rm;
 	}
 	
-	@Override public void renderTileEntityAt(TileEntityDisplayTable starCrafting, double x, double y, double z, float partialTicks, int destroyStage) {
-		int facing = starCrafting.getFacing();
+	@Override public void renderTileEntityAt(TileEntityDisplayTable displayTable, double x, double y, double z, float partialTicks, int destroyStage) {
+		int facing = displayTable.getFacing();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		ResourceLocation textures = (new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/StarCraftingTable.png"));
-		Minecraft.getMinecraft().renderEngine.bindTexture(textures);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.displayTableTexture);
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
 		this.model.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 		GlStateManager.popMatrix();
 		
-		/* RENDER THE INSIDE */
+		/* RENDER THE ITEMS ON TOP */
 		
 		GlStateManager.pushMatrix();
 		GlStateManager.color(1, 1, 1, 1);
@@ -54,18 +54,18 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDi
 		int translates = 0;
 		
 		for (int i = 0; i < 25; i ++) {
-			ItemStack stack = starCrafting.getStackInSlot(i);
+			ItemStack stack = displayTable.getStackInSlot(i);
 			if (stack != null) {
 				ItemStack renderStack = stack.copy();
 				renderStack.stackSize = 1;
-				EntityItem ghostItem = new EntityItem(starCrafting.getWorld(), x, y, z, renderStack);
+				EntityItem ghostItem = new EntityItem(displayTable.getWorld(), x, y, z, renderStack);
 				ghostItem.hoverStart = 0F;
 				if (!(stack.getItem() instanceof ItemBlock)) {
 					if (facing == 2) GlStateManager.rotate(-90, 0, 1, 0);
 					if (facing == 3) GlStateManager.rotate(90, 0, 1, 0);
 					if (facing == 4) GlStateManager.rotate(180, 0, 1, 0);
 				}
-				renderManager.doRenderEntity(ghostItem, 0, 0, 0, 0, 0, false);
+				this.renderManager.doRenderEntity(ghostItem, 0, 0, 0, 0, 0, false);
 				if (!(stack.getItem() instanceof ItemBlock)) {
 					if (facing == 2) GlStateManager.rotate(90, 0, 1, 0);
 					if (facing == 3) GlStateManager.rotate(-90, 0, 1, 0);
