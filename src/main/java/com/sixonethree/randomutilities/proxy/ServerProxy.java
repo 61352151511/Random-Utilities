@@ -30,7 +30,6 @@ public class ServerProxy implements IGuiHandler {
 	
 	public void postInit(FMLPostInitializationEvent event) {}
 	
-	public void bindTileEntitySpecialRenderers() {}
 	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) { return null; }
 	public World getClientWorld() { return null; }
 	
@@ -41,7 +40,4 @@ public class ServerProxy implements IGuiHandler {
 		if (ID == 1) return new ContainerDisplayTable(player.inventory, (TileEntityDisplayTable) te, 0, 0);
 		return null;
 	}
-	
-	public void registerRenderInformation() {}
-	public void registerItemRenders() {}
 }

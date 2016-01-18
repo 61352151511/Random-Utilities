@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -17,8 +18,8 @@ import com.sixonethree.randomutilities.client.gui.GuiManager;
 import com.sixonethree.randomutilities.client.gui.GuiManager.GUI;
 import com.sixonethree.randomutilities.client.model.ModelHelper;
 import com.sixonethree.randomutilities.client.render.DisplayTableRenderer;
-import com.sixonethree.randomutilities.client.render.MagicChestRenderer;
 import com.sixonethree.randomutilities.client.render.ModeledBlockInventoryRenderer;
+import com.sixonethree.randomutilities.client.render.TileEntityRenderer;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
@@ -32,22 +33,12 @@ public class ClientProxy extends ServerProxy {
 	@Override public void init(FMLInitializationEvent event) {
 		super.init(event);
 		
-		this.bindTileEntitySpecialRenderers();
-		this.registerRenderInformation();
-		this.registerItemRenders();
+		this.registerRenderers();
+		MinecraftForge.EVENT_BUS.register(new TileEntityRenderer());
 	}
 	
 	@Override public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
-	}
-	
-	@Override public void bindTileEntitySpecialRenderers() {
-		TileEntitySpecialRenderer<TileEntityMagicChest> mcr = new MagicChestRenderer(Minecraft.getMinecraft().getRenderManager());
-		TileEntitySpecialRenderer<TileEntityDisplayTable> dtr = new DisplayTableRenderer(Minecraft.getMinecraft().getRenderManager());
-		ModelHelper.removeBlockState(ModBlocks.magicChest);
-		ModelHelper.removeBlockState(ModBlocks.displayTable);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicChest.class, mcr);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
 	}
 	
 	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -62,16 +53,18 @@ public class ClientProxy extends ServerProxy {
 		return FMLClientHandler.instance().getClient().theWorld;
 	}
 	
-	@Override public void registerItemRenders() {
+	public void registerRenderers() {
+		TileEntitySpecialRenderer<TileEntityDisplayTable> dtr = new DisplayTableRenderer(Minecraft.getMinecraft().getRenderManager());
+		ModelHelper.removeBlockState(ModBlocks.displayTable);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
+		
 		ModelHelper.registerBlock(ModBlocks.magicChest);
 		ModelHelper.registerBlock(ModBlocks.displayTable);
 		ModelHelper.registerItem(ModItems.lunchbox, new int[] {0, 1});
 		ModelHelper.registerItem(ModItems.heartCanister, new int[] {0, 1, 2, 3});
 		ModelHelper.registerItem(ModItems.combined);
 		ModelHelper.registerItem(ModItems.magicCard);
-	}
-	
-	@Override public void registerRenderInformation() {
+		
 		TileEntityItemStackRenderer.instance = new ModeledBlockInventoryRenderer(TileEntityItemStackRenderer.instance);
 	}
 }

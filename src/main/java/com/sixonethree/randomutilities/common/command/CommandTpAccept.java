@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 import com.sixonethree.randomutilities.reference.CommandReference.TeleportRequests;
-import com.sixonethree.randomutilities.utility.Location;
+import com.sixonethree.randomutilities.utility.homewarp.Location;
 
 public class CommandTpAccept extends ModCommandBase implements ICommand {
 	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {

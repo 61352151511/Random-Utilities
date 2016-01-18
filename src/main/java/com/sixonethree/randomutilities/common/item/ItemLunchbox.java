@@ -32,7 +32,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.stores"));
 		float storedFood = this.getCurrentFoodStorage(stack);
 		float maximum = this.getMaxFoodStorage(stack);
-		if (stack.getItemDamage() == 1) list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.auto"));
+		if (this.isLunchboxAutomatic(stack)) list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.lunchbox.auto"));
 		list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.lunchbox.fill"));
 		String storedAsString = String.valueOf(storedFood / 2);
 		String maximumStoredAsString = String.valueOf(maximum / 2);
@@ -43,7 +43,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) { return pass == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(getColor(stack)); }
-	@Override public EnumAction getItemUseAction(ItemStack stack) { return stack.getItemDamage() == 0 ? EnumAction.EAT : EnumAction.NONE; }
+	@Override public EnumAction getItemUseAction(ItemStack stack) { return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT; }
 	
 	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		list.add(new ItemStack(item, 1, 0));
@@ -91,11 +91,12 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 	
 	/* ILunchbox */
 	
-	@Override public int getColor(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.COLOR, 16); }
-	@Override public float getCurrentFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F); }
-	@Override public float getMaxFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F); }
-	@Override public boolean hasColor(ItemStack stack) {
-		tagCompoundVerification(stack);
-		return stack.getTagCompound().hasKey(NBTTagKeys.COLOR);
+	@Override public boolean isLunchboxAutomatic(ItemStack stack) {
+		return stack.getMetadata() == 1;
+	}
+	
+	@Override public void setCurrentFoodStorage(ItemStack stack, float storage) {
+		this.tagCompoundVerification(stack);
+		stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, storage);
 	}
 }

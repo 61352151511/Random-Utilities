@@ -45,6 +45,8 @@ public class Recipes {
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 0), "qdq", "igi", "qdq", 'q', new ItemStack(Blocks.quartz_block, 1, 0), 'd', new ItemStack(Items.diamond, 1, 0), 'i', new ItemStack(Items.iron_ingot), 'g', new ItemStack(Items.golden_apple, 1, 0));
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 1), "gdg", "nen", "gdg", 'g', new ItemStack(Blocks.gold_block, 1, 0), 'd', new ItemStack(Blocks.diamond_block, 1, 0), 'n', new ItemStack(Items.nether_star), 'e', new ItemStack(Items.golden_apple, 1, 1));
 		GameRegistry.addShapedRecipe(new ItemStack(ModItems.lunchbox, 1, 0), " s ", "iii", "cgb", 's', new ItemStack(Items.stick), 'i', new ItemStack(Items.iron_ingot), 'c', new ItemStack(Items.carrot), 'g', new ItemStack(Items.golden_apple), 'b', new ItemStack(Items.bread));
+		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.magicChest), "ccc", "cnc", "ccc", 'c', new ItemStack(Blocks.chest), 'n', new ItemStack(Items.nether_star));
+		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.displayTable), "ccc", "w w", "w w", 'c', new ItemStack(Blocks.crafting_table), 'w', new ItemStack(Blocks.planks));
 		
 		ArrayList<ItemStack> UpgradeComponents = new ArrayList<ItemStack>() {
 			private static final long serialVersionUID = -4349640254907860210L;

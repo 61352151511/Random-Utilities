@@ -20,8 +20,8 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import com.sixonethree.randomutilities.utility.Location;
-import com.sixonethree.randomutilities.utility.TeleporterHome;
+import com.sixonethree.randomutilities.utility.homewarp.Location;
+import com.sixonethree.randomutilities.utility.homewarp.TeleporterHome;
 
 public abstract class ModCommandBase extends CommandBase {
 	
@@ -32,6 +32,7 @@ public abstract class ModCommandBase extends CommandBase {
 	public static ICommandManager commandManager = serverInstance.getCommandManager();
 	
 	public static String noHomeCalled = "homes.message.nohomecalled";
+	public static String noWarpCalled = "warps.message.nowarpcalled";
 	
 	/* One Liners */
 	
@@ -47,12 +48,25 @@ public abstract class ModCommandBase extends CommandBase {
 		processCommandConsole((ICommandSender) block, args);
 	}
 	
+	/**
+	 * Determines if the console can use this command.
+	 * @return Can the console use the command?
+	 */
 	public abstract boolean canConsoleUseCommand();
-	
+	/**
+	 * Determines if this command is for server operators only.
+	 * @return True if op only, false if anyone can use it.
+	 */
 	public abstract boolean isOpOnly();
-	
+	/**
+	 * Determines if pressing the tab key fills out player names for arguments.
+	 * @return True if pressing tab fills out online players.
+	 */
 	public abstract boolean tabCompletesOnlinePlayers();
-	
+	/**
+	 * The usage type.
+	 * @return 0 for "command.commandname.usage" or 1 for /commandname
+	 */
 	public abstract int getUsageType(); // 0 = command.<Command Name>.usage || 1
 										// = /<Command Name>
 	
@@ -137,16 +151,24 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	public void outputMessage(ICommandSender sender, String message, boolean Translatable, boolean AppendBase, Object... formatargs) {
+	/**
+	 * Outputs a message to an ICommandSender
+	 * @param sender - Who to send the message to
+	 * @param message - The message to send
+	 * @param translatable - Whether the message is translatable or not
+	 * @param appendBase - Append the command base?
+	 * @param formatargs - Translation arguments.
+	 */
+	public void outputMessage(ICommandSender sender, String message, boolean translatable, boolean appendBase, Object... formatargs) {
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;
-			if (Translatable) {
-				outputMessageLocal(sender, message, AppendBase, formatargs);
+			if (translatable) {
+				outputMessageLocal(sender, message, appendBase, formatargs);
 			} else {
-				player.addChatComponentMessage(new ChatComponentText((AppendBase ? getLocalBase() : "") + message));
+				player.addChatComponentMessage(new ChatComponentText((appendBase ? getLocalBase() : "") + message));
 			}
 		} else {
-			sender.addChatMessage(new ChatComponentText((AppendBase ? getLocalBase() : "") + message));
+			sender.addChatMessage(new ChatComponentText((appendBase ? getLocalBase() : "") + message));
 		}
 	}
 	
@@ -156,8 +178,13 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	public void outputUsage(ICommandSender sender, Boolean Translatable) {
-		outputMessage(sender, getCommandUsage(sender), Translatable, false);
+	/**
+	 * Outputs how to properly use the command.
+	 * @param sender - Who are we outputting the message to?
+	 * @param translatable - Is the message translatable?
+	 */
+	public void outputUsage(ICommandSender sender, Boolean translatable) {
+		outputMessage(sender, getCommandUsage(sender), translatable, false);
 	}
 	
 	public static void transferDimension(EntityPlayerMP player, Location loc) {

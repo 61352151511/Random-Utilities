@@ -21,9 +21,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	
 	public ItemHeartCanister() {
 		super();
-		this.setUnlocalizedName("heartCanister");
-		this.setFull3D();
-		this.setHasSubtypes(true);
+		this.setUnlocalizedName("heartCanister").setFull3D().setHasSubtypes(true);
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
@@ -71,10 +69,10 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	}
 	
 	@Override public String getUnlocalizedName(ItemStack stack) { return super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()]; }
-	@Override public boolean hasEffect(ItemStack stack) { return stack.getItemDamage() > 1; }
+	@Override public boolean hasEffect(ItemStack stack) { return this.isHeartCanisterAutomatic(stack); }
 	
 	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (stack.getItemDamage() < 2) {
+		if (!this.isHeartCanisterAutomatic(stack)) {
 			if (!player.isSneaking()) { // TAKE HEALTH
 				float storedHealth = this.getCurrentHealthStorage(stack);
 				float maxStoredHealth = this.getMaxHealthStorage(stack);
@@ -134,6 +132,6 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	
 	/* IHeartCanister */
 	
-	@Override public float getCurrentHealthStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F); }
-	@Override public float getMaxHealthStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, ((stack.getItemDamage() % 2) + 1) == 1 ? 200F : 2000F); }
+	@Override public boolean isLarge(ItemStack stack) { return stack.getItemDamage() % 2 == 1; }
+	@Override public boolean isHeartCanisterAutomatic(ItemStack stack) { return stack.getItemDamage() >= 2; }
 }

@@ -1,40 +1,29 @@
-package com.sixonethree.randomutilities.common.command;
+package com.sixonethree.randomutilities.common.command.home;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 
-import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
-import com.sixonethree.randomutilities.utility.HomePoint;
-import com.sixonethree.randomutilities.utility.Location;
+import com.sixonethree.randomutilities.common.command.ModCommandBase;
+import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
 
-public class CommandHome extends ModCommandBase implements ICommand {
+public class CommandDelHome extends ModCommandBase implements ICommand {
 	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 	
 	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
-		EntityPlayerMP playerMP = (EntityPlayerMP) player;
-		UUID playerUUID = player.getUniqueID();
 		if (args.length > 0) {
 			String requestedHome = args[0];
-			if (HomePoint.getHome(playerUUID + requestedHome) != null) {
-				Location loc = HomePoint.getHome(playerUUID + requestedHome).location;
-				LastLocations.set(playerMP, new Location(playerMP));
-				if (loc.dimension != player.dimension) {
-					transferDimension(playerMP, loc);
-				} else {
-					player.setPositionAndUpdate(loc.posX, loc.posY, loc.posZ);
-					player.fallDistance = 0F;
-				}
+			if (HomePoint.getHome(player.getUniqueID().toString() + requestedHome) != null) {
+				HomePoint.delHome(player.getUniqueID().toString() + requestedHome);
+				outputMessage(player, "deletedhome", true, true, requestedHome);
 			} else {
-				outputMessage(player, noHomeCalled, true, false, requestedHome);
+				outputMessage(player, "nohome", true, true, requestedHome);
 			}
 		} else {
 			outputMessage(player, "statewhichhome", true, true);
@@ -47,6 +36,4 @@ public class CommandHome extends ModCommandBase implements ICommand {
 	@Override public int getUsageType() { return 0; }
 	@Override public boolean isOpOnly() { return false; }
 	@Override public boolean tabCompletesOnlinePlayers() { return false; }
-	
-	
 }

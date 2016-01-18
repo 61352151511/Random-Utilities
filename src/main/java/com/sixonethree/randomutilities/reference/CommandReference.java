@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.sixonethree.randomutilities.utility.Location;
+import com.sixonethree.randomutilities.utility.homewarp.Location;
 
 public class CommandReference {
 	public static class AfkPlayers {

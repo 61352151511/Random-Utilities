@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -21,7 +20,7 @@ public class BlockMagicChest extends BlockContainerBase {
 		super();
 		this.setUnlocalizedName("magicChest");
 		this.setHardness(1.5F);
-		this.setParticleBlockState(Blocks.obsidian.getDefaultState());
+		this.setParticleBlockState(this.getDefaultState());
 	}
 	
 	@Override public TileEntity createNewTileEntity(World world, int meta) {
@@ -29,7 +28,7 @@ public class BlockMagicChest extends BlockContainerBase {
 	}
 	
 	@Override public int getRenderType() {
-		return 2;
+		return 3;
 	}
 	
 	@Override public boolean isOpaqueCube() {

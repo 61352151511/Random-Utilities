@@ -17,7 +17,7 @@ import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.LogHelper;
 
 @SideOnly(Side.CLIENT) public class ModelHelper {
-	public static void registerItem(Item item, String[] registryNames, int[] registryMetas) {
+	public static void registerItemInternal(Item item, String[] registryNames, int[] registryMetas) {
 		if (registryNames.length != registryMetas.length) {
 			LogHelper.warn("Could not register models for " + item.getUnlocalizedName() + ": registryNames and registryMetas do not have matching lengths.");
 			return;
@@ -28,8 +28,13 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 		}
 	}
 	
+	public static void registerItem(Item item, String[] registryNames, int[] registryMetas) {
+		ModelBakery.registerItemVariants(item, generateVariants(registryNames));
+		registerItemInternal(item, registryNames, registryMetas);
+	}
+	
 	public static void registerBlock(Block block, IStateMapper mapper, String[] registryNames, int[] registryMetas) {
-		registerItem(Item.getItemFromBlock(block), registryNames, registryMetas);
+		registerItemInternal(Item.getItemFromBlock(block), registryNames, registryMetas);
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), generateVariants(registryNames));
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getBlockModelShapes().registerBlockWithStateMapper(block, mapper);
 	}
@@ -51,7 +56,7 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	}
 	
 	public static void registerItem(Item item, String registryName) {
-		registerItem(item, new String[] {registryName}, new int[] {0});
+		registerItemInternal(item, new String[] {registryName}, new int[] {0});
 	}
 	
 	public static void registerItem(Item item, int[] registryMetas) {
@@ -59,11 +64,12 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 		for (int i = 0; i < registryNames.length; i ++) {
 			registryNames[i] = item.getUnlocalizedName().substring(5).replace(Reference.RESOURCE_PREFIX, "");
 		}
-		registerItem(item, registryNames, registryMetas);
+		ModelBakery.registerItemVariants(item, generateVariants(registryNames));
+		registerItemInternal(item, registryNames, registryMetas);
 	}
 	
 	public static void registerItem(Item item) {
-		registerItem(item, new String[] {item.getUnlocalizedName().substring(5).replace(Reference.RESOURCE_PREFIX, "")}, new int[] {0});
+		registerItemInternal(item, new String[] {item.getUnlocalizedName().substring(5).replace(Reference.RESOURCE_PREFIX, "")}, new int[] {0});
 	}
 	
 	public static void removeBlockState(Block block) {
@@ -73,7 +79,7 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	static ResourceLocation[] generateVariants(String[] registryNames) {
 		ArrayList<ResourceLocation> ret = new ArrayList<ResourceLocation>();
 		for (String aString : registryNames) {
-			ret.add(new ResourceLocation(Reference.MOD_ID, aString));
+			ret.add(new ResourceLocation(Reference.MOD_ID, aString.contains(Reference.RESOURCE_PREFIX) ? aString.replace(Reference.RESOURCE_PREFIX, "") : aString));
 		}
 		return ret.toArray(new ResourceLocation[] {});
 	}

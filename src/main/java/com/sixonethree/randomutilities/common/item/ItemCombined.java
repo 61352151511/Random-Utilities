@@ -106,17 +106,18 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 	}
 	
 	/* ILunchbox */
-	@Override public int getColor(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.COLOR, 16); }
-	@Override public float getCurrentFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_FOOD_STORED, 0F); }
-	@Override public float getMaxFoodStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_FOOD_STORED, 200F); }
 	
-	@Override public boolean hasColor(ItemStack stack) {
+	@Override public boolean isLunchboxAutomatic(ItemStack stack) {
+		return stack.getMetadata() == 1;
+	}
+	
+	@Override public void setCurrentFoodStorage(ItemStack stack, float storage) {
 		this.tagCompoundVerification(stack);
-		return stack.getTagCompound().hasKey(NBTTagKeys.COLOR);
+		stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_FOOD_STORED, storage);
 	}
 	
 	/* IHeartCanister */
 	
-	@Override public float getCurrentHealthStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.CURRENT_HEALTH_STORED, 0F); }
-	@Override public float getMaxHealthStorage(ItemStack stack) { return this.tagOrDefault(stack, NBTTagKeys.MAX_HEALTH_STORED, 2000F); }
+	@Override public boolean isHeartCanisterAutomatic(ItemStack stack) { return true; }
+	@Override public boolean isLarge(ItemStack stack) { return true; }
 }

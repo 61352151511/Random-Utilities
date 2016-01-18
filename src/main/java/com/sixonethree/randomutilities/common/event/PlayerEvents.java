@@ -12,8 +12,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
-import com.sixonethree.randomutilities.utility.HomePoint;
-import com.sixonethree.randomutilities.utility.SaveFile;
+import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
+import com.sixonethree.randomutilities.utility.homewarp.SaveFile;
+import com.sixonethree.randomutilities.utility.homewarp.WarpPoint;
 
 public class PlayerEvents {
 	private static IChatComponent colorPlayer(EntityPlayer player) {
@@ -38,10 +39,13 @@ public class PlayerEvents {
 	
 	@SubscribeEvent public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
 		HomePoint.homesSaveFile = new SaveFile("/homes.txt", event.playerDirectory.getParent());
+		WarpPoint.warpsSaveFile = new SaveFile("/warps.txt", event.playerDirectory.getParent());
 		HomePoint.loadAll();
+		WarpPoint.loadAll();
 	}
 	
 	@SubscribeEvent public void onPlayerSaveToFileEvent(PlayerEvent.SaveToFile event) {
 		HomePoint.saveAll();
+		WarpPoint.saveAll();
 	}
 }

@@ -1,10 +1,11 @@
-package com.sixonethree.randomutilities.common.command;
+package com.sixonethree.randomutilities.common.command.home;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.sixonethree.randomutilities.utility.HomePoint;
+import com.sixonethree.randomutilities.common.command.ModCommandBase;
+import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
 
 public class CommandSetHome extends ModCommandBase implements ICommand {
 	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {

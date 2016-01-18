@@ -1,4 +1,4 @@
-package com.sixonethree.randomutilities.utility;
+package com.sixonethree.randomutilities.utility.homewarp;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.Teleporter;
