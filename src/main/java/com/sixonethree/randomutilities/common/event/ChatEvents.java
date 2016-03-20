@@ -11,7 +11,7 @@ import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
 
 public class ChatEvents {
 	@SubscribeEvent public void onPlayerChat(ServerChatEvent event) {
-		EntityPlayerMP mrchattypants = event.player;
+		EntityPlayerMP mrchattypants = event.getPlayer();
 		if (MutedPlayers.isMuted(mrchattypants.getUniqueID())) {
 			event.setCanceled(true);
 		}

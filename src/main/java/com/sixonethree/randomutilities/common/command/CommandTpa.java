@@ -3,13 +3,14 @@ package com.sixonethree.randomutilities.common.command;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 import com.sixonethree.randomutilities.reference.CommandReference.TeleportRequests;
 
 public class CommandTpa extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) throws CommandException {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) throws CommandException {
 		if (args.length > 0) {
-			EntityPlayer requestedPlayer = getPlayer(player, args[0]);
+			EntityPlayer requestedPlayer = getPlayer(server, player, args[0]);
 			if (requestedPlayer.equals(player)) {
 				outputMessage(player, "notyourself", true, true);
 			} else {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 public class HomePoint {
 	public String name;
@@ -74,15 +74,15 @@ public class HomePoint {
 			if (homes.get(cur).name.startsWith(player.getUniqueID().toString())) {
 				if (playerhomes.length() == 0) {
 					if (homes.get(cur).location.dimension != player.dimension) {
-						playerhomes += EnumChatFormatting.RED + homes.get(cur).name.substring(player.getUniqueID().toString().length());
+						playerhomes += TextFormatting.RED + homes.get(cur).name.substring(player.getUniqueID().toString().length());
 					} else {
-						playerhomes += EnumChatFormatting.GREEN + homes.get(cur).name.substring(player.getUniqueID().toString().length());
+						playerhomes += TextFormatting.GREEN + homes.get(cur).name.substring(player.getUniqueID().toString().length());
 						Location aloc = homes.get(cur).location;
-						playerhomes += EnumChatFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(aloc.x, aloc.y, aloc.z)))) + ")";
+						playerhomes += TextFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(aloc.x, aloc.y, aloc.z)))) + ")";
 					}
 				} else {
 					Location aloc = homes.get(cur).location;
-					playerhomes += EnumChatFormatting.RESET + ", " + (aloc.dimension == player.dimension ? EnumChatFormatting.GREEN : EnumChatFormatting.RED) + homes.get(cur).name.substring(player.getUniqueID().toString().length()) + ((aloc.dimension == player.dimension) ? EnumChatFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(aloc.x, aloc.y, aloc.z)))) + ")" : "");
+					playerhomes += TextFormatting.RESET + ", " + (aloc.dimension == player.dimension ? TextFormatting.GREEN : TextFormatting.RED) + homes.get(cur).name.substring(player.getUniqueID().toString().length()) + ((aloc.dimension == player.dimension) ? TextFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(aloc.x, aloc.y, aloc.z)))) + ")" : "");
 				}
 			}
 		}

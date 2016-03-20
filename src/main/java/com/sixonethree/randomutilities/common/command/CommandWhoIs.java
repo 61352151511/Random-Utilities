@@ -4,14 +4,15 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
 import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
 
 public class CommandWhoIs extends ModCommandBase implements ICommand {
-	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	@Override public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
-			EntityPlayer player = getPlayer(sender, args[0]);
+			EntityPlayer player = getPlayer(server, sender, args[0]);
 			outputMessage(sender, "statson", true, true, colorPlayer(player));
 			outputMessage(sender, "afk", true, true, AfkPlayers.isAfk(player.getUniqueID()));
 			outputMessage(sender, "muted", true, true, MutedPlayers.isMuted(player.getUniqueID()));

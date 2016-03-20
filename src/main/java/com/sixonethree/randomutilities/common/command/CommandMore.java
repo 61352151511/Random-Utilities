@@ -2,11 +2,12 @@ package com.sixonethree.randomutilities.common.command;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandMore extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
-		if (player.getCurrentEquippedItem() != null) {
-			player.getCurrentEquippedItem().stackSize = player.getCurrentEquippedItem().getMaxStackSize();
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
+		if (player.getHeldItemMainhand() != null) {
+			player.getHeldItemMainhand().stackSize = player.getHeldItemMainhand().getMaxStackSize();
 		}
 	}
 	

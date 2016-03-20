@@ -3,10 +3,17 @@ package com.sixonethree.randomutilities.common.command;
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandRepair extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
-		ItemStack itemStack = player.getCurrentEquippedItem();
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
+		ItemStack itemStack = player.getHeldItemMainhand();
+		if (itemStack != null) {
+			if (itemStack.getItem().isDamageable()) {
+				itemStack.setItemDamage(0);
+			}
+		}
+		itemStack = player.getHeldItemOffhand();
 		if (itemStack != null) {
 			if (itemStack.getItem().isDamageable()) {
 				itemStack.setItemDamage(0);

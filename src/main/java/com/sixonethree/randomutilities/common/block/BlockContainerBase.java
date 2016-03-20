@@ -12,10 +12,10 @@ import net.minecraft.client.particle.EntityDiggingFX.Factory;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +41,7 @@ public class BlockContainerBase extends BlockContainer {
 		return null;
 	}
 	
-	@Override public boolean isOpaqueCube() {
+	@Override public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 	
@@ -57,7 +57,7 @@ public class BlockContainerBase extends BlockContainer {
 		this.particleBlockState = state;
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+	@Override @SideOnly(Side.CLIENT) public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, EffectRenderer effectRenderer) {
 		if (particleBlockState == null) return true;
 		Factory digFX = new Factory();
 		EnumFacing side = target.sideHit;
@@ -81,7 +81,7 @@ public class BlockContainerBase extends BlockContainer {
 		
 		EntityFX fx = digFX.getEntityFX(0, worldObj, d0, d1, d2, 0, 0, 0, Block.getStateId(iblockstate));
 		EntityDiggingFX dfx = (EntityDiggingFX) fx;
-		effectRenderer.addEffect(dfx.func_174846_a(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+		effectRenderer.addEffect(dfx.setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 		return true;
 	}
 	
@@ -103,7 +103,7 @@ public class BlockContainerBase extends BlockContainer {
 		return true;
 	}
 	
-	@Override public boolean addLandingEffects(WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles) {
+	@Override public boolean addLandingEffects(IBlockState state, WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles) {
 		worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), numberOfParticles, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[] {Block.getStateId(this.particleBlockState)});
 		return true;
 	}

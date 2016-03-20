@@ -6,17 +6,18 @@ import java.util.List;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 import com.sixonethree.randomutilities.common.command.ModCommandBase;
 import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
 
 public class CommandDelHome extends ModCommandBase implements ICommand {
-	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	@Override public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 	
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		if (args.length > 0) {
 			String requestedHome = args[0];
 			if (HomePoint.getHome(player.getUniqueID().toString() + requestedHome) != null) {

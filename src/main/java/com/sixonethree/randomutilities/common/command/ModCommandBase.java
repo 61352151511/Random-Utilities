@@ -10,13 +10,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -28,7 +28,7 @@ public abstract class ModCommandBase extends CommandBase {
 	/* Variables */
 	
 	public static MinecraftServer serverInstance = FMLCommonHandler.instance().getMinecraftServerInstance();
-	public static ServerConfigurationManager configHandler = serverInstance.getConfigurationManager();
+	public static PlayerList playerList = serverInstance.getPlayerList();
 	public static ICommandManager commandManager = serverInstance.getCommandManager();
 	
 	public static String noHomeCalled = "homes.message.nohomecalled";
@@ -40,12 +40,12 @@ public abstract class ModCommandBase extends CommandBase {
 		return "command." + getCommandName().toLowerCase() + ".";
 	}
 	
-	public void processCommandPlayer(EntityPlayer player, String[] args) throws CommandException {}
+	public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) throws CommandException {}
 	
-	public void processCommandConsole(ICommandSender sender, String[] args) {}
+	public void executeCommandConsole(MinecraftServer server, ICommandSender sender, String[] args) {}
 	
-	public void processCommandBlock(TileEntityCommandBlock block, String[] args) {
-		processCommandConsole((ICommandSender) block, args);
+	public void executeCommandBlock(MinecraftServer server, TileEntityCommandBlock block, String[] args) {
+		executeCommandConsole(server, (ICommandSender) block, args);
 	}
 	
 	/**
@@ -79,18 +79,18 @@ public abstract class ModCommandBase extends CommandBase {
 	}
 	
 	public static boolean checkOp(EntityPlayer player) {
-		return configHandler.canSendCommands(((EntityPlayerMP) player).getGameProfile());
+		return playerList.canSendCommands(((EntityPlayerMP) player).getGameProfile());
 	}
 	
-	public static IChatComponent colorPlayer(EntityPlayer player) {
+	public static ITextComponent colorPlayer(EntityPlayer player) {
 		return player.getDisplayName();
 	}
 	
-	public static IChatComponent colorPlayer(ICommandSender sender) {
+	public static ITextComponent colorPlayer(ICommandSender sender) {
 		return sender.getDisplayName();
 	}
 	
-	public static IChatComponent colorPlayer(EntityLivingBase entity) {
+	public static ITextComponent colorPlayer(EntityLivingBase entity) {
 		return entity.getDisplayName();
 	}
 	
@@ -116,17 +116,17 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	@Override public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
-			processCommandPlayer((EntityPlayer) sender, args);
+			executeCommandPlayer(server, (EntityPlayer) sender, args);
 		} else if (sender instanceof TileEntityCommandBlock) {
-			processCommandBlock((TileEntityCommandBlock) sender, args);
+			executeCommandBlock(server, (TileEntityCommandBlock) sender, args);
 		} else {
-			processCommandConsole(sender, args);
+			executeCommandConsole(server, sender, args);
 		}
 	}
 	
-	@Override public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	@Override public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		if (sender instanceof EntityPlayer) {
 			return canPlayerUseCommand((EntityPlayer) sender);
 		} else if (sender instanceof TileEntityCommandBlock) {
@@ -136,18 +136,16 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	@Override public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		if (tabCompletesOnlinePlayers()) { return args.length >= 1 ? getListOfStringsMatchingLastWord(args, serverInstance.getAllUsernames()) : null; }
 		return null;
 	}
 	
 	public void messageAll(String message, boolean Translatable, boolean AppendBase, Object... formatargs) {
-		List<?> players = configHandler.playerEntityList;
+		List<EntityPlayerMP> players = playerList.getPlayerList();
 		for (int i = 0; i < players.size(); ++ i) {
-			Object somethin = players.get(i);
-			if (somethin instanceof EntityPlayer) {
-				outputMessage((ICommandSender) somethin, message, Translatable, true, formatargs);
-			}
+			EntityPlayerMP player = players.get(i);
+			outputMessage((ICommandSender) player, message, Translatable, true, formatargs);
 		}
 	}
 	
@@ -165,16 +163,16 @@ public abstract class ModCommandBase extends CommandBase {
 			if (translatable) {
 				outputMessageLocal(sender, message, appendBase, formatargs);
 			} else {
-				player.addChatComponentMessage(new ChatComponentText((appendBase ? getLocalBase() : "") + message));
+				player.addChatComponentMessage(new TextComponentString((appendBase ? getLocalBase() : "") + message));
 			}
 		} else {
-			sender.addChatMessage(new ChatComponentText((appendBase ? getLocalBase() : "") + message));
+			sender.addChatMessage(new TextComponentString((appendBase ? getLocalBase() : "") + message));
 		}
 	}
 	
-	public void outputMessageLocal(ICommandSender sender, String message, boolean AppendBase, Object... formatargs) {
+	public void outputMessageLocal(ICommandSender sender, String message, boolean appendBase, Object... formatargs) {
 		if (sender instanceof EntityPlayer) {
-			((EntityPlayer) sender).addChatComponentMessage(new ChatComponentTranslation((AppendBase ? getLocalBase() : "") + message, formatargs));
+			((EntityPlayer) sender).addChatComponentMessage(new TextComponentTranslation((appendBase ? getLocalBase() : "") + message, formatargs));
 		}
 	}
 	
@@ -189,10 +187,10 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	public static void transferDimension(EntityPlayerMP player, Location loc) {
 		if (player.dimension == 1) {
-			player.addChatComponentMessage(new ChatComponentTranslation("command.teleport.inend", new Object[0]));
+			player.addChatComponentMessage(new TextComponentTranslation("command.teleport.inend", new Object[0]));
 		} else {
-			configHandler.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.worldObj, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
-			player = configHandler.getPlayerByUsername(player.getName());
+			playerList.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.worldObj, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
+			player = playerList.getPlayerByUsername(player.getName());
 		}
 	}
 	
@@ -206,8 +204,8 @@ public abstract class ModCommandBase extends CommandBase {
 			message = deathmessage;
 		}
 		
-		@Override public IChatComponent getDeathMessage(EntityLivingBase entity) {
-			return new ChatComponentTranslation(this.message, colorPlayer(entity));
+		@Override public ITextComponent getDeathMessage(EntityLivingBase entity) {
+			return new TextComponentTranslation(this.message, colorPlayer(entity));
 		}
 	}
 }

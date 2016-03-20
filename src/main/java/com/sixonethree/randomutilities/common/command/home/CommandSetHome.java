@@ -3,12 +3,13 @@ package com.sixonethree.randomutilities.common.command.home;
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 
 import com.sixonethree.randomutilities.common.command.ModCommandBase;
 import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
 
 public class CommandSetHome extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		if (args.length > 0) {
 			String homeName = args[0];
 			HomePoint.setHome((EntityPlayerMP) player, homeName);

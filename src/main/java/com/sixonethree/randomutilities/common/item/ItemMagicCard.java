@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,9 +39,9 @@ public class ItemMagicCard extends ItemBase {
 		}
 	}
 	
-	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (!player.worldObj.isRemote) {
-			String signersA = this.tagOrDefault(stack, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
+	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (!playerIn.worldObj.isRemote) {
+			String signersA = this.tagOrDefault(itemStackIn, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
 			String[] splitSigners = signersA.split(";");
 			ArrayList<String> signers;
 			if (splitSigners.length == 1) {
@@ -51,10 +53,10 @@ public class ItemMagicCard extends ItemBase {
 			} else {
 				signers = new ArrayList<String>(Arrays.asList(splitSigners));
 			}
-			if (signers.contains(player.getPersistentID().toString())) {
-				signers.remove(player.getPersistentID().toString());
+			if (signers.contains(playerIn.getPersistentID().toString())) {
+				signers.remove(playerIn.getPersistentID().toString());
 			} else {
-				signers.add(player.getPersistentID().toString());
+				signers.add(playerIn.getPersistentID().toString());
 			}
 			String compiled = "";
 			for (int i = 0; i < signers.size(); i ++) {
@@ -64,11 +66,11 @@ public class ItemMagicCard extends ItemBase {
 				}
 			}
 			if (compiled.isEmpty()) {
-				stack.getTagCompound().removeTag(NBTTagKeys.MAGIC_CARD_SIGNERS);
+				itemStackIn.getTagCompound().removeTag(NBTTagKeys.MAGIC_CARD_SIGNERS);
 			} else {
-				stack.getTagCompound().setString(NBTTagKeys.MAGIC_CARD_SIGNERS, compiled);
+				itemStackIn.getTagCompound().setString(NBTTagKeys.MAGIC_CARD_SIGNERS, compiled);
 			}
-			return stack;
-		} else return stack;
+		}
+		return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
 	}
 }

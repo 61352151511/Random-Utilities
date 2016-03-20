@@ -1,5 +1,5 @@
 {
-    "parent": "builtin/generated",
+    "parent": "item/generated",
     "textures": {
         "layer0": "randomutilities:items/combined",
         "layer1": "randomutilities:items/combined_overlay1",

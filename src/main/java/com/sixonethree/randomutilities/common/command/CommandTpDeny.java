@@ -5,15 +5,16 @@ import java.util.List;
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 
 import com.sixonethree.randomutilities.reference.CommandReference.TeleportRequests;
 
 public class CommandTpDeny extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		if (TeleportRequests.pending(player.getUniqueID())) {
 			outputMessage(player, "youdenied", true, true);
 			TeleportRequests.remove(player.getUniqueID());
-			List<EntityPlayerMP> playerlist = configHandler.playerEntityList;
+			List<EntityPlayerMP> playerlist = playerList.getPlayerList();
 			for (int i = 0; i < playerlist.size(); ++ i) {
 				if (playerlist.get(i).getUniqueID().equals(TeleportRequests.fromWho(player.getUniqueID()))) {
 					outputMessage(playerlist.get(i), "gotdenied", true, true);

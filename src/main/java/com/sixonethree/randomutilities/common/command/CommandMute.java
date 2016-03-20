@@ -4,13 +4,14 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
 
 public class CommandMute extends ModCommandBase implements ICommand {
-	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	@Override public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 0) {
-			EntityPlayer requestedPlayer = getPlayer(sender, args[0]);
+			EntityPlayer requestedPlayer = getPlayer(server, sender, args[0]);
 			boolean result = MutedPlayers.toggle(requestedPlayer.getUniqueID());
 			messageAll((result ? "mutedby" : "unmutedby"), true, true, colorPlayer(requestedPlayer), colorPlayer(sender));
 		} else {

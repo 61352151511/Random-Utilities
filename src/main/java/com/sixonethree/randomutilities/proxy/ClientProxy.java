@@ -5,9 +5,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -18,8 +17,8 @@ import com.sixonethree.randomutilities.client.gui.GuiManager;
 import com.sixonethree.randomutilities.client.gui.GuiManager.GUI;
 import com.sixonethree.randomutilities.client.model.ModelHelper;
 import com.sixonethree.randomutilities.client.render.DisplayTableRenderer;
+import com.sixonethree.randomutilities.client.render.MagicChestRenderer;
 import com.sixonethree.randomutilities.client.render.ModeledBlockInventoryRenderer;
-import com.sixonethree.randomutilities.client.render.TileEntityRenderer;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
@@ -34,7 +33,6 @@ public class ClientProxy extends ServerProxy {
 		super.init(event);
 		
 		this.registerRenderers();
-		MinecraftForge.EVENT_BUS.register(new TileEntityRenderer());
 	}
 	
 	@Override public void postInit(FMLPostInitializationEvent event) {
@@ -55,8 +53,11 @@ public class ClientProxy extends ServerProxy {
 	
 	public void registerRenderers() {
 		TileEntitySpecialRenderer<TileEntityDisplayTable> dtr = new DisplayTableRenderer(Minecraft.getMinecraft().getRenderManager());
+		TileEntitySpecialRenderer<TileEntityMagicChest> mcr = new MagicChestRenderer(Minecraft.getMinecraft().getRenderManager());
 		ModelHelper.removeBlockState(ModBlocks.displayTable);
+		ModelHelper.removeBlockState(ModBlocks.magicChest);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicChest.class, mcr);
 		
 		ModelHelper.registerBlock(ModBlocks.magicChest);
 		ModelHelper.registerBlock(ModBlocks.displayTable);

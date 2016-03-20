@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 public class WarpPoint {
 	public String name;
@@ -73,15 +73,15 @@ public class WarpPoint {
 		for (int cur = 0; cur < warps.size(); cur ++) {
 			if (warpList.length() == 0) {
 				if (warps.get(cur).location.dimension != player.dimension) {
-					warpList += EnumChatFormatting.RED + warps.get(cur).name;
+					warpList += TextFormatting.RED + warps.get(cur).name;
 				} else {
-					warpList += EnumChatFormatting.GREEN + warps.get(cur).name;
+					warpList += TextFormatting.GREEN + warps.get(cur).name;
 					Location warpLoc = warps.get(cur).location;
-					warpList += EnumChatFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(warpLoc.x, warpLoc.y, warpLoc.z)))) + ")";
+					warpList += TextFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(warpLoc.x, warpLoc.y, warpLoc.z)))) + ")";
 				}
 			} else {
 				Location warpLoc = warps.get(cur).location;
-				warpList += EnumChatFormatting.RESET + ", " + (warpLoc.dimension == player.dimension ? EnumChatFormatting.GREEN : EnumChatFormatting.RED) + warps.get(cur).name.substring(player.getUniqueID().toString().length()) + ((warpLoc.dimension == player.dimension) ? EnumChatFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(warpLoc.x, warpLoc.y, warpLoc.z)))) + ")" : "");
+				warpList += TextFormatting.RESET + ", " + (warpLoc.dimension == player.dimension ? TextFormatting.GREEN : TextFormatting.RED) + warps.get(cur).name.substring(player.getUniqueID().toString().length()) + ((warpLoc.dimension == player.dimension) ? TextFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(warpLoc.x, warpLoc.y, warpLoc.z)))) + ")" : "");
 			}
 		}
 		if (warpList == "") {

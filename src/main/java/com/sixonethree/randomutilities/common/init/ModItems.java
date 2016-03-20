@@ -1,5 +1,6 @@
 package com.sixonethree.randomutilities.common.init;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.sixonethree.randomutilities.common.item.ItemBase;
@@ -17,8 +18,11 @@ import com.sixonethree.randomutilities.reference.Reference;
 	
 	public static void init() {
 		GameRegistry.registerItem(lunchbox, "lunchbox");
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(((ItemLunchbox) lunchbox).getItemColor(), lunchbox);
 		GameRegistry.registerItem(heartCanister, "heartCanister");
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(((ItemHeartCanister) heartCanister).getItemColor(), heartCanister);
 		GameRegistry.registerItem(combined, "combined");
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(((ItemCombined) combined).getItemColor(), combined);
 		GameRegistry.registerItem(magicCard, "magicCard");
 	}
 }

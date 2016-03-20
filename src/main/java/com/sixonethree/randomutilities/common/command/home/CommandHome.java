@@ -8,7 +8,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 import com.sixonethree.randomutilities.common.command.ModCommandBase;
 import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
@@ -16,11 +17,11 @@ import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
 import com.sixonethree.randomutilities.utility.homewarp.Location;
 
 public class CommandHome extends ModCommandBase implements ICommand {
-	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	@Override public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 	
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		EntityPlayerMP playerMP = (EntityPlayerMP) player;
 		UUID playerUUID = player.getUniqueID();
 		if (args.length > 0) {

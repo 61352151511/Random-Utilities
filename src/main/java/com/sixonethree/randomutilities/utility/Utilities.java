@@ -3,7 +3,7 @@ package com.sixonethree.randomutilities.utility;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class Utilities {
 	
@@ -24,6 +24,6 @@ public class Utilities {
 	}
 	
 	public static String translateFormatted(String string, Object... formatargs) {
-		return StatCollector.translateToLocalFormatted(string, formatargs);
+		return I18n.translateToLocalFormatted(string, formatargs);
 	}
 }

@@ -2,13 +2,16 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,21 +21,45 @@ import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	String[] nameSuffixes = new String[] {"", "_large", "_auto", "_large_auto"};
+	public IItemColor heartCanister = new IItemColor() {
+		@Override public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			if (tintIndex == 0) {
+				return 0xFFFFFF;
+			} else {
+				switch (stack.getItemDamage()) {
+					case 0:
+						return 0xFF0000;
+					case 1:
+						return 0xFFFF00;
+					case 2:
+						return 0x00FF00;
+					case 3:
+						return 0x00FFFF;
+					default:
+						return 0xFFFFFF;
+				}
+			}
+		}
+	};
 	
 	public ItemHeartCanister() {
 		super();
 		this.setUnlocalizedName("heartCanister").setFull3D().setHasSubtypes(true);
 	}
 	
+	public IItemColor getItemColor() {
+		return this.heartCanister;
+	}
+	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
-		list.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tooltip.heartcanister.stores"));
+		list.add(TextFormatting.AQUA + I18n.translateToLocal("tooltip.heartcanister.stores"));
 		float storedHealth = getCurrentHealthStorage(stack);
 		float maxStoredHealth = getMaxHealthStorage(stack);
 		if (stack.getItemDamage() > 1) {
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.auto"));
+			list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.auto"));
 		} else {
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.rclick"));
-			list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("tooltip.heartcanister.rclick2"));
+			list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.rclick"));
+			list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.rclick2"));
 		}
 		
 		String storedAsString = String.valueOf(storedHealth / 2);
@@ -45,25 +72,6 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", storedAsString, maxStorageString));
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (pass == 0) {
-			return 0xFFFFFF;
-		} else {
-			switch (stack.getItemDamage()) {
-				case 0:
-					return 0xFF0000;
-				case 1:
-					return 0xFFFF00;
-				case 2:
-					return 0x00FF00;
-				case 3:
-					return 0x00FFFF;
-				default:
-					return 0xFFFFFF;
-			}
-		}
-	}
-	
 	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (int i = 0; i <= 3; i ++) list.add(new ItemStack(item, 1, i));
 	}
@@ -71,31 +79,31 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	@Override public String getUnlocalizedName(ItemStack stack) { return super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()]; }
 	@Override public boolean hasEffect(ItemStack stack) { return this.isHeartCanisterAutomatic(stack); }
 	
-	@Override public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (!this.isHeartCanisterAutomatic(stack)) {
-			if (!player.isSneaking()) { // TAKE HEALTH
-				float storedHealth = this.getCurrentHealthStorage(stack);
-				float maxStoredHealth = this.getMaxHealthStorage(stack);
-				float playerHealth = player.getHealth();
+	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if (!this.isHeartCanisterAutomatic(itemStackIn)) {
+			if (!playerIn.isSneaking()) { // TAKE HEALTH
+				float storedHealth = this.getCurrentHealthStorage(itemStackIn);
+				float maxStoredHealth = this.getMaxHealthStorage(itemStackIn);
+				float playerHealth = playerIn.getHealth();
 				float healthToTake = playerHealth - 2F;
 				
 				if (healthToTake < 0F) healthToTake = 0F;
 				if (storedHealth + healthToTake > maxStoredHealth) healthToTake -= (storedHealth + healthToTake) - maxStoredHealth;
 				
-				player.setHealth(playerHealth - healthToTake);
-				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, storedHealth + healthToTake);
+				playerIn.setHealth(playerHealth - healthToTake);
+				itemStackIn.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, storedHealth + healthToTake);
 			} else { // GIVE HEALTH
-				float storedHealth = this.getCurrentHealthStorage(stack);
-				float playerHealth = player.getHealth();
-				float healthToGive = player.getMaxHealth() - playerHealth;
+				float storedHealth = this.getCurrentHealthStorage(itemStackIn);
+				float playerHealth = playerIn.getHealth();
+				float healthToGive = playerIn.getMaxHealth() - playerHealth;
 				
 				if (healthToGive > storedHealth) healthToGive = storedHealth;
 				
-				player.setHealth(playerHealth + healthToGive);
-				stack.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, storedHealth - healthToGive);
+				playerIn.setHealth(playerHealth + healthToGive);
+				itemStackIn.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, storedHealth - healthToGive);
 			}
 		}
-		return stack;
+		return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
 	}
 	
 	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {

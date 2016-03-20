@@ -2,9 +2,10 @@ package com.sixonethree.randomutilities.common.command;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandSuicide extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		player.attackEntityFrom(new DamageSourceCustom("suicide", "command.suicide.bidfarewell"), Float.MAX_VALUE);
 	}
 

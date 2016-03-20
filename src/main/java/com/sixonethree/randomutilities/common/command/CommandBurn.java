@@ -4,11 +4,12 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandBurn extends ModCommandBase implements ICommand {
-	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	@Override public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length > 1) {
-			EntityPlayer player = getPlayer(sender, args[0]);
+			EntityPlayer player = getPlayer(server, sender, args[0]);
 			Integer burnTime = parseInt(args[1]);
 			player.setFire(burnTime);
 			outputMessage(player, "ouchhot", true, true);

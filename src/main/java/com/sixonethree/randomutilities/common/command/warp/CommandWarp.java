@@ -7,7 +7,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 import com.sixonethree.randomutilities.common.command.ModCommandBase;
 import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
@@ -15,11 +16,11 @@ import com.sixonethree.randomutilities.utility.homewarp.Location;
 import com.sixonethree.randomutilities.utility.homewarp.WarpPoint;
 
 public class CommandWarp extends ModCommandBase implements ICommand {
-	@Override public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	@Override public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		return WarpPoint.getWarpsAsList(args[0]);
 	}
 	
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		if (args.length > 0) {
 			String requestedWarp = args[0];
 			if (WarpPoint.getWarp(requestedWarp) != null) {

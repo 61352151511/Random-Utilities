@@ -2,11 +2,12 @@ package com.sixonethree.randomutilities.common.command;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
 
 public class CommandAfk extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		boolean result = AfkPlayers.toggle(player.getUniqueID());
 		messageAll((result ? "nowafk" : "notafk"), true, true, colorPlayer(player));
 	}

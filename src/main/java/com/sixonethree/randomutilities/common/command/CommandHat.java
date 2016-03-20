@@ -2,18 +2,20 @@ package com.sixonethree.randomutilities.common.command;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandHat extends ModCommandBase implements ICommand {
-	@Override public void processCommandPlayer(EntityPlayer player, String[] args) {
-		ItemStack itemStack = player.getCurrentArmor(3);
-		ItemStack hat = player.getCurrentEquippedItem();
+	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
+		ItemStack itemStack = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+		ItemStack hat = player.getHeldItemMainhand();
 		ItemStack oldhat = null;
 		if (itemStack != null) {
 			oldhat = itemStack;
 		}
-		player.setCurrentItemOrArmor(0, oldhat);
-		player.setCurrentItemOrArmor(4, hat);
+		player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, oldhat);
+		player.setItemStackToSlot(EntityEquipmentSlot.HEAD, hat);
 	}
 	
 	@Override public boolean canConsoleUseCommand() { return false; }

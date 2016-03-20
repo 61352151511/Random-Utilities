@@ -13,12 +13,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.sixonethree.randomutilities.common.init.ModBlocks;
@@ -43,7 +43,7 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	@Override public Packet<INetHandlerPlayClient> getDescriptionPacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		this.writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(this.getPos(), 0, tag);
+		return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
 	}
 	
 	@Override public void markDirty() {
@@ -60,9 +60,9 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		}
 	}
 	
-	@Override public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+	@Override public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		this.readFromNBT(packet.getNbtCompound());
-		if (this.getWorld().isRemote) this.getWorld().markBlockForUpdate(this.getPos());
+		if (this.getWorld().isRemote) this.markDirty();
 	}
 	
 	@Override public void readFromNBT(NBTTagCompound compound) {
@@ -115,7 +115,7 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		}
 	}
 	
-	@Override public IChatComponent getDisplayName() { return new ChatComponentText("Magic Chest"); }
+	@Override public ITextComponent getDisplayName() { return new TextComponentString("Magic Chest"); }
 	@Override public int getField(int id) { return 0; }
 	@Override public int getFieldCount() { return 0; }
 	@Override public int getInventoryStackLimit() { return 64; }
@@ -189,7 +189,7 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		if (this.placer.isEmpty() || this.placer.equalsIgnoreCase("")) return;
 		if (!this.worldObj.isRemote) {
 			if (this.inventory[2] != null) this.inventory[2] = null;
-			List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+			List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
 			for (EntityPlayerMP player : players) {
 				if (this.isOwner(player.getPersistentID()) && this.turn < this.owners.length) {
 					if (owners[turn].equals(player.getPersistentID().toString())) {

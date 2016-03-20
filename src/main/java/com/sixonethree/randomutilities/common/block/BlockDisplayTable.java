@@ -9,31 +9,35 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.sixonethree.randomutilities.RandomUtilities;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 
 public class BlockDisplayTable extends BlockContainerBase {
+	protected static final AxisAlignedBB TABLE_AABB = new AxisAlignedBB(0F, 0F, 0F, 1F, (1F / 16) * 15, 1F);
+	
 	public BlockDisplayTable() {
 		super(Material.wood);
 		this.setHardness(1F);
 		this.setUnlocalizedName("displayTable");
-		this.setBlockBounds(0F, 0F, 0F, 1F, (1F / 16) * 15, 1F);
 		this.setParticleBlockState(Blocks.planks.getDefaultState());
+	}
+	
+	@Override public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return TABLE_AABB;
 	}
 	
 	@Override public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityDisplayTable();
 	}
 	
-	@Override public int getRenderType() {
-		return 2;
-	}
-	
-	@Override public boolean isOpaqueCube() {
+	@Override public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 	
@@ -43,7 +47,7 @@ public class BlockDisplayTable extends BlockContainerBase {
 		if (te != null && te instanceof TileEntityDisplayTable) {
 			TileEntityDisplayTable tesct = (TileEntityDisplayTable) te;
 			tesct.setFacing(facing);
-			world.markBlockForUpdate(pos);
+			tesct.markDirty();
 		}
 	}
 	
@@ -66,11 +70,11 @@ public class BlockDisplayTable extends BlockContainerBase {
 		super.breakBlock(world, pos, state);
 	}
 	
-	@Override public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntity te = world.getTileEntity(pos);
+	@Override public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity te = worldIn.getTileEntity(pos);
 		if (te == null || !(te instanceof TileEntityDisplayTable)) { return true; }
-		if (world.isRemote) { return true; }
-		player.openGui(RandomUtilities.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
+		if (worldIn.isRemote) { return true; }
+		playerIn.openGui(RandomUtilities.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 }

@@ -4,8 +4,8 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -17,15 +17,15 @@ import com.sixonethree.randomutilities.utility.homewarp.SaveFile;
 import com.sixonethree.randomutilities.utility.homewarp.WarpPoint;
 
 public class PlayerEvents {
-	private static IChatComponent colorPlayer(EntityPlayer player) {
+	private static ITextComponent colorPlayer(EntityPlayer player) {
 		return player.getDisplayName();
 	}
 	
 	private static void messageAll(String message, Object... formatargs) {
-		List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+		List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
 		for (int i = 0; i < players.size(); i ++) {
 			EntityPlayerMP player = players.get(i);
-			player.addChatComponentMessage(new ChatComponentTranslation(message, formatargs));
+			player.addChatComponentMessage(new TextComponentTranslation(message, formatargs));
 		}
 	}
 	

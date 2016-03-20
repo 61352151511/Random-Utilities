@@ -8,10 +8,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.util.Constants;
 
 import com.sixonethree.randomutilities.common.init.ModBlocks;
@@ -30,12 +30,12 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	@Override public Packet<INetHandlerPlayClient> getDescriptionPacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		this.writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(this.getPos(), 0, tag);
+		return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
 	}
 	
-	@Override public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+	@Override public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		this.readFromNBT(packet.getNbtCompound());
-		if (this.getWorld().isRemote) this.getWorld().markBlockForUpdate(this.getPos());
+		if (this.getWorld().isRemote) this.markDirty();
 	}
 	
 	@Override public void readFromNBT(NBTTagCompound compound) {
@@ -102,7 +102,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		}
 	}
 	
-	@Override public IChatComponent getDisplayName() { return new ChatComponentText("Display Table"); }
+	@Override public ITextComponent getDisplayName() { return new TextComponentString("Display Table"); }
 	@Override public int getField(int id) { return 0; }
 	@Override public int getFieldCount() { return 0; }
 	@Override public int getInventoryStackLimit() { return 64; }
