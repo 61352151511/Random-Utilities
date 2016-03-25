@@ -30,7 +30,7 @@ public class PlayerEvents {
 	}
 	
 	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		if (AfkPlayers.isAfk(player.getUniqueID())) {
 			AfkPlayers.remove(player.getUniqueID());
 			messageAll("command.afk.notafk", colorPlayer(player));
@@ -38,8 +38,8 @@ public class PlayerEvents {
 	}
 	
 	@SubscribeEvent public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
-		HomePoint.homesSaveFile = new SaveFile("/homes.txt", event.playerDirectory.getParent());
-		WarpPoint.warpsSaveFile = new SaveFile("/warps.txt", event.playerDirectory.getParent());
+		HomePoint.homesSaveFile = new SaveFile("/homes.txt", event.getPlayerDirectory().getParent());
+		WarpPoint.warpsSaveFile = new SaveFile("/warps.txt", event.getPlayerDirectory().getParent());
 		HomePoint.loadAll();
 		WarpPoint.loadAll();
 	}

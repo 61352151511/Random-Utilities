@@ -23,6 +23,9 @@ import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.item.ItemCombined;
+import com.sixonethree.randomutilities.common.item.ItemHeartCanister;
+import com.sixonethree.randomutilities.common.item.ItemLunchbox;
 
 public class ClientProxy extends ServerProxy {
 	@Override public void preInit(FMLPreInitializationEvent event) {
@@ -65,6 +68,9 @@ public class ClientProxy extends ServerProxy {
 		ModelHelper.registerItem(ModItems.heartCanister, new int[] {0, 1, 2, 3});
 		ModelHelper.registerItem(ModItems.combined);
 		ModelHelper.registerItem(ModItems.magicCard);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(((ItemLunchbox) ModItems.lunchbox).getItemColor(), ModItems.lunchbox);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(((ItemHeartCanister) ModItems.heartCanister).getItemColor(), ModItems.heartCanister);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(((ItemCombined) ModItems.combined).getItemColor(), ModItems.combined);
 		
 		TileEntityItemStackRenderer.instance = new ModeledBlockInventoryRenderer(TileEntityItemStackRenderer.instance);
 	}
