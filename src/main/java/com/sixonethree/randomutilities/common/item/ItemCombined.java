@@ -2,7 +2,6 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,27 +11,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.sixonethree.randomutilities.client.ColorLogic;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister {
-	public IItemColor combined = new IItemColor() {
-		@Override public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-			if (tintIndex == 1) return 0x00FFFF;
-			if (tintIndex == 2) return ColorLogic.getColorFromMeta(getColor(stack));
-			return 0xFFFFFF;
-		}
-	};
-	
 	public ItemCombined() {
 		super();
 		this.setUnlocalizedName("combined");
 		this.setFull3D();
-	}
-	
-	public IItemColor getItemColor() {
-		return this.combined;
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {

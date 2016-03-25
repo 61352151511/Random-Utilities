@@ -2,7 +2,6 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,34 +20,10 @@ import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	String[] nameSuffixes = new String[] {"", "_large", "_auto", "_large_auto"};
-	public IItemColor heartCanister = new IItemColor() {
-		@Override public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-			if (tintIndex == 0) {
-				return 0xFFFFFF;
-			} else {
-				switch (stack.getItemDamage()) {
-					case 0:
-						return 0xFF0000;
-					case 1:
-						return 0xFFFF00;
-					case 2:
-						return 0x00FF00;
-					case 3:
-						return 0x00FFFF;
-					default:
-						return 0xFFFFFF;
-				}
-			}
-		}
-	};
 	
 	public ItemHeartCanister() {
 		super();
 		this.setUnlocalizedName("heartCanister").setFull3D().setHasSubtypes(true);
-	}
-	
-	public IItemColor getItemColor() {
-		return this.heartCanister;
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {

@@ -2,7 +2,6 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,27 +18,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.sixonethree.randomutilities.client.ColorLogic;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemLunchbox extends ItemBase implements ILunchbox {
 	String[] nameSuffixes = new String[] {"", "_auto"};
-	public IItemColor lunchbox = new IItemColor() {
-		@Override public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-			return tintIndex == 0 ? 0xFFFFFF : ColorLogic.getColorFromMeta(getColor(stack));
-		}
-	};
 	
 	public ItemLunchbox() {
 		super();
 		this.setUnlocalizedName("lunchbox");
 		this.setFull3D();
 		this.setHasSubtypes(true);
-	}
-	
-	public IItemColor getItemColor() {
-		return this.lunchbox;
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
