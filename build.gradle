@@ -23,7 +23,7 @@ ext.configFile = file('build.properties')
 ext.config = parseConfig(configFile)
 
 version = "${config.mc_version}-${config.mod_version_major}.${config.mod_version_minor}.${config.mod_version_build}"
-group= "${config.group}"
+group = "${config.group}"
 archivesBaseName = "${config.archive_base}"
 
 minecraft {
