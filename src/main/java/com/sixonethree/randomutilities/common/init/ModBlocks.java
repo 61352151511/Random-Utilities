@@ -1,12 +1,11 @@
 package com.sixonethree.randomutilities.common.init;
 
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.sixonethree.randomutilities.common.block.BlockContainerBase;
 import com.sixonethree.randomutilities.common.block.BlockDisplayTable;
 import com.sixonethree.randomutilities.common.block.BlockMagicChest;
-import com.sixonethree.randomutilities.common.block.item.ItemBlockDisplayTable;
-import com.sixonethree.randomutilities.common.block.item.ItemBlockMagicChest;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.reference.Reference;
@@ -16,8 +15,10 @@ import com.sixonethree.randomutilities.reference.Reference;
 	public static BlockContainerBase displayTable = new BlockDisplayTable();
 	
 	public static void init() {
-		GameRegistry.registerBlock(magicChest, ItemBlockMagicChest.class, "magicChest");
-		GameRegistry.registerBlock(displayTable, ItemBlockDisplayTable.class, "displayTable");
+		GameRegistry.register(magicChest.setRegistryName("magicChest"));
+		GameRegistry.register(new ItemBlock(magicChest).setRegistryName("magicChest"));
+		GameRegistry.register(displayTable.setRegistryName("displayTable"));
+		GameRegistry.register(new ItemBlock(displayTable).setRegistryName("displayTable"));
 		GameRegistry.registerTileEntity(TileEntityMagicChest.class, "TileEntityMagicChest");
 		GameRegistry.registerTileEntity(TileEntityDisplayTable.class, "TileEntityDisplayTable");
 	}

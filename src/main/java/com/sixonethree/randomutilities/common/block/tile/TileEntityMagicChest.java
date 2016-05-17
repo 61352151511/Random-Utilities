@@ -40,9 +40,9 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	/* TileEntity */
 	
-	@Override public Packet<INetHandlerPlayClient> getDescriptionPacket() {
+	@Override public Packet<INetHandlerPlayClient> func_145844_m() {
 		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
+		this.func_145841_b(tag);
 		return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
 	}
 	
@@ -73,8 +73,8 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		this.markDirty();
 	}
 	
-	@Override public void writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+	@Override public void func_145841_b(NBTTagCompound compound) {
+		super.func_145841_b(compound);
 		compound.setString(NBTTagKeys.MAGIC_CHEST_PLACER, this.placer);
 		if (this.inventory[0] != null) compound.setTag(NBTTagKeys.MAGIC_CHEST_STACK, this.inventory[0].writeToNBT(new NBTTagCompound()));
 		if (this.inventory[1] != null) compound.setTag(NBTTagKeys.MAGIC_CHEST_CARD, this.inventory[1].writeToNBT(new NBTTagCompound()));

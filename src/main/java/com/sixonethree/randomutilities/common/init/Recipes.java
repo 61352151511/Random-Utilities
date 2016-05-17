@@ -42,17 +42,17 @@ public class Recipes {
 		GameRegistry.addRecipe(new RecipesLunchboxFeeding());
 		GameRegistry.addRecipe(new RecipesUpgrading());
 		
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 0), "qdq", "igi", "qdq", 'q', new ItemStack(Blocks.quartz_block, 1, 0), 'd', new ItemStack(Items.diamond, 1, 0), 'i', new ItemStack(Items.iron_ingot), 'g', new ItemStack(Items.golden_apple));
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 1), "gdg", "nen", "gdg", 'g', new ItemStack(Blocks.gold_block, 1, 0), 'd', new ItemStack(Blocks.diamond_block, 1, 0), 'n', new ItemStack(Items.nether_star), 'e', new ItemStack(Items.golden_apple));
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.lunchbox, 1, 0), " s ", "iii", "cgb", 's', new ItemStack(Items.stick), 'i', new ItemStack(Items.iron_ingot), 'c', new ItemStack(Items.carrot), 'g', new ItemStack(Items.golden_apple), 'b', new ItemStack(Items.bread));
-		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.magicChest), "ccc", "cnc", "ccc", 'c', new ItemStack(Blocks.chest), 'n', new ItemStack(Items.nether_star));
-		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.displayTable), "ccc", "w w", "w w", 'c', new ItemStack(Blocks.crafting_table), 'w', new ItemStack(Blocks.planks));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 0), "qdq", "igi", "qdq", 'q', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 0), 'd', new ItemStack(Items.DIAMOND, 1, 0), 'i', new ItemStack(Items.IRON_INGOT), 'g', new ItemStack(Items.GOLDEN_APPLE));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 1), "gdg", "nen", "gdg", 'g', new ItemStack(Blocks.GOLD_BLOCK, 1, 0), 'd', new ItemStack(Blocks.DIAMOND_BLOCK, 1, 0), 'n', new ItemStack(Items.NETHER_STAR), 'e', new ItemStack(Items.GOLDEN_APPLE));
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.lunchbox, 1, 0), " s ", "iii", "cgb", 's', new ItemStack(Items.STICK), 'i', new ItemStack(Items.IRON_INGOT), 'c', new ItemStack(Items.CARROT), 'g', new ItemStack(Items.GOLDEN_APPLE), 'b', new ItemStack(Items.BREAD));
+		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.magicChest), "ccc", "cnc", "ccc", 'c', new ItemStack(Blocks.CHEST), 'n', new ItemStack(Items.NETHER_STAR));
+		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.displayTable), "ccc", "w w", "w w", 'c', new ItemStack(Blocks.CRAFTING_TABLE), 'w', new ItemStack(Blocks.PLANKS));
 		
 		ArrayList<ItemStack> UpgradeComponents = new ArrayList<ItemStack>() {
 			private static final long serialVersionUID = -4349640254907860210L;
 			{
-				add(new ItemStack(Items.nether_star));
-				add(new ItemStack(Items.bucket));
+				add(new ItemStack(Items.NETHER_STAR));
+				add(new ItemStack(Items.BUCKET));
 			}
 		};
 		
@@ -63,7 +63,7 @@ public class Recipes {
 	}
 	
 	public static void initLunchboxRecipes() {
-		for (Object obj : Item.itemRegistry) {
+		for (Object obj : Item.REGISTRY) {
 			if (obj instanceof Item) {
 				Item item = (Item) obj;
 				if (item instanceof ItemFood) {
@@ -82,7 +82,7 @@ public class Recipes {
 			ItemStack lunchbox = new ItemStack(ModItems.lunchbox, 1, 0);
 			lunchbox.setTagCompound(new NBTTagCompound());
 			lunchbox.getTagCompound().setInteger(NBTTagKeys.COLOR, i);
-			ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(Items.dye, 1, i)), lunchbox);
+			ItemCombiningRecipeRegistry.registerCombiningRecipe(Utilities.recipeHelper(new ItemStack(ModItems.lunchbox, 1, 0), new ItemStack(Items.DYE, 1, i)), lunchbox);
 		}
 	}
 }

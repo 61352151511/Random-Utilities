@@ -23,10 +23,10 @@ public class BlockDisplayTable extends BlockContainerBase {
 	protected static final AxisAlignedBB TABLE_AABB = new AxisAlignedBB(0F, 0F, 0F, 1F, (1F / 16) * 15, 1F);
 	
 	public BlockDisplayTable() {
-		super(Material.wood);
+		super(Material.WOOD);
 		this.setHardness(1F);
 		this.setUnlocalizedName("displayTable");
-		this.setParticleBlockState(Blocks.planks.getDefaultState());
+		this.setParticleBlockState(Blocks.PLANKS.getDefaultState());
 	}
 	
 	@Override public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {

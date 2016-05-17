@@ -29,7 +29,7 @@ public class BlockContainerBase extends BlockContainer {
 	private IBlockState particleBlockState = null;
 	
 	public BlockContainerBase() {
-		this(Material.rock);
+		this(Material.ROCK);
 	}
 	
 	public BlockContainerBase(Material material) {

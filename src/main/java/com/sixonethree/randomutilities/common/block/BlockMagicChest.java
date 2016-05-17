@@ -22,7 +22,7 @@ public class BlockMagicChest extends BlockContainerBase {
 		super();
 		this.setUnlocalizedName("magicChest");
 		this.setHardness(1.5F);
-		this.setParticleBlockState(Blocks.coal_block.getDefaultState());
+		this.setParticleBlockState(Blocks.COAL_BLOCK.getDefaultState());
 	}
 	
 	@Override public TileEntity createNewTileEntity(World world, int meta) {

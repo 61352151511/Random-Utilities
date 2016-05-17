@@ -16,9 +16,9 @@ import com.sixonethree.randomutilities.reference.Reference;
 	public static final ItemBase magicCard = new ItemMagicCard();
 	
 	public static void init() {
-		GameRegistry.registerItem(lunchbox, "lunchbox");
-		GameRegistry.registerItem(heartCanister, "heartCanister");
-		GameRegistry.registerItem(combined, "combined");
-		GameRegistry.registerItem(magicCard, "magicCard");
+		GameRegistry.register(lunchbox.setRegistryName("lunchbox"));
+		GameRegistry.register(heartCanister.setRegistryName("heartCanister"));
+		GameRegistry.register(combined.setRegistryName("combined"));
+		GameRegistry.register(magicCard.setRegistryName("magicCard"));
 	}
 }

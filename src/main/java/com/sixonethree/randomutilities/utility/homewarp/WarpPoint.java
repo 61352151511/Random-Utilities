@@ -81,7 +81,7 @@ public class WarpPoint {
 				}
 			} else {
 				Location warpLoc = warps.get(cur).location;
-				warpList += TextFormatting.RESET + ", " + (warpLoc.dimension == player.dimension ? TextFormatting.GREEN : TextFormatting.RED) + warps.get(cur).name.substring(player.getUniqueID().toString().length()) + ((warpLoc.dimension == player.dimension) ? TextFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(warpLoc.x, warpLoc.y, warpLoc.z)))) + ")" : "");
+				warpList += TextFormatting.RESET + ", " + (warpLoc.dimension == player.dimension ? TextFormatting.GREEN : TextFormatting.RED) + warps.get(cur).name + ((warpLoc.dimension == player.dimension) ? TextFormatting.RESET + " (" + ((int) Math.floor(Math.sqrt(player.getDistanceSq(warpLoc.x, warpLoc.y, warpLoc.z)))) + ")" : "");
 			}
 		}
 		if (warpList == "") {

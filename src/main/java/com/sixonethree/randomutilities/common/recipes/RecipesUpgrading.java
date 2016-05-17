@@ -44,9 +44,9 @@ public class RecipesUpgrading implements IRecipe {
 				} else if (u == 0 && stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == 0) {
 					u ++;
 					upgrade = stack;
-				} else if (stack.getItem() == Items.nether_star) {
+				} else if (stack.getItem() == Items.NETHER_STAR) {
 					n ++;
-				} else if (stack.getItem() == Items.bucket) {
+				} else if (stack.getItem() == Items.BUCKET) {
 					b ++;
 				} else {
 					return false;

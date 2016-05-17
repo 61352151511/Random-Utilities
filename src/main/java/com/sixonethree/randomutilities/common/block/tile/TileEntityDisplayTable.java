@@ -27,9 +27,9 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	
 	/* TileEntity */
 	
-	@Override public Packet<INetHandlerPlayClient> getDescriptionPacket() {
+	@Override public Packet<INetHandlerPlayClient> func_145844_m() {
 		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
+		this.func_145841_b(tag);
 		return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
 	}
 	
@@ -53,8 +53,8 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		this.markDirty();
 	}
 	
-	@Override public void writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+	@Override public void func_145841_b(NBTTagCompound compound) {
+		super.func_145841_b(compound);
 		compound.setInteger(NBTTagKeys.DISPLAY_TABLE_FACING, this.getFacing());
 		NBTTagList list = new NBTTagList();
 		int slot = 0;

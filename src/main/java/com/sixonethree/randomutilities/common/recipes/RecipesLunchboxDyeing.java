@@ -39,7 +39,7 @@ public class RecipesLunchboxDyeing implements IRecipe {
 				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
 					s = stack;
 					l ++;
-				} else if (stack.getItem() == Items.dye) {
+				} else if (stack.getItem() == Items.DYE) {
 					c = (byte) stack.getItemDamage();
 					d ++;
 				} else {
