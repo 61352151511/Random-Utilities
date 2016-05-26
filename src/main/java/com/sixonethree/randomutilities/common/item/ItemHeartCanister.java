@@ -2,6 +2,7 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,13 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
-import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	String[] nameSuffixes = new String[] {"", "_large", "_auto", "_large_auto"};
@@ -27,14 +26,14 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
-		list.add(TextFormatting.AQUA + I18n.translateToLocal("tooltip.heartcanister.stores"));
+		list.add(TextFormatting.AQUA + I18n.format("tooltip.heartcanister.stores"));
 		float storedHealth = getCurrentHealthStorage(stack);
 		float maxStoredHealth = getMaxHealthStorage(stack);
 		if (stack.getItemDamage() > 1) {
-			list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.auto"));
+			list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.auto"));
 		} else {
-			list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.rclick"));
-			list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.rclick2"));
+			list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.rclick"));
+			list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.rclick2"));
 		}
 		
 		String storedAsString = String.valueOf(storedHealth / 2);
@@ -44,7 +43,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		if (maxStorageString.contains(".")) maxStorageString = maxStorageString.substring(0, maxStorageString.indexOf(".") + 2);
 		if (maxStorageString.endsWith(".0")) maxStorageString = maxStorageString.replace(".0", "");
 		
-		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", storedAsString, maxStorageString));
+		list.add(I18n.format("tooltip.heartcanister.stored", storedAsString, maxStorageString));
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {

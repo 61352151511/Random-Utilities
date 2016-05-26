@@ -42,7 +42,7 @@ public class BlockDisplayTable extends BlockContainerBase {
 	}
 	
 	@Override public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int facing = placer.getHorizontalFacing().getOpposite().getIndex();
+		EnumFacing facing = placer.getHorizontalFacing().getOpposite();
 		TileEntity te = world.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityDisplayTable) {
 			TileEntityDisplayTable tesct = (TileEntityDisplayTable) te;

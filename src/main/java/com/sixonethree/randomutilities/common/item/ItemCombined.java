@@ -2,17 +2,16 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
-import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister {
 	public ItemCombined() {
@@ -22,11 +21,11 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
-		list.add(TextFormatting.AQUA + I18n.translateToLocal("tooltip.heartcanister.stores"));
-		list.add(TextFormatting.AQUA + I18n.translateToLocal("tooltip.lunchbox.stores"));
-		list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.heartcanister.auto"));
-		list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.lunchbox.auto"));
-		list.add(TextFormatting.RED + I18n.translateToLocal("tooltip.lunchbox.fill"));
+		list.add(TextFormatting.AQUA + I18n.format("tooltip.heartcanister.stores"));
+		list.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.stores"));
+		list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.auto"));
+		list.add(TextFormatting.GREEN + I18n.format("tooltip.lunchbox.auto"));
+		list.add(TextFormatting.RED + I18n.format("tooltip.lunchbox.fill"));
 		
 		/* Heart Canister */
 		
@@ -49,8 +48,8 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		if (storedFoodAsString.endsWith(".0")) storedFoodAsString = storedFoodAsString.replace(".0", "");
 		if (maxStoredFoodAsString.endsWith(".0")) maxStoredFoodAsString = maxStoredFoodAsString.replace(".0", "");
 		
-		list.add(Utilities.translateFormatted("tooltip.heartcanister.stored", storedHealthAsString, maxStoredHealthAsString));
-		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", storedFoodAsString, maxStoredFoodAsString));
+		list.add(I18n.format("tooltip.heartcanister.stored", storedHealthAsString, maxStoredHealthAsString));
+		list.add(I18n.format("tooltip.lunchbox.stored", storedFoodAsString, maxStoredFoodAsString));
 	}
 	
 	@Override public boolean hasEffect(ItemStack stack) { return true; }

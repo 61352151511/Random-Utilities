@@ -2,6 +2,7 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,13 +14,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
-import com.sixonethree.randomutilities.utility.Utilities;
 
 public class ItemLunchbox extends ItemBase implements ILunchbox {
 	String[] nameSuffixes = new String[] {"", "_auto"};
@@ -32,17 +31,17 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
-		list.add(TextFormatting.AQUA + I18n.translateToLocal("tooltip.lunchbox.stores"));
+		list.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.stores"));
 		float storedFood = this.getCurrentFoodStorage(stack);
 		float maximum = this.getMaxFoodStorage(stack);
-		if (this.isLunchboxAutomatic(stack)) list.add(TextFormatting.AQUA + I18n.translateToLocal("tooltip.lunchbox.auto"));
-		list.add(TextFormatting.GREEN + I18n.translateToLocal("tooltip.lunchbox.fill"));
+		if (this.isLunchboxAutomatic(stack)) list.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.auto"));
+		list.add(TextFormatting.GREEN + I18n.format("tooltip.lunchbox.fill"));
 		String storedAsString = String.valueOf(storedFood / 2);
 		String maximumStoredAsString = String.valueOf(maximum / 2);
 		if (storedAsString.contains(".")) storedAsString = storedAsString.substring(0, storedAsString.indexOf(".") + 2);
 		if (storedAsString.endsWith(".0")) storedAsString = storedAsString.replace(".0", "");
 		if (maximumStoredAsString.endsWith(".0")) maximumStoredAsString = maximumStoredAsString.replace(".0", "");
-		list.add(Utilities.translateFormatted("tooltip.lunchbox.stored", storedAsString, maximumStoredAsString));
+		list.add(I18n.format("tooltip.lunchbox.stored", storedAsString, maximumStoredAsString));
 	}
 	
 	@Override public EnumAction getItemUseAction(ItemStack stack) { return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT; }

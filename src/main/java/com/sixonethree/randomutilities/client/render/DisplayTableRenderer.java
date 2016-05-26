@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import com.sixonethree.randomutilities.client.model.ModelDisplayTable;
@@ -26,7 +27,7 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDi
 	}
 	
 	@Override public void renderTileEntityAt(TileEntityDisplayTable displayTable, double x, double y, double z, float partialTicks, int destroyStage) {
-		int facing = displayTable.getFacing();
+		EnumFacing facing = displayTable.getFacing();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		Minecraft.getMinecraft().renderEngine.bindTexture(this.displayTableTexture);
@@ -45,10 +46,10 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDi
 		GlStateManager.scale(0.5, 0.5, 0.5);
 		
 		GlStateManager.pushMatrix();
-		if (facing == 2) GlManager.translateThenRotate(1.8, 1.65, 1.8, 0, 0, 1, 0);
-		if (facing == 3) GlManager.translateThenRotate(0.2, 1.65, 0.2, 0, 0, 1, 0);
-		if (facing == 4) GlManager.translateThenRotate(1.8, 1.65, 0.2, 0, 0, 1, 0);
-		if (facing == 5) GlManager.translateThenRotate(0.2, 1.65, 1.8, 0, 0, 1, 0);
+		if (facing == EnumFacing.NORTH) GlManager.translateThenRotate(1.8, 1.65, 1.8, 0, 0, 1, 0);
+		if (facing == EnumFacing.SOUTH) GlManager.translateThenRotate(0.2, 1.65, 0.2, 0, 0, 1, 0);
+		if (facing == EnumFacing.WEST) GlManager.translateThenRotate(1.8, 1.65, 0.2, 0, 0, 1, 0);
+		if (facing == EnumFacing.EAST) GlManager.translateThenRotate(0.2, 1.65, 1.8, 0, 0, 1, 0);
 		GlStateManager.rotate(0, 0, 1, 0);
 		
 		int translates = 0;
@@ -61,29 +62,29 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDi
 				EntityItem ghostItem = new EntityItem(displayTable.getWorld(), x, y, z, renderStack);
 				ghostItem.hoverStart = 0F;
 				if (!(stack.getItem() instanceof ItemBlock)) {
-					if (facing == 2) GlStateManager.rotate(-90, 0, 1, 0);
-					if (facing == 3) GlStateManager.rotate(90, 0, 1, 0);
-					if (facing == 4) GlStateManager.rotate(180, 0, 1, 0);
+					if (facing == EnumFacing.NORTH) GlStateManager.rotate(-90, 0, 1, 0);
+					if (facing == EnumFacing.SOUTH) GlStateManager.rotate(90, 0, 1, 0);
+					if (facing == EnumFacing.WEST) GlStateManager.rotate(180, 0, 1, 0);
 				}
 				this.renderManager.doRenderEntity(ghostItem, 0, 0, 0, 0, 0, false);
 				if (!(stack.getItem() instanceof ItemBlock)) {
-					if (facing == 2) GlStateManager.rotate(90, 0, 1, 0);
-					if (facing == 3) GlStateManager.rotate(-90, 0, 1, 0);
-					if (facing == 4) GlStateManager.rotate(-180, 0, 1, 0);
+					if (facing == EnumFacing.NORTH) GlStateManager.rotate(90, 0, 1, 0);
+					if (facing == EnumFacing.SOUTH) GlStateManager.rotate(-90, 0, 1, 0);
+					if (facing == EnumFacing.WEST) GlStateManager.rotate(-180, 0, 1, 0);
 				}
 			}
-			if (facing == 2) GlStateManager.translate(-0.4, 0, 0);
-			if (facing == 3) GlStateManager.translate(0.4, 0, 0);
-			if (facing == 4) GlStateManager.translate(0, 0, 0.4);
-			if (facing == 5) GlStateManager.translate(0, 0, -0.4);
+			if (facing == EnumFacing.NORTH) GlStateManager.translate(-0.4, 0, 0);
+			if (facing == EnumFacing.SOUTH) GlStateManager.translate(0.4, 0, 0);
+			if (facing == EnumFacing.WEST) GlStateManager.translate(0, 0, 0.4);
+			if (facing == EnumFacing.EAST) GlStateManager.translate(0, 0, -0.4);
 			
 			translates ++;
 			if (translates == 5) {
 				translates = 0;
-				if (facing == 2) GlStateManager.translate(2, 0, -0.4);
-				if (facing == 3) GlStateManager.translate(-2, 0, 0.4);
-				if (facing == 4) GlStateManager.translate(-0.4, 0, -2);
-				if (facing == 5) GlStateManager.translate(0.4, 0, 2);
+				if (facing == EnumFacing.NORTH) GlStateManager.translate(2, 0, -0.4);
+				if (facing == EnumFacing.SOUTH) GlStateManager.translate(-2, 0, 0.4);
+				if (facing == EnumFacing.WEST) GlStateManager.translate(-0.4, 0, -2);
+				if (facing == EnumFacing.EAST) GlStateManager.translate(0.4, 0, 2);
 			}
 		}
 		

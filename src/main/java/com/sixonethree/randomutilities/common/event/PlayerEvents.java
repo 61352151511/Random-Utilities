@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -76,7 +77,7 @@ public class PlayerEvents {
 								}
 							}
 							if (switchItem) {
-								drop.getEntityItem().setItem(ModItems.magicCard);
+								drop.setEntityItemStack(new ItemStack(ModItems.magicCard));
 							}
 						}
 					}

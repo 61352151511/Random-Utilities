@@ -1,8 +1,8 @@
 package com.sixonethree.randomutilities.client.creativetab;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,7 +16,7 @@ public class CreativeTab {
 		}
 		
 		@Override @SideOnly(Side.CLIENT) public String getTranslatedTabLabel() {
-			return I18n.translateToLocal("itemGroup.randomUtilities");
+			return I18n.format("itemGroup.randomUtilities");
 		}
 	};
 }

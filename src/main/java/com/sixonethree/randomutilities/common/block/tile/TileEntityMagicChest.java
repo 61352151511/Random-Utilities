@@ -3,6 +3,8 @@ package com.sixonethree.randomutilities.common.block.tile;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -11,8 +13,6 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -40,12 +40,6 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	/* TileEntity */
 	
-	@Override public Packet<INetHandlerPlayClient> func_145844_m() {
-		NBTTagCompound tag = new NBTTagCompound();
-		this.func_145841_b(tag);
-		return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
-	}
-	
 	@Override public void markDirty() {
 		super.markDirty();
 		this.owners = new String[] {""};
@@ -60,8 +54,18 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		}
 	}
 	
-	@Override public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-		this.readFromNBT(packet.getNbtCompound());
+	@Nonnull @Override public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+	}
+	
+	@Nonnull @Override public NBTTagCompound getUpdateTag() {
+		NBTTagCompound updateTag = super.getUpdateTag();
+		this.writeToNBT(updateTag);
+		return updateTag;
+	}
+	
+	@Override public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
+		super.onDataPacket(network, packet);
 		if (this.getWorld().isRemote) this.markDirty();
 	}
 	
@@ -73,13 +77,14 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		this.markDirty();
 	}
 	
-	@Override public void func_145841_b(NBTTagCompound compound) {
-		super.func_145841_b(compound);
+	@Override public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
 		compound.setString(NBTTagKeys.MAGIC_CHEST_PLACER, this.placer);
 		if (this.inventory[0] != null) compound.setTag(NBTTagKeys.MAGIC_CHEST_STACK, this.inventory[0].writeToNBT(new NBTTagCompound()));
 		if (this.inventory[1] != null) compound.setTag(NBTTagKeys.MAGIC_CHEST_CARD, this.inventory[1].writeToNBT(new NBTTagCompound()));
 		if (this.inventory[0] == null && compound.hasKey(NBTTagKeys.MAGIC_CHEST_STACK)) compound.removeTag(NBTTagKeys.MAGIC_CHEST_STACK);
 		if (this.inventory[0] == null && compound.hasKey(NBTTagKeys.MAGIC_CHEST_CARD)) compound.removeTag(NBTTagKeys.MAGIC_CHEST_CARD);
+		return compound;
 	}
 	
 	/* IInventory */

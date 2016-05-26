@@ -1,15 +1,16 @@
 package com.sixonethree.randomutilities.common.block.tile;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.util.Constants;
@@ -18,29 +19,34 @@ import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class TileEntityDisplayTable extends TileEntity implements IInventory {
-	private int facing;
+	private EnumFacing facing;
 	private ItemStack[] inventory = new ItemStack[25];
 	
 	public TileEntityDisplayTable() {
 		super();
+		this.facing = EnumFacing.NORTH;
 	}
 	
 	/* TileEntity */
 	
-	@Override public Packet<INetHandlerPlayClient> func_145844_m() {
-		NBTTagCompound tag = new NBTTagCompound();
-		this.func_145841_b(tag);
-		return new SPacketUpdateTileEntity(this.getPos(), 0, tag);
+	@Nonnull @Override public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
 	}
 	
-	@Override public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-		this.readFromNBT(packet.getNbtCompound());
+	@Nonnull @Override public NBTTagCompound getUpdateTag() {
+		NBTTagCompound updateTag = super.getUpdateTag();
+		this.writeToNBT(updateTag);
+		return updateTag;
+	}
+	
+	@Override public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
+		super.onDataPacket(network, packet);
 		if (this.getWorld().isRemote) this.markDirty();
 	}
 	
 	@Override public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.setFacing(compound.hasKey(NBTTagKeys.DISPLAY_TABLE_FACING) ? compound.getInteger(NBTTagKeys.DISPLAY_TABLE_FACING) : 0);
+		this.setFacing(EnumFacing.VALUES[compound.getByte(NBTTagKeys.DISPLAY_TABLE_FACING)]);
 		NBTTagList list = compound.hasKey(NBTTagKeys.DISPLAY_TABLE_INVENTORY) ? compound.getTagList(NBTTagKeys.DISPLAY_TABLE_INVENTORY, Constants.NBT.TAG_COMPOUND) : null;
 		if (list == null) return;
 		for (int i = 0; i < list.tagCount(); i ++) {
@@ -53,9 +59,9 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		this.markDirty();
 	}
 	
-	@Override public void func_145841_b(NBTTagCompound compound) {
-		super.func_145841_b(compound);
-		compound.setInteger(NBTTagKeys.DISPLAY_TABLE_FACING, this.getFacing());
+	@Override public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setByte(NBTTagKeys.DISPLAY_TABLE_FACING, (byte) this.getFacing().ordinal());
 		NBTTagList list = new NBTTagList();
 		int slot = 0;
 		for (ItemStack stack : this.inventory) {
@@ -68,6 +74,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 			slot ++;
 		}
 		compound.setTag(NBTTagKeys.DISPLAY_TABLE_INVENTORY, list);
+		return compound;
 	}
 	
 	/* IInventory */
@@ -144,10 +151,10 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	
 	/* TileEntityDisplayTable */
 	
-	public int getFacing() { return this.facing; }
+	public EnumFacing getFacing() { return this.facing; }
 	public ItemStack[] getInventory() { return this.inventory; }
 	
-	public void setFacing(int newFacing) {
+	public void setFacing(EnumFacing newFacing) {
 		this.facing = newFacing;
 		this.markDirty();
 	}
