@@ -23,37 +23,50 @@ import com.sixonethree.randomutilities.reference.NBTTagKeys;
 public class ItemLunchbox extends ItemBase implements ILunchbox {
 	String[] nameSuffixes = new String[] {"", "_auto"};
 	
+	/* Constructors */
+	
 	public ItemLunchbox() {
 		super();
-		this.setUnlocalizedName("lunchbox");
-		this.setFull3D();
 		this.setHasSubtypes(true);
+		this.setNames("lunchbox");
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
-		list.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.stores"));
+	/* Overridden */
+	
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		tooltip.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.stores"));
 		float storedFood = this.getCurrentFoodStorage(stack);
 		float maximum = this.getMaxFoodStorage(stack);
-		if (this.isLunchboxAutomatic(stack)) list.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.auto"));
-		list.add(TextFormatting.GREEN + I18n.format("tooltip.lunchbox.fill"));
+		if (this.isLunchboxAutomatic(stack)) tooltip.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.auto"));
+		tooltip.add(TextFormatting.GREEN + I18n.format("tooltip.lunchbox.fill"));
 		String storedAsString = String.valueOf(storedFood / 2);
 		String maximumStoredAsString = String.valueOf(maximum / 2);
 		if (storedAsString.contains(".")) storedAsString = storedAsString.substring(0, storedAsString.indexOf(".") + 2);
 		if (storedAsString.endsWith(".0")) storedAsString = storedAsString.replace(".0", "");
 		if (maximumStoredAsString.endsWith(".0")) maximumStoredAsString = maximumStoredAsString.replace(".0", "");
-		list.add(I18n.format("tooltip.lunchbox.stored", storedAsString, maximumStoredAsString));
+		tooltip.add(I18n.format("tooltip.lunchbox.stored", storedAsString, maximumStoredAsString));
 	}
 	
-	@Override public EnumAction getItemUseAction(ItemStack stack) { return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT; }
-	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		list.add(new ItemStack(item, 1, 0));
-		list.add(new ItemStack(item, 1, 1));
+	@Override public EnumAction getItemUseAction(ItemStack stack) {
+		return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT;
 	}
 	
-	@Override public String getUnlocalizedName(ItemStack stack) { return super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()]; }
-	@Override public int getMaxItemUseDuration(ItemStack stack) { return 32; }
-	@Override public boolean hasEffect(ItemStack stack) { return stack.getItemDamage() == 1; }
+	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+		subItems.add(new ItemStack(itemIn, 1, 0));
+		subItems.add(new ItemStack(itemIn, 1, 1));
+	}
+	
+	@Override public String getUnlocalizedName(ItemStack stack) {
+		return stack.getItemDamage() < this.nameSuffixes.length ? super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()] : super.getUnlocalizedName();
+	}
+	
+	@Override public int getMaxItemUseDuration(ItemStack stack) {
+		return 32;
+	}
+	
+	@Override public boolean hasEffect(ItemStack stack) {
+		return stack.getItemDamage() == 1;
+	}
 	
 	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (playerIn.canEat(false)) {

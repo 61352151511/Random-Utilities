@@ -1,5 +1,7 @@
 package com.sixonethree.randomutilities.common.container;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,6 +15,8 @@ public class ContainerDisplayTable extends Container {
 	private EntityPlayer player;
 	private IInventory inventory;
 	
+	/* Constructors */
+	
 	public ContainerDisplayTable(IInventory playerInv, IInventory inventory, int xSize, int ySize) {
 		this.player = ((InventoryPlayer) playerInv).player;
 		this.inventory = inventory;
@@ -20,31 +24,10 @@ public class ContainerDisplayTable extends Container {
 		layoutContainer(playerInv, inventory, xSize, ySize);
 	}
 	
-	@Override public boolean canInteractWith(EntityPlayer player) {
-		return this.inventory.isUseableByPlayer(player);
-	}
+	/* Custom Methods */
 	
-	@Override public ItemStack transferStackInSlot(EntityPlayer player, int index) {
-		ItemStack itemstack = null;
-		Slot slot = (Slot) this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
-			if (index < this.inventory.getSizeInventory()) {
-				if (!mergeItemStack(itemstack1, this.inventory.getSizeInventory(), this.inventorySlots.size(), true)) { return null; }
-			} else if (!mergeItemStack(itemstack1, 0, this.inventory.getSizeInventory(), false)) { return null; }
-			if (itemstack1.stackSize == 0) {
-				slot.putStack(null);
-			} else {
-				slot.onSlotChanged();
-			}
-		}
-		return itemstack;
-	}
-	
-	@Override public void onContainerClosed(EntityPlayer entityplayer) {
-		super.onContainerClosed(entityplayer);
-		this.inventory.closeInventory(entityplayer);
+	public EntityPlayer getPlayer() {
+		return this.player;
 	}
 	
 	protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize) {
@@ -69,7 +52,32 @@ public class ContainerDisplayTable extends Container {
 		}
 	}
 	
-	public EntityPlayer getPlayer() {
-		return this.player;
+	/* Overridden */
+	
+	@Override public boolean canInteractWith(EntityPlayer playerIn) {
+		return this.inventory.isUseableByPlayer(playerIn);
+	}
+	
+	@Override public void onContainerClosed(EntityPlayer playerIn) {
+		super.onContainerClosed(playerIn);
+		this.inventory.closeInventory(playerIn);
+	}
+	
+	@Override @Nullable public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+		ItemStack itemstack = null;
+		Slot slot = (Slot) this.inventorySlots.get(index);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (index < this.inventory.getSizeInventory()) {
+				if (!mergeItemStack(itemstack1, this.inventory.getSizeInventory(), this.inventorySlots.size(), true)) { return null; }
+			} else if (!mergeItemStack(itemstack1, 0, this.inventory.getSizeInventory(), false)) { return null; }
+			if (itemstack1.stackSize == 0) {
+				slot.putStack(null);
+			} else {
+				slot.onSlotChanged();
+			}
+		}
+		return itemstack;
 	}
 }

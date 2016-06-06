@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import com.sixonethree.randomutilities.common.container.ContainerDisplayTable;
 import com.sixonethree.randomutilities.common.container.ContainerMagicChest;
 
+// TODO Clean this up
 public class GuiManager extends GuiContainer {
 	public enum ResourceList {
 		MAGIC(new ResourceLocation("randomutilities", "textures/gui/magicchest.png")),

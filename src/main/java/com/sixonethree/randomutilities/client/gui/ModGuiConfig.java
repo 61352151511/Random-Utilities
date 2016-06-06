@@ -13,13 +13,15 @@ import com.sixonethree.randomutilities.common.handler.ConfigurationHandler;
 import com.sixonethree.randomutilities.reference.Reference;
 
 public class ModGuiConfig extends GuiConfig {
-	static List<IConfigElement> configElements = new ArrayList<IConfigElement>();
+	private static List<IConfigElement> configElements = new ArrayList<IConfigElement>();
 	{
 		configElements.addAll(new ConfigElement(ConfigurationHandler.configuration.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements());
 		configElements.addAll(new ConfigElement(ConfigurationHandler.configuration.getCategory(ConfigurationHandler.CATEGORY_COMMANDS)).getChildElements());
 	}
 	
-	public ModGuiConfig(GuiScreen guiScreen) {
-		super(guiScreen, configElements, Reference.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ConfigurationHandler.configuration.toString()));
+	/* Constructors */
+	
+	public ModGuiConfig(GuiScreen parentScreen) {
+		super(parentScreen, configElements, Reference.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath(ConfigurationHandler.configuration.toString()));
 	}
 }

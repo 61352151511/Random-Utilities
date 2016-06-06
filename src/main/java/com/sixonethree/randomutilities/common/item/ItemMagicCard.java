@@ -17,24 +17,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class ItemMagicCard extends ItemBase {
+	
+	/* Constructors */
+	
 	public ItemMagicCard() {
 		super();
-		this.setUnlocalizedName("magicCard");
+		this.setNames("magicCard");
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced) {
+	/* Overridden */
+	
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		String signers1 = this.tagOrDefault(stack, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
 		String[] signers = signers1.split(";");
-		list.add("Signers: ");
+		tooltip.add("Signers: ");
 		for (String signer : signers) {
 			String name = null;
 			try {
 				name = UsernameCache.getLastKnownUsername(UUID.fromString(signer));
 			} catch (IllegalArgumentException e) {}
 			if (name != null) {
-				list.add(name);
+				tooltip.add(name);
 			} else {
-				list.add(signer);
+				tooltip.add(signer);
 			}
 		}
 	}

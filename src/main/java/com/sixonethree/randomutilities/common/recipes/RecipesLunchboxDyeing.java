@@ -36,7 +36,7 @@ public class RecipesLunchboxDyeing implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (stack != null) {
-				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
+				if (stack.getItem() == ModItems.LUNCHBOX || stack.getItem() == ModItems.COMBINED) {
 					s = stack;
 					l ++;
 				} else if (stack.getItem() == Items.DYE) {

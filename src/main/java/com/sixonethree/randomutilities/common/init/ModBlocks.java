@@ -11,14 +11,14 @@ import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
 import com.sixonethree.randomutilities.reference.Reference;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID) public class ModBlocks {
-	public static BlockContainerBase magicChest = new BlockMagicChest();
-	public static BlockContainerBase displayTable = new BlockDisplayTable();
+	public static final BlockContainerBase MAGIC_CHEST = new BlockMagicChest();
+	public static final BlockContainerBase DISPLAY_TABLE = new BlockDisplayTable();
 	
 	public static void init() {
-		GameRegistry.register(magicChest.setRegistryName("magicChest"));
-		GameRegistry.register(new ItemBlock(magicChest).setRegistryName("magicChest"));
-		GameRegistry.register(displayTable.setRegistryName("displayTable"));
-		GameRegistry.register(new ItemBlock(displayTable).setRegistryName("displayTable"));
+		GameRegistry.register(MAGIC_CHEST);
+		GameRegistry.register(new ItemBlock(MAGIC_CHEST).setRegistryName(MAGIC_CHEST.getRegistryName()));
+		GameRegistry.register(DISPLAY_TABLE);
+		GameRegistry.register(new ItemBlock(DISPLAY_TABLE).setRegistryName(DISPLAY_TABLE.getRegistryName()));
 		GameRegistry.registerTileEntity(TileEntityMagicChest.class, "TileEntityMagicChest");
 		GameRegistry.registerTileEntity(TileEntityDisplayTable.class, "TileEntityDisplayTable");
 	}

@@ -1,42 +1,30 @@
-package com.sixonethree.randomutilities.client.render;
+package com.sixonethree.randomutilities.client.render.tileentity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 
-import com.sixonethree.randomutilities.client.model.ModelDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
-import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.GlManager;
 
 public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDisplayTable> {
-	private final ModelDisplayTable model;
 	private RenderManager renderManager;
-	ResourceLocation displayTableTexture = new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/DisplayTable.png");
+	
+	/* Constructors */
 	
 	public DisplayTableRenderer(RenderManager rm) {
-		this.model = new ModelDisplayTable();
 		this.renderManager = rm;
 	}
 	
+	/* Overridden */
+	
 	@Override public void renderTileEntityAt(TileEntityDisplayTable displayTable, double x, double y, double z, float partialTicks, int destroyStage) {
 		EnumFacing facing = displayTable.getFacing();
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		Minecraft.getMinecraft().renderEngine.bindTexture(this.displayTableTexture);
-		GlStateManager.pushMatrix();
-		GlStateManager.rotate(180, 0, 0, 1);
-		this.model.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GlStateManager.popMatrix();
-		GlStateManager.popMatrix();
-		
+
 		/* RENDER THE ITEMS ON TOP */
 		
 		GlStateManager.pushMatrix();

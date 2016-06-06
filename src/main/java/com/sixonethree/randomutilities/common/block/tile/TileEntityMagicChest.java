@@ -3,7 +3,7 @@ package com.sixonethree.randomutilities.common.block.tile;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,6 +25,7 @@ import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
+// TODO Capability
 public class TileEntityMagicChest extends TileEntity implements ITickable, IInventory, ISidedInventory {
 	private String[] owners;
 	private String placer;
@@ -38,7 +39,37 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		this.turn = 0;
 	}
 	
+	/* Custom Methods */
+	
+	public String getPlacer() { return this.placer; }
+	
+	public boolean isOwner(Object compareTo) {
+		if (compareTo instanceof String) {
+			String possibleOwner = (String) compareTo;
+			if (possibleOwner.equals(placer)) return true;
+			for (String s : this.owners) {
+				if (s.equals(possibleOwner)) return true;
+			}
+		} else if (compareTo instanceof UUID) { return isOwner(((UUID) compareTo).toString()); }
+		return false;
+	}
+	
+	public void setPlacer(String newPlacer) {
+		this.placer = newPlacer;
+		this.markDirty();
+	}
+	
 	/* TileEntity */
+	
+	@Override @Nullable public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.getPos(), 0, this.getUpdateTag());
+	}
+	
+	@Override public NBTTagCompound getUpdateTag() {
+		NBTTagCompound updateTag = super.getUpdateTag();
+		this.writeToNBT(updateTag);
+		return updateTag;
+	}
 	
 	@Override public void markDirty() {
 		super.markDirty();
@@ -54,18 +85,8 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		}
 	}
 	
-	@Nonnull @Override public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
-	}
-	
-	@Nonnull @Override public NBTTagCompound getUpdateTag() {
-		NBTTagCompound updateTag = super.getUpdateTag();
-		this.writeToNBT(updateTag);
-		return updateTag;
-	}
-	
-	@Override public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
-		super.onDataPacket(network, packet);
+	@Override public final void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
 		if (this.getWorld().isRemote) this.markDirty();
 	}
 	
@@ -97,7 +118,7 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	@Override public void closeInventory(EntityPlayer player) {
 		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.magicChest, 1, 0);
+		this.worldObj.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 0);
 	}
 	
 	@Override public ItemStack decrStackSize(int slot, int amount) {
@@ -144,7 +165,7 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	@Override public void openInventory(EntityPlayer player) {
 		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.magicChest, 1, 1);
+		this.worldObj.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 1);
 	}
 	
 	@Override public ItemStack removeStackFromSlot(int slot) {
@@ -208,25 +229,5 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 			this.turn ++;
 			if (this.turn >= this.owners.length) this.turn = 0;
 		}
-	}
-	
-	/* TileEntityMagicChest */
-	
-	public String getPlacer() { return this.placer; }
-	
-	public boolean isOwner(Object compareTo) {
-		if (compareTo instanceof String) {
-			String possibleOwner = (String) compareTo;
-			if (possibleOwner.equals(placer)) return true;
-			for (String s : this.owners) {
-				if (s.equals(possibleOwner)) return true;
-			}
-		} else if (compareTo instanceof UUID) { return isOwner(((UUID) compareTo).toString()); }
-		return false;
-	}
-	
-	public void setPlacer(String newPlacer) {
-		this.placer = newPlacer;
-		this.markDirty();
 	}
 }

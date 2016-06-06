@@ -1,6 +1,6 @@
 package com.sixonethree.randomutilities.common.block.tile;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,29 +18,47 @@ import net.minecraftforge.common.util.Constants;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
+// TODO Capability
 public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	private EnumFacing facing;
 	private ItemStack[] inventory = new ItemStack[25];
+	
+	/* Constructors */
 	
 	public TileEntityDisplayTable() {
 		super();
 		this.facing = EnumFacing.NORTH;
 	}
 	
+	/* Custom Methods */
+	
+	public EnumFacing getFacing() {
+		return this.facing;
+	}
+	
+	public ItemStack[] getInventory() {
+		return this.inventory;
+	}
+	
+	public void setFacing(EnumFacing newFacing) {
+		this.facing = newFacing;
+		this.markDirty();
+	}
+	
 	/* TileEntity */
 	
-	@Nonnull @Override public SPacketUpdateTileEntity getUpdatePacket() {
+	@Override @Nullable public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
 	}
 	
-	@Nonnull @Override public NBTTagCompound getUpdateTag() {
+	@Override public NBTTagCompound getUpdateTag() {
 		NBTTagCompound updateTag = super.getUpdateTag();
 		this.writeToNBT(updateTag);
 		return updateTag;
 	}
 	
-	@Override public final void onDataPacket(NetworkManager network, SPacketUpdateTileEntity packet) {
-		super.onDataPacket(network, packet);
+	@Override public final void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
 		if (this.getWorld().isRemote) this.markDirty();
 	}
 	
@@ -86,7 +104,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	
 	@Override public void closeInventory(EntityPlayer player) {
 		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.displayTable, 1, 0);
+		this.worldObj.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 0);
 	}
 	
 	@Override public ItemStack decrStackSize(int slot, int amount) {
@@ -133,7 +151,7 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	
 	@Override public void openInventory(EntityPlayer player) {
 		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.displayTable, 1, 1);
+		this.worldObj.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 1);
 	}
 	
 	@Override public ItemStack removeStackFromSlot(int index) {
@@ -147,15 +165,5 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 		if (index < 0 || index > this.inventory.length) return;
 		this.markDirty();
 		this.inventory[index] = stack;
-	}
-	
-	/* TileEntityDisplayTable */
-	
-	public EnumFacing getFacing() { return this.facing; }
-	public ItemStack[] getInventory() { return this.inventory; }
-	
-	public void setFacing(EnumFacing newFacing) {
-		this.facing = newFacing;
-		this.markDirty();
 	}
 }

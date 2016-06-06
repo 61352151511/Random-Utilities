@@ -14,11 +14,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister {
+	
+	/* Constructors */
+	
 	public ItemCombined() {
 		super();
-		this.setUnlocalizedName("combined");
-		this.setFull3D();
+		this.setNames("combined");
 	}
+	
+	/* Overridden */
 	
 	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
 		list.add(TextFormatting.AQUA + I18n.format("tooltip.heartcanister.stores"));
@@ -52,7 +56,9 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 		list.add(I18n.format("tooltip.lunchbox.stored", storedFoodAsString, maxStoredFoodAsString));
 	}
 	
-	@Override public boolean hasEffect(ItemStack stack) { return true; }
+	@Override public boolean hasEffect(ItemStack stack) {
+		return true;
+	}
 	
 	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
 		if (entity instanceof EntityPlayer) {
@@ -110,6 +116,11 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 	
 	/* IHeartCanister */
 	
-	@Override public boolean isHeartCanisterAutomatic(ItemStack stack) { return true; }
-	@Override public boolean isLarge(ItemStack stack) { return true; }
+	@Override public boolean isHeartCanisterAutomatic(ItemStack stack) {
+		return true;
+	}
+	
+	@Override public boolean isLarge(ItemStack stack) {
+		return true;
+	}
 }

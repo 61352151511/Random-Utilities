@@ -14,6 +14,8 @@ public class ConfigurationHandler {
 	public static final String CATEGORY_COMMANDS = "Commands";
 	private static HashMap<String, Boolean> enabledCommands = new HashMap<String, Boolean>();
 	
+	/* Methods */
+	
 	public static void init(File configFile) {
 		if (configuration == null) {
 			configuration = new Configuration(configFile);
@@ -21,10 +23,11 @@ public class ConfigurationHandler {
 		}
 	}
 	
-	@SubscribeEvent public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
-			loadConfiguration();
+	public static boolean isCommandEnabled(String command) {
+		if (enabledCommands.containsKey(command)) {
+			return enabledCommands.get(command).booleanValue();
 		}
+		return false;
 	}
 	
 	private static void loadConfiguration() {
@@ -56,10 +59,11 @@ public class ConfigurationHandler {
 		if (configuration.hasChanged()) configuration.save();
 	}
 	
-	public static boolean isCommandEnabled(String command) {
-		if (enabledCommands.containsKey(command)) {
-			return enabledCommands.get(command).booleanValue();
+	/* Events */
+	
+	@SubscribeEvent public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+		if (event.getModID().equalsIgnoreCase(Reference.MOD_ID)) {
+			loadConfiguration();
 		}
-		return false;
 	}
 }

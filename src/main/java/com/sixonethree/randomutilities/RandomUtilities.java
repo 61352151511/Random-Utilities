@@ -23,6 +23,9 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY) public static ServerProxy proxy;
 	
 	@Mod.EventHandler public void preInit(FMLPreInitializationEvent event) {
+		ModBlocks.init();
+		ModItems.init();
+		
 		proxy.preInit(event);
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
@@ -31,9 +34,6 @@ import com.sixonethree.randomutilities.utility.LogHelper;
 	}
 	
 	@Mod.EventHandler public void init(FMLInitializationEvent event) {
-		ModBlocks.init();
-		ModItems.init();
-		
 		proxy.init(event);
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);

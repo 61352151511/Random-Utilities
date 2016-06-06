@@ -20,20 +20,25 @@ import com.sixonethree.randomutilities.reference.NBTTagKeys;
 public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	String[] nameSuffixes = new String[] {"", "_large", "_auto", "_large_auto"};
 	
+	/* Constructors */
+	
 	public ItemHeartCanister() {
 		super();
-		this.setUnlocalizedName("heartCanister").setFull3D().setHasSubtypes(true);
+		this.setHasSubtypes(true);
+		this.setNames("heartCanister");
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean bool) {
-		list.add(TextFormatting.AQUA + I18n.format("tooltip.heartcanister.stores"));
+	/* Overridden */
+	
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		tooltip.add(TextFormatting.AQUA + I18n.format("tooltip.heartcanister.stores"));
 		float storedHealth = getCurrentHealthStorage(stack);
 		float maxStoredHealth = getMaxHealthStorage(stack);
 		if (stack.getItemDamage() > 1) {
-			list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.auto"));
+			tooltip.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.auto"));
 		} else {
-			list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.rclick"));
-			list.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.rclick2"));
+			tooltip.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.rclick"));
+			tooltip.add(TextFormatting.GREEN + I18n.format("tooltip.heartcanister.rclick2"));
 		}
 		
 		String storedAsString = String.valueOf(storedHealth / 2);
@@ -43,15 +48,21 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		if (maxStorageString.contains(".")) maxStorageString = maxStorageString.substring(0, maxStorageString.indexOf(".") + 2);
 		if (maxStorageString.endsWith(".0")) maxStorageString = maxStorageString.replace(".0", "");
 		
-		list.add(I18n.format("tooltip.heartcanister.stored", storedAsString, maxStorageString));
+		tooltip.add(I18n.format("tooltip.heartcanister.stored", storedAsString, maxStorageString));
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (int i = 0; i <= 3; i ++) list.add(new ItemStack(item, 1, i));
+	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+		for (int i = 0; i <= 3; i ++)
+			subItems.add(new ItemStack(itemIn, 1, i));
 	}
 	
-	@Override public String getUnlocalizedName(ItemStack stack) { return super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()]; }
-	@Override public boolean hasEffect(ItemStack stack) { return this.isHeartCanisterAutomatic(stack); }
+	@Override public String getUnlocalizedName(ItemStack stack) {
+		return stack.getItemDamage() < this.nameSuffixes.length ? super.getUnlocalizedName() + this.nameSuffixes[stack.getItemDamage()] : super.getUnlocalizedName();
+	}
+	
+	@Override public boolean hasEffect(ItemStack stack) {
+		return this.isHeartCanisterAutomatic(stack);
+	}
 	
 	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (!this.isHeartCanisterAutomatic(itemStackIn)) {
@@ -114,6 +125,11 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	
 	/* IHeartCanister */
 	
-	@Override public boolean isLarge(ItemStack stack) { return stack.getItemDamage() % 2 == 1; }
-	@Override public boolean isHeartCanisterAutomatic(ItemStack stack) { return stack.getItemDamage() >= 2; }
+	@Override public boolean isLarge(ItemStack stack) {
+		return stack.getItemDamage() % 2 == 1;
+	}
+	
+	@Override public boolean isHeartCanisterAutomatic(ItemStack stack) {
+		return stack.getItemDamage() >= 2;
+	}
 }

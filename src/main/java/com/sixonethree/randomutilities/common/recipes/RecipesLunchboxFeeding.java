@@ -37,7 +37,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (stack != null) {
-				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
+				if (stack.getItem() == ModItems.LUNCHBOX || stack.getItem() == ModItems.COMBINED) {
 					s = stack;
 					l ++;
 				} else {
@@ -86,7 +86,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 				tag.setFloat(NBTTagKeys.CURRENT_FOOD_STORED, fs + fta);
 				tag.setFloat(NBTTagKeys.MAX_FOOD_STORED, mfs);
 				if (c > -1) tag.setInteger(NBTTagKeys.COLOR, c);
-				if (this.result.getItem() == ModItems.combined) {
+				if (this.result.getItem() == ModItems.COMBINED) {
 					tag.setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, hs);
 					tag.setFloat(NBTTagKeys.MAX_HEALTH_STORED, mhs);
 				}

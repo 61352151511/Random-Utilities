@@ -1,38 +1,26 @@
-package com.sixonethree.randomutilities.client.render;
+package com.sixonethree.randomutilities.client.render.tileentity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
-import com.sixonethree.randomutilities.client.model.ModelMagicChest;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
-import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.GlManager;
 
 public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagicChest> {
-	private final ModelMagicChest model;
 	private RenderManager renderManager;
-	ResourceLocation magicChestTexture = new ResourceLocation(Reference.RESOURCE_PREFIX + "textures/blocks/MagicChest.png");
+	
+	/* Constructors */
 	
 	public MagicChestRenderer(RenderManager rm) {
-		this.model = new ModelMagicChest();
 		this.renderManager = rm;
 	}
 	
+	/* Overridden */
+	
 	@Override public void renderTileEntityAt(TileEntityMagicChest magicChest, double x, double y, double z, float partialTicks, int destroyStage) {
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
-		Minecraft.getMinecraft().renderEngine.bindTexture(this.magicChestTexture);
-		GlStateManager.pushMatrix();
-		GlStateManager.rotate(180, 0, 0, 1);
-		this.model.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GlStateManager.popMatrix();
-		GlStateManager.popMatrix();
 		
 		/* RENDER THE INSIDE */
 		

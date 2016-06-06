@@ -1,4 +1,4 @@
-package com.sixonethree.randomutilities.client.creativetab;
+package com.sixonethree.randomutilities.common.creativetab;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,9 +10,9 @@ import com.sixonethree.randomutilities.common.init.ModItems;
 import com.sixonethree.randomutilities.reference.Reference;
 
 public class CreativeTab {
-	public static final CreativeTabs randomUtilitiesTab = new CreativeTabs(Reference.MOD_ID) {
-		@Override public Item getTabIconItem() {
-			return ModItems.lunchbox;
+	public static final CreativeTabs RANDOM_UTILITIES = new CreativeTabs(Reference.MOD_ID) {
+		@Override @SideOnly(Side.CLIENT) public Item getTabIconItem() {
+			return ModItems.LUNCHBOX;
 		}
 		
 		@Override @SideOnly(Side.CLIENT) public String getTranslatedTabLabel() {

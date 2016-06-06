@@ -8,11 +8,15 @@ public class ValidatingSlot extends Slot {
 	private boolean useValidItemsList = false;
 	private ItemStack[] validItems = new ItemStack[1];
 	
+	/* Constructors */
+	
 	public ValidatingSlot(IInventory par1iInventory, int par2, int par3, int par4, boolean useValidItemsList, ItemStack... validItems) {
 		super(par1iInventory, par2, par3, par4);
 		this.useValidItemsList = useValidItemsList;
 		this.validItems = validItems;
 	}
+	
+	/* Overridden */
 	
 	@Override public boolean isItemValid(ItemStack par1ItemStack) {
 		if (!useValidItemsList) return true;

@@ -25,6 +25,9 @@ import com.sixonethree.randomutilities.utility.homewarp.SaveFile;
 import com.sixonethree.randomutilities.utility.homewarp.WarpPoint;
 
 public class PlayerEvents {
+	
+	/* Methods */
+	
 	private static ITextComponent colorPlayer(EntityPlayer player) {
 		return player.getDisplayName();
 	}
@@ -37,25 +40,7 @@ public class PlayerEvents {
 		}
 	}
 	
-	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
-		if (AfkPlayers.isAfk(player.getUniqueID())) {
-			AfkPlayers.remove(player.getUniqueID());
-			messageAll("command.afk.notafk", colorPlayer(player));
-		}
-	}
-	
-	@SubscribeEvent public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
-		HomePoint.homesSaveFile = new SaveFile("/homes.txt", event.getPlayerDirectory().getParent());
-		WarpPoint.warpsSaveFile = new SaveFile("/warps.txt", event.getPlayerDirectory().getParent());
-		HomePoint.loadAll();
-		WarpPoint.loadAll();
-	}
-	
-	@SubscribeEvent public void onPlayerSaveToFileEvent(PlayerEvent.SaveToFile event) {
-		HomePoint.saveAll();
-		WarpPoint.saveAll();
-	}
+	/* Events */
 	
 	@SubscribeEvent public void onItemDrop(ItemTossEvent event) {
 		if (!event.getEntity().worldObj.isRemote) {
@@ -77,7 +62,7 @@ public class PlayerEvents {
 								}
 							}
 							if (switchItem) {
-								drop.setEntityItemStack(new ItemStack(ModItems.magicCard));
+								drop.setEntityItemStack(new ItemStack(ModItems.MAGIC_CARD));
 							}
 						}
 					}
@@ -85,4 +70,24 @@ public class PlayerEvents {
 			}
 		}
     }
+	
+	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
+		EntityPlayer player = event.getEntityPlayer();
+		if (AfkPlayers.isAfk(player.getUniqueID())) {
+			AfkPlayers.remove(player.getUniqueID());
+			messageAll("command.afk.notafk", colorPlayer(player));
+		}
+	}
+	
+	@SubscribeEvent public void onPlayerLoadFromFileEvent(PlayerEvent.LoadFromFile event) {
+		HomePoint.homesSaveFile = new SaveFile("/homes.txt", event.getPlayerDirectory().getParent());
+		WarpPoint.warpsSaveFile = new SaveFile("/warps.txt", event.getPlayerDirectory().getParent());
+		HomePoint.loadAll();
+		WarpPoint.loadAll();
+	}
+	
+	@SubscribeEvent public void onPlayerSaveToFileEvent(PlayerEvent.SaveToFile event) {
+		HomePoint.saveAll();
+		WarpPoint.saveAll();
+	}
 }
