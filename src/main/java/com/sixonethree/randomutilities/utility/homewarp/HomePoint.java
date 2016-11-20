@@ -34,7 +34,7 @@ public class HomePoint {
 			String locationInfo = info.substring(info.indexOf("(") + 1, info.indexOf(")"));
 			this.location = new Location(locationInfo);
 		} catch (Exception e) {
-			System.err.println("Exception on attemping to rebuild WarpPoint from String.");
+			System.err.println("Exception on attemping to rebuild HomePoint from String.");
 			this.name = "Error";
 			this.location = new Location(0, 256, 0, 0);
 		}

@@ -8,9 +8,11 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
+import com.sixonethree.randomutilities.utility.LogHelper;
 
 public class ChatEvents {
 	@SubscribeEvent public void onPlayerChat(ServerChatEvent event) {
+		LogHelper.warn(event.getPlayer().experienceTotal);
 		EntityPlayerMP mrchattypants = event.getPlayer();
 		if (MutedPlayers.isMuted(mrchattypants.getUniqueID())) {
 			event.setCanceled(true);
