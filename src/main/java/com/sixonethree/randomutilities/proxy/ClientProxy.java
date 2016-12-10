@@ -54,16 +54,16 @@ public class ClientProxy extends ServerProxy {
 	}
 	
 	private void registerRenderersPreInit() {
-		this.registerItem(ModItems.LUNCHBOX, 0);
-		this.registerItem(ModItems.LUNCHBOX, 1);
-		this.registerItem(ModItems.HEART_CANISTER, 0);
-		this.registerItem(ModItems.HEART_CANISTER, 1);
-		this.registerItem(ModItems.HEART_CANISTER, 2);
-		this.registerItem(ModItems.HEART_CANISTER, 3);
-		this.registerItem(ModItems.COMBINED);
-		this.registerItem(ModItems.MAGIC_CARD);
-		this.registerBlock(ModBlocks.MAGIC_CHEST);
-		this.registerBlock(ModBlocks.DISPLAY_TABLE);
+		this.registerItem(ModItems.lunchbox, 0);
+		this.registerItem(ModItems.lunchbox, 1);
+		this.registerItem(ModItems.heartCanister, 0);
+		this.registerItem(ModItems.heartCanister, 1);
+		this.registerItem(ModItems.heartCanister, 2);
+		this.registerItem(ModItems.heartCanister, 3);
+		this.registerItem(ModItems.combined);
+		this.registerItem(ModItems.magicCard);
+		this.registerBlock(ModBlocks.magicChest);
+		this.registerBlock(ModBlocks.displayTable);
 	}
 	
 	private void registerRenderersInit() {
@@ -72,9 +72,9 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicChest.class, mcr);
 		
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.lunchbox, ModItems.LUNCHBOX);
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.heartCanister, ModItems.HEART_CANISTER);
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.combined, ModItems.COMBINED);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.lunchbox, ModItems.lunchbox);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.heartCanister, ModItems.heartCanister);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.combined, ModItems.combined);
 	}
 	
 	private void registerBlock(Block block) {

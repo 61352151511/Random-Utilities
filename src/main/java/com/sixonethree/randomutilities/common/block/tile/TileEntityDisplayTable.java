@@ -90,7 +90,7 @@ public class TileEntityDisplayTable extends TileEntityLockableLoot implements IT
 	
 	@Override public void closeInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 0);
+		this.world.addBlockEvent(this.pos, ModBlocks.displayTable, 1, 0);
 	}
 	
 	@Override public ITextComponent getDisplayName() {
@@ -111,7 +111,7 @@ public class TileEntityDisplayTable extends TileEntityLockableLoot implements IT
 	
 	@Override public void openInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 1);
+		this.world.addBlockEvent(this.pos, ModBlocks.displayTable, 1, 1);
 	}
 	
 	@Override public boolean isEmpty() {

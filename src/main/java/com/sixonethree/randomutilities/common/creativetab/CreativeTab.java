@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class CreativeTab {
 	public static final CreativeTabs RANDOM_UTILITIES = new CreativeTabs(Reference.MOD_ID) {
 		@Override @SideOnly(Side.CLIENT) public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.LUNCHBOX);
+			return new ItemStack(ModItems.lunchbox);
 		}
 		
 		@Override @SideOnly(Side.CLIENT) public String getTranslatedTabLabel() {

@@ -21,13 +21,9 @@ public class ItemBase extends Item {
 	
 	/* Custom Methods */
 	
-	protected String getUnwrappedUnlocalizedName(String unlocalizedName) {
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
-	}
-	
 	public ItemBase setNames(String name) {
 		this.setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
-		this.setUnlocalizedName(name);
+		this.setUnlocalizedName(this.getRegistryName().toString());
 		return this;
 	}
 	
@@ -48,15 +44,5 @@ public class ItemBase extends Item {
 	public String tagOrDefault(ItemStack stack, String key, String def) {
 		this.tagCompoundVerification(stack);
 		return stack.getTagCompound().hasKey(key) ? stack.getTagCompound().getString(key) : def;
-	}
-	
-	/* Overridden */
-	
-	@Override public String getUnlocalizedName() {
-		return String.format("item.%s%s", Reference.RESOURCE_PREFIX, this.getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-	}
-	
-	@Override public String getUnlocalizedName(ItemStack stack) {
-		return String.format("item.%s%s", Reference.RESOURCE_PREFIX, this.getUnwrappedUnlocalizedName(super.getUnlocalizedName(stack)));
 	}
 }

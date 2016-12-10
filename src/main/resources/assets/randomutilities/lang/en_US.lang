@@ -90,17 +90,17 @@ warps.message.serverwarps=Server warps: %s
 item.randomutilities:lunchbox.name=Lunchbox
 item.randomutilities:lunchbox_auto.name=Automatic Lunchbox
 
-item.randomutilities:heartCanister.name=Heart Canister
-item.randomutilities:heartCanister_auto.name=Automatic Heart Canister
-item.randomutilities:heartCanister_large.name=Large Heart Canister
-item.randomutilities:heartCanister_large_auto.name=Automatic Large Heart Canister
+item.randomutilities:heart_canister.name=Heart Canister
+item.randomutilities:heart_canister_auto.name=Automatic Heart Canister
+item.randomutilities:heart_canister_large.name=Large Heart Canister
+item.randomutilities:heart_canister_large_auto.name=Automatic Large Heart Canister
 
 item.randomutilities:combined.name=Automatic Lunchbox & Heart Canister
 
-item.randomutilities:magicCard.name=Magic Card
+item.randomutilities:magic_card.name=Magic Card
 
-tile.randomutilities:magicChest.name=Magic Chest
-tile.randomutilities:displayTable.name=Display Table
+tile.randomutilities:magic_chest.name=Magic Chest
+tile.randomutilities:display_table.name=Display Table
 
 itemGroup.randomUtilities=Random Utilities
 

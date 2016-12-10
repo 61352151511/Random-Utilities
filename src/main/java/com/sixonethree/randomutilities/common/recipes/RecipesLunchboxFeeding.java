@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesLunchboxFeeding implements IRecipe {
-	private ItemStack result;
+	private ItemStack result = ItemStack.EMPTY;
 	
 	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
 	@Override public ItemStack getRecipeOutput() { return this.result; }
@@ -39,7 +39,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.LUNCHBOX || stack.getItem() == ModItems.COMBINED) {
+				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
 					s = stack;
 					l ++;
 				} else {
@@ -88,7 +88,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 				tag.setFloat(NBTTagKeys.CURRENT_FOOD_STORED, fs + fta);
 				tag.setFloat(NBTTagKeys.MAX_FOOD_STORED, mfs);
 				if (c > -1) tag.setInteger(NBTTagKeys.COLOR, c);
-				if (this.result.getItem() == ModItems.COMBINED) {
+				if (this.result.getItem() == ModItems.combined) {
 					tag.setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, hs);
 					tag.setFloat(NBTTagKeys.MAX_HEALTH_STORED, mhs);
 				}

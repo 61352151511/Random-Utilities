@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesCombinedCombining implements IRecipe {
-	private ItemStack result;
+	private ItemStack result = ItemStack.EMPTY;
 	
 	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
 	@Override public ItemStack getRecipeOutput() { return this.result; }
@@ -41,13 +41,13 @@ public class RecipesCombinedCombining implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.COMBINED) {
+				if (stack.getItem() == ModItems.combined) {
 					c ++;
 					s.add(stack);
-				} else if (stack.getItem() == ModItems.HEART_CANISTER) {
+				} else if (stack.getItem() == ModItems.heartCanister) {
 					h ++;
 					s.add(stack);
-				} else if (stack.getItem() == ModItems.LUNCHBOX) {
+				} else if (stack.getItem() == ModItems.lunchbox) {
 					l ++;
 					s.add(stack);
 				} else {
@@ -62,7 +62,7 @@ public class RecipesCombinedCombining implements IRecipe {
 			float mhs = 0F;
 			int co = -1;
 			for (ItemStack stack : s) {
-				if (stack.getItem() == ModItems.COMBINED) {
+				if (stack.getItem() == ModItems.combined) {
 					ILunchbox cast1 = (ILunchbox) stack.getItem();
 					IHeartCanister cast2 = (IHeartCanister) stack.getItem();
 					fs += cast1.getCurrentFoodStorage(stack);
@@ -70,18 +70,18 @@ public class RecipesCombinedCombining implements IRecipe {
 					hs += cast2.getCurrentHealthStorage(stack);
 					mhs += cast2.getMaxHealthStorage(stack);
 					if (co == -1 && cast1.hasColor(stack)) co = cast1.getColor(stack);
-				} else if (stack.getItem() == ModItems.HEART_CANISTER) {
+				} else if (stack.getItem() == ModItems.heartCanister) {
 					IHeartCanister cast = (IHeartCanister) stack.getItem();
 					hs += cast.getCurrentHealthStorage(stack);
 					mhs += cast.getMaxHealthStorage(stack);
-				} else if (stack.getItem() == ModItems.LUNCHBOX) {
+				} else if (stack.getItem() == ModItems.lunchbox) {
 					ILunchbox cast = (ILunchbox) stack.getItem();
 					fs += cast.getCurrentFoodStorage(stack);
 					mfs += cast.getMaxFoodStorage(stack);
 					if (co == -1 && cast.hasColor(stack)) co = cast.getColor(stack);
 				}
 			}
-			this.result = new ItemStack(ModItems.COMBINED, 1, 0);
+			this.result = new ItemStack(ModItems.combined, 1, 0);
 			if (!this.result.hasTagCompound()) this.result.setTagCompound(new NBTTagCompound());
 			NBTTagCompound tag = this.result.getTagCompound();
 			tag.setFloat(NBTTagKeys.CURRENT_FOOD_STORED, fs);

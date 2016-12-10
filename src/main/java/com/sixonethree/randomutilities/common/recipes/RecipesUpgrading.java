@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesUpgrading implements IRecipe {
-	private ItemStack result;
+	private ItemStack result = ItemStack.EMPTY;
 	
 	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
 	@Override public ItemStack getRecipeOutput() { return this.result; }
@@ -40,10 +40,10 @@ public class RecipesUpgrading implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (u == 0 && stack.getItem() == ModItems.HEART_CANISTER && stack.getItemDamage() < 2) {
+				if (u == 0 && stack.getItem() == ModItems.heartCanister && stack.getItemDamage() < 2) {
 					u ++;
 					upgrade = stack;
-				} else if (u == 0 && stack.getItem() == ModItems.LUNCHBOX && stack.getItemDamage() == 0) {
+				} else if (u == 0 && stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == 0) {
 					u ++;
 					upgrade = stack;
 				} else if (stack.getItem() == Items.NETHER_STAR) {
@@ -56,7 +56,7 @@ public class RecipesUpgrading implements IRecipe {
 			}
 		}
 		if (u == 1 && n == 1 && b == 1 && !upgrade.isEmpty()) {
-			byte t = (byte) (upgrade.getItem() == ModItems.LUNCHBOX ? 1 : 0); // 1 Lunchbox, 0 Heart Canister
+			byte t = (byte) (upgrade.getItem() == ModItems.lunchbox ? 1 : 0); // 1 Lunchbox, 0 Heart Canister
 			float fs, mfs, hs, mhs;
 			fs = mfs = hs = mhs = 0F;
 			int c = -1;

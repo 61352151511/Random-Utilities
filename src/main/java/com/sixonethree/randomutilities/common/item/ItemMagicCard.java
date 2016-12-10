@@ -22,7 +22,7 @@ public class ItemMagicCard extends ItemBase {
 	
 	public ItemMagicCard() {
 		super();
-		this.setNames("magicCard");
+		this.setNames("magic_card");
 	}
 	
 	/* Overridden */

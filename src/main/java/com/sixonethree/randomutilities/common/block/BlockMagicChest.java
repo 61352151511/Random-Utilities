@@ -28,8 +28,8 @@ public class BlockMagicChest extends BlockContainerBase {
 	public BlockMagicChest() {
 		super();
 		this.setHardness(1.5F);
-		this.setRegistryName(new ResourceLocation(Reference.MOD_ID.toLowerCase(), "magicChest"));
-		this.setUnlocalizedName("magicChest");
+		this.setRegistryName(new ResourceLocation(Reference.MOD_ID.toLowerCase(), "magic_chest"));
+		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
 	
 	/* Overridden */

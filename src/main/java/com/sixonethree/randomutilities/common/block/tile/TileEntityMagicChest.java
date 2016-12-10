@@ -9,6 +9,7 @@ import com.sixonethree.randomutilities.common.container.ContainerMagicChest;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
+import com.sixonethree.randomutilities.utility.LogHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -121,7 +122,7 @@ public class TileEntityMagicChest extends TileEntityLockableLoot implements ITic
 	
 	@Override public void closeInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 0);
+		this.world.addBlockEvent(this.pos, ModBlocks.magicChest, 1, 0);
 	}
 	
 	@Override public ITextComponent getDisplayName() {
@@ -149,7 +150,7 @@ public class TileEntityMagicChest extends TileEntityLockableLoot implements ITic
 	
 	@Override public void openInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 1);
+		this.world.addBlockEvent(this.pos, ModBlocks.magicChest, 1, 1);
 	}
 	
 	/* ISidedInventory */
@@ -160,6 +161,7 @@ public class TileEntityMagicChest extends TileEntityLockableLoot implements ITic
 	}
 	
 	@Override public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		LogHelper.warn(index);
 		if (index == 2) {
 			if (!this.inventory.get(0).isEmpty()) {
 				if (this.inventory.get(0).getItem() instanceof ILunchbox) {
@@ -167,6 +169,7 @@ public class TileEntityMagicChest extends TileEntityLockableLoot implements ITic
 						ItemFood foodItem = (ItemFood) itemStackIn.getItem();
 						ILunchbox lunchbox = (ILunchbox) this.inventory.get(0).getItem();
 						if (lunchbox.getCurrentFoodStorage(this.inventory.get(0)) <= (lunchbox.getMaxFoodStorage(this.inventory.get(0)) - foodItem.getHealAmount(itemStackIn))) {
+							LogHelper.warn("A");
 							lunchbox.setCurrentFoodStorage(this.inventory.get(0), lunchbox.getCurrentFoodStorage(this.inventory.get(0)) + foodItem.getHealAmount(itemStackIn));
 							return true;
 						}

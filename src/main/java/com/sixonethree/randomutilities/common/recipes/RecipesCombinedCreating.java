@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesCombinedCreating implements IRecipe {
-	private ItemStack result;
+	private ItemStack result = ItemStack.EMPTY;
 	
 	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
 	@Override public ItemStack getRecipeOutput() { return this.result; }
@@ -40,10 +40,10 @@ public class RecipesCombinedCreating implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.HEART_CANISTER && stack.getItemDamage() == 3) {
+				if (stack.getItem() == ModItems.heartCanister && stack.getItemDamage() == 3) {
 					h ++;
 					s.add(stack);
-				} else if (stack.getItem() == ModItems.LUNCHBOX && stack.getItemDamage() == 1) {
+				} else if (stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == 1) {
 					l ++;
 					s.add(stack);
 				} else {
@@ -58,18 +58,18 @@ public class RecipesCombinedCreating implements IRecipe {
 			float mhs = 0F;
 			int c = -1;
 			for (ItemStack stack : s) {
-				if (stack.getItem() == ModItems.LUNCHBOX) {
+				if (stack.getItem() == ModItems.lunchbox) {
 					ILunchbox cast = (ILunchbox) stack.getItem();
 					fs += cast.getCurrentFoodStorage(stack);
 					mfs += cast.getMaxFoodStorage(stack);
 					if (c == -1 && cast.hasColor(stack)) c = cast.getColor(stack);
-				} else if (stack.getItem() == ModItems.HEART_CANISTER) {
+				} else if (stack.getItem() == ModItems.heartCanister) {
 					IHeartCanister cast = (IHeartCanister) stack.getItem();
 					hs += cast.getCurrentHealthStorage(stack);
 					mhs += cast.getMaxHealthStorage(stack);
 				}
 			}
-			this.result = new ItemStack(ModItems.COMBINED, 1, 0);
+			this.result = new ItemStack(ModItems.combined, 1, 0);
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, hs);
 			tag.setFloat(NBTTagKeys.MAX_HEALTH_STORED, mhs);

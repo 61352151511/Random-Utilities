@@ -61,7 +61,7 @@ public class PlayerEvents {
 							}
 						}
 						if (switchItem) {
-							drop.setEntityItemStack(new ItemStack(ModItems.MAGIC_CARD));
+							drop.setEntityItemStack(new ItemStack(ModItems.magicCard));
 						}
 					}
 				}

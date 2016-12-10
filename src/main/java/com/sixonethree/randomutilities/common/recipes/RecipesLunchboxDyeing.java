@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesLunchboxDyeing implements IRecipe {
-	private ItemStack result;
+	private ItemStack result = ItemStack.EMPTY;
 	
 	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
 	@Override public ItemStack getRecipeOutput() { return this.result; }
@@ -38,7 +38,7 @@ public class RecipesLunchboxDyeing implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.LUNCHBOX || stack.getItem() == ModItems.COMBINED) {
+				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
 					s = stack;
 					l ++;
 				} else if (stack.getItem() == Items.DYE) {

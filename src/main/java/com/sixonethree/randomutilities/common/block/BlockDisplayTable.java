@@ -31,8 +31,8 @@ public class BlockDisplayTable extends BlockContainerBase {
 	public BlockDisplayTable() {
 		super(Material.WOOD);
 		this.setHardness(1F);
-		this.setRegistryName(new ResourceLocation(Reference.MOD_ID.toLowerCase(), "displayTable"));
-		this.setUnlocalizedName("displayTable");
+		this.setRegistryName(new ResourceLocation(Reference.MOD_ID.toLowerCase(), "display_table"));
+		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
 	
 	/* Overridden */

@@ -27,7 +27,7 @@ public class ContainerMagicChest extends Container {
 	
 	protected void layoutContainer(IInventory playerInventory, IInventory chestInventory, int xSize, int ySize) {
 		this.addSlotToContainer(new ValidatingSlot(chestInventory, 0, 80, 18, false));
-		this.addSlotToContainer(new ValidatingSlot(chestInventory, 1, 152, 18, true, new ItemStack(ModItems.MAGIC_CARD)));
+		this.addSlotToContainer(new ValidatingSlot(chestInventory, 1, 152, 18, true, new ItemStack(ModItems.magicCard)));
 		
 		int leftCol = (xSize - 162) / 2 + 1;
 		for (int playerInvRow = 0; playerInvRow < 3; playerInvRow ++) {

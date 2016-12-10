@@ -26,7 +26,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	public ItemHeartCanister() {
 		super();
 		this.setHasSubtypes(true);
-		this.setNames("heartCanister");
+		this.setNames("heart_canister");
 	}
 	
 	/* Overridden */
