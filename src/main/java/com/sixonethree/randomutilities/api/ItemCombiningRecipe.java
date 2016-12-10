@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 
 public class ItemCombiningRecipe {
-	private ArrayList<ItemStack> ingredients = new ArrayList<ItemStack>();
+	private ArrayList<ItemStack> ingredients = new ArrayList<>();
 	private ItemStack result;
 	private int size;
 	
@@ -16,7 +16,7 @@ public class ItemCombiningRecipe {
 	}
 	
 	public boolean doesRequiredItemMatch(ItemStack compareStack) {
-		if (compareStack != null) {
+		if (!compareStack.isEmpty()) {
 			for (int i = 0; i <= this.getSize() - 1; i ++) {
 				if (this.getIngredient(i).isItemEqual(compareStack)) {
 					return true;

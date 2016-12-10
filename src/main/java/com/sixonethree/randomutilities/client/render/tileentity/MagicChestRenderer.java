@@ -1,13 +1,13 @@
 package com.sixonethree.randomutilities.client.render.tileentity;
 
+import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
+import com.sixonethree.randomutilities.utility.GlManager;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-
-import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
-import com.sixonethree.randomutilities.utility.GlManager;
 
 public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagicChest> {
 	private RenderManager renderManager;
@@ -33,11 +33,11 @@ public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagi
 		GlManager.translateThenRotate(1.5, 0.3, 0.5, 0, 0, 1, 0);
 		GlManager.translateThenRotate(-0.5, 0, 0.5, 0, 0, 1, 0);
 		ItemStack stack = magicChest.getStackInSlot(0);
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			ItemStack renderStack = stack.copy();
 			EntityItem ghostItem = new EntityItem(magicChest.getWorld(), x, y, z, renderStack);
 			float rotationAngle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
-			renderStack.stackSize = 1;
+			renderStack.setCount(1);
 			ghostItem.hoverStart = 0F;
 			
 			GlStateManager.scale(2, 2, 2);

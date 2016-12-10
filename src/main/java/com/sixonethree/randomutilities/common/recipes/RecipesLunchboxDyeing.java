@@ -1,15 +1,16 @@
 package com.sixonethree.randomutilities.common.recipes;
 
+import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import com.sixonethree.randomutilities.common.init.ModItems;
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class RecipesLunchboxDyeing implements IRecipe {
 	private ItemStack result;
@@ -18,24 +19,25 @@ public class RecipesLunchboxDyeing implements IRecipe {
 	@Override public ItemStack getRecipeOutput() { return this.result; }
 	@Override public int getRecipeSize() { return 10; }
 	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
+	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		
+		for (int i = 0; i < nonnulllist.size(); i ++) {
+			nonnulllist.set(i, ForgeHooks.getContainerItem(inv.getStackInSlot(i)));
 		}
-		return retstack;
+		
+		return nonnulllist;
 	}
 	
 	@Override public boolean matches(InventoryCrafting window, World world) {
-		this.result = null;
+		this.result = ItemStack.EMPTY;
 		byte l = 0;
 		byte d = 0;
 		byte c = 0;
-		ItemStack s = null;
+		ItemStack s = ItemStack.EMPTY;
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				if (stack.getItem() == ModItems.LUNCHBOX || stack.getItem() == ModItems.COMBINED) {
 					s = stack;
 					l ++;
@@ -47,7 +49,7 @@ public class RecipesLunchboxDyeing implements IRecipe {
 				}
 			}
 		}
-		if (l == 1 && d == 1 && s != null) {
+		if (l == 1 && d == 1 && !s.isEmpty()) {
 			NBTTagCompound tag;
 			this.result = new ItemStack(s.getItem(), 1, s.getItemDamage());
 			if (!this.result.hasTagCompound()) this.result.setTagCompound(new NBTTagCompound());

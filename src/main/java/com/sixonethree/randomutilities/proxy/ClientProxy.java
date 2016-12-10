@@ -1,5 +1,15 @@
 package com.sixonethree.randomutilities.proxy;
 
+import com.sixonethree.randomutilities.client.RandomUtilitiesItemColors;
+import com.sixonethree.randomutilities.client.gui.GuiManager;
+import com.sixonethree.randomutilities.client.gui.GuiManager.GUI;
+import com.sixonethree.randomutilities.client.render.tileentity.DisplayTableRenderer;
+import com.sixonethree.randomutilities.client.render.tileentity.MagicChestRenderer;
+import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
+import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
+import com.sixonethree.randomutilities.common.init.ModBlocks;
+import com.sixonethree.randomutilities.common.init.ModItems;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -15,16 +25,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
-import com.sixonethree.randomutilities.client.RandomUtilitiesItemColors;
-import com.sixonethree.randomutilities.client.gui.GuiManager;
-import com.sixonethree.randomutilities.client.gui.GuiManager.GUI;
-import com.sixonethree.randomutilities.client.render.tileentity.DisplayTableRenderer;
-import com.sixonethree.randomutilities.client.render.tileentity.MagicChestRenderer;
-import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
-import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
-import com.sixonethree.randomutilities.common.init.ModBlocks;
-import com.sixonethree.randomutilities.common.init.ModItems;
 
 public class ClientProxy extends ServerProxy {
 	@Override public void preInit(FMLPreInitializationEvent event) {
@@ -50,7 +50,7 @@ public class ClientProxy extends ServerProxy {
 	}
 	
 	@Override public World getClientWorld() {
-		return FMLClientHandler.instance().getClient().theWorld;
+		return FMLClientHandler.instance().getClient().world;
 	}
 	
 	private void registerRenderersPreInit() {

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "randomutilities:magicChest" }
+        "normal": { "model": "randomutilities:magicchest" }
     }
 }

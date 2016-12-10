@@ -10,8 +10,8 @@ public class ValidatingSlot extends Slot {
 	
 	/* Constructors */
 	
-	public ValidatingSlot(IInventory par1iInventory, int par2, int par3, int par4, boolean useValidItemsList, ItemStack... validItems) {
-		super(par1iInventory, par2, par3, par4);
+	public ValidatingSlot(IInventory inventoryIn, int index, int xPosition, int yPosition, boolean useValidItemsList, ItemStack... validItems) {
+		super(inventoryIn, index, xPosition, yPosition);
 		this.useValidItemsList = useValidItemsList;
 		this.validItems = validItems;
 	}

@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 public class CommandExtinguish extends ModCommandBase implements ICommand {
-	@Override public List<String> getCommandAliases() {
+	@Override public List<String> getAliases() {
 		return Arrays.asList(new String[] {"ext"});
 	}
 	

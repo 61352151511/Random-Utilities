@@ -1,13 +1,13 @@
 package com.sixonethree.randomutilities.common.command;
 
+import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
+import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
+
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-
-import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
-import com.sixonethree.randomutilities.reference.CommandReference.MutedPlayers;
 
 public class CommandWhoIs extends ModCommandBase implements ICommand {
 	@Override public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
@@ -19,7 +19,7 @@ public class CommandWhoIs extends ModCommandBase implements ICommand {
 			outputMessage(sender, "location", true, true, doubleToInt(player.posX), doubleToInt(player.posY), doubleToInt(player.posZ));
 			outputMessage(sender, "dimension", true, true, player.dimension);
 		} else {
-			outputMessage(sender, getCommandUsage(sender), true, false);
+			outputMessage(sender, getUsage(sender), true, false);
 		}
 	}
 	

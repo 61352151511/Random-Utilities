@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.sixonethree.randomutilities.common.command.ModCommandBase;
+import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
+import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
+import com.sixonethree.randomutilities.utility.homewarp.Location;
+
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,13 +16,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-import com.sixonethree.randomutilities.common.command.ModCommandBase;
-import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
-import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
-import com.sixonethree.randomutilities.utility.homewarp.Location;
-
 public class CommandHome extends ModCommandBase implements ICommand {
-	@Override public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	@Override public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		return HomePoint.getPlayerHomesAsList((EntityPlayer) sender, args[0]);
 	}
 	

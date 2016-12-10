@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "randomutilities:displayTable" }
+        "normal": { "model": "randomutilities:displaytable" }
     }
 }

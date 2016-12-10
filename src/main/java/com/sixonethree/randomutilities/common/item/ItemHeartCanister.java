@@ -2,6 +2,8 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -10,12 +12,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	String[] nameSuffixes = new String[] {"", "_large", "_auto", "_large_auto"};
@@ -51,7 +52,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		tooltip.add(I18n.format("tooltip.heartcanister.stored", storedAsString, maxStorageString));
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (int i = 0; i <= 3; i ++)
 			subItems.add(new ItemStack(itemIn, 1, i));
 	}
@@ -64,7 +65,8 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		return this.isHeartCanisterAutomatic(stack);
 	}
 	
-	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	@Override public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack itemStackIn = playerIn.getHeldItem(handIn);
 		if (!this.isHeartCanisterAutomatic(itemStackIn)) {
 			if (!playerIn.isSneaking()) { // TAKE HEALTH
 				float storedHealth = this.getCurrentHealthStorage(itemStackIn);
@@ -88,7 +90,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 				itemStackIn.getTagCompound().setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, storedHealth - healthToGive);
 			}
 		}
-		return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 	
 	@Override public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {

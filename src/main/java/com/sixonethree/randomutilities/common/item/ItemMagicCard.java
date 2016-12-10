@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -13,8 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class ItemMagicCard extends ItemBase {
 	
@@ -44,19 +44,20 @@ public class ItemMagicCard extends ItemBase {
 		}
 	}
 	
-	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		if (!playerIn.worldObj.isRemote) {
+	@Override public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack itemStackIn = playerIn.getHeldItem(handIn);
+		if (!playerIn.world.isRemote) {
 			String signersA = this.tagOrDefault(itemStackIn, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
 			String[] splitSigners = signersA.split(";");
 			ArrayList<String> signers;
 			if (splitSigners.length == 1) {
 				if (splitSigners[0].isEmpty()) {
-					signers = new ArrayList<String>();
+					signers = new ArrayList<>();
 				} else {
-					signers = new ArrayList<String>(Arrays.asList(splitSigners));
+					signers = new ArrayList<>(Arrays.asList(splitSigners));
 				}
 			} else {
-				signers = new ArrayList<String>(Arrays.asList(splitSigners));
+				signers = new ArrayList<>(Arrays.asList(splitSigners));
 			}
 			if (signers.contains(playerIn.getPersistentID().toString())) {
 				signers.remove(playerIn.getPersistentID().toString());
@@ -76,6 +77,6 @@ public class ItemMagicCard extends ItemBase {
 				itemStackIn.getTagCompound().setString(NBTTagKeys.MAGIC_CARD_SIGNERS, compiled);
 			}
 		}
-		return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 }

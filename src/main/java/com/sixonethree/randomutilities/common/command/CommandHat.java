@@ -10,8 +10,8 @@ public class CommandHat extends ModCommandBase implements ICommand {
 	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		ItemStack itemStack = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 		ItemStack hat = player.getHeldItemMainhand();
-		ItemStack oldhat = null;
-		if (itemStack != null) {
+		ItemStack oldhat = ItemStack.EMPTY;
+		if (!itemStack.isEmpty()) {
 			oldhat = itemStack;
 		}
 		player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, oldhat);

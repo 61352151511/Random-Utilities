@@ -2,6 +2,9 @@ package com.sixonethree.randomutilities.common.command;
 
 import java.util.List;
 
+import com.sixonethree.randomutilities.utility.homewarp.Location;
+import com.sixonethree.randomutilities.utility.homewarp.TeleporterHome;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandManager;
@@ -20,9 +23,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import com.sixonethree.randomutilities.utility.homewarp.Location;
-import com.sixonethree.randomutilities.utility.homewarp.TeleporterHome;
-
 public abstract class ModCommandBase extends CommandBase {
 	
 	/* Variables */
@@ -37,7 +37,7 @@ public abstract class ModCommandBase extends CommandBase {
 	/* One Liners */
 	
 	public String getLocalBase() {
-		return "command." + getCommandName().toLowerCase() + ".";
+		return "command." + getName().toLowerCase() + ".";
 	}
 	
 	public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) throws CommandException {}
@@ -98,7 +98,7 @@ public abstract class ModCommandBase extends CommandBase {
 		return Double.valueOf(d).intValue();
 	}
 	
-	@Override public String getCommandName() {
+	@Override public String getName() {
 		return this.getClass().getSimpleName().replace("Command", "").toLowerCase();
 	}
 	
@@ -108,11 +108,11 @@ public abstract class ModCommandBase extends CommandBase {
 	
 	/* Functions */
 	
-	@Override public String getCommandUsage(ICommandSender sender) {
+	@Override public String getUsage(ICommandSender sender) {
 		if (getUsageType() == 0) {
 			return getLocalBase() + "usage";
 		} else {
-			return "/" + getCommandName();
+			return "/" + getName();
 		}
 	}
 	
@@ -136,13 +136,13 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	@Override public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
-		if (tabCompletesOnlinePlayers()) { return args.length >= 1 ? getListOfStringsMatchingLastWord(args, serverInstance.getAllUsernames()) : null; }
+	@Override public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+		if (tabCompletesOnlinePlayers()) { return args.length >= 1 ? getListOfStringsMatchingLastWord(args, serverInstance.getOnlinePlayerNames()) : null; }
 		return null;
 	}
 	
 	public void messageAll(String message, boolean Translatable, boolean AppendBase, Object... formatargs) {
-		List<EntityPlayerMP> players = playerList.getPlayerList();
+		List<EntityPlayerMP> players = playerList.getPlayers();
 		for (int i = 0; i < players.size(); ++ i) {
 			EntityPlayerMP player = players.get(i);
 			outputMessage((ICommandSender) player, message, Translatable, true, formatargs);
@@ -163,16 +163,16 @@ public abstract class ModCommandBase extends CommandBase {
 			if (translatable) {
 				outputMessageLocal(sender, message, appendBase, formatargs);
 			} else {
-				player.addChatComponentMessage(new TextComponentString((appendBase ? getLocalBase() : "") + message));
+				player.sendMessage(new TextComponentString((appendBase ? getLocalBase() : "") + message));
 			}
 		} else {
-			sender.addChatMessage(new TextComponentString((appendBase ? getLocalBase() : "") + message));
+			sender.sendMessage(new TextComponentString((appendBase ? getLocalBase() : "") + message));
 		}
 	}
 	
 	public void outputMessageLocal(ICommandSender sender, String message, boolean appendBase, Object... formatargs) {
 		if (sender instanceof EntityPlayer) {
-			((EntityPlayer) sender).addChatComponentMessage(new TextComponentTranslation((appendBase ? getLocalBase() : "") + message, formatargs));
+			((EntityPlayer) sender).sendMessage(new TextComponentTranslation((appendBase ? getLocalBase() : "") + message, formatargs));
 		}
 	}
 	
@@ -182,14 +182,14 @@ public abstract class ModCommandBase extends CommandBase {
 	 * @param translatable - Is the message translatable?
 	 */
 	public void outputUsage(ICommandSender sender, Boolean translatable) {
-		outputMessage(sender, getCommandUsage(sender), translatable, false);
+		outputMessage(sender, getUsage(sender), translatable, false);
 	}
 	
 	public static void transferDimension(EntityPlayerMP player, Location loc) {
 		if (player.dimension == 1) {
-			player.addChatComponentMessage(new TextComponentTranslation("command.teleport.inend", new Object[0]));
+			player.sendMessage(new TextComponentTranslation("command.teleport.inend", new Object[0]));
 		} else {
-			playerList.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.worldObj, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
+			playerList.transferPlayerToDimension(player, loc.dimension, new TeleporterHome((WorldServer) player.world, loc.dimension, (int) loc.posX, (int) loc.posY, (int) loc.posZ, 0F, 0F));
 			player = playerList.getPlayerByUsername(player.getName());
 		}
 	}

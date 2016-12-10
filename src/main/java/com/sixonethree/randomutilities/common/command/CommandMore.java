@@ -6,8 +6,8 @@ import net.minecraft.server.MinecraftServer;
 
 public class CommandMore extends ModCommandBase implements ICommand {
 	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
-		if (player.getHeldItemMainhand() != null) {
-			player.getHeldItemMainhand().stackSize = player.getHeldItemMainhand().getMaxStackSize();
+		if (!player.getHeldItemMainhand().isEmpty()) {
+			player.getHeldItemMainhand().setCount(player.getHeldItemMainhand().getMaxStackSize());
 		}
 	}
 	

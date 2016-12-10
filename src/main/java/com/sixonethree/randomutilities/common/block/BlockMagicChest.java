@@ -1,6 +1,8 @@
 package com.sixonethree.randomutilities.common.block;
 
-import javax.annotation.Nullable;
+import com.sixonethree.randomutilities.RandomUtilities;
+import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
+import com.sixonethree.randomutilities.reference.Reference;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -19,10 +21,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.sixonethree.randomutilities.RandomUtilities;
-import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
-import com.sixonethree.randomutilities.reference.Reference;
-
 public class BlockMagicChest extends BlockContainerBase {
 	
 	/* Constructors */
@@ -40,22 +38,22 @@ public class BlockMagicChest extends BlockContainerBase {
 		TileEntityMagicChest te = (TileEntityMagicChest) worldIn.getTileEntity(pos);
 		if (te != null) {
 			ItemStack stack = te.getStackInSlot(0);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				float f = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				float f1 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				float f2 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityitem = new EntityItem(worldIn, (float) pos.getX() + f, (float) pos.getY() + 1 + f1, (float) pos.getZ() + f2, new ItemStack(stack.getItem(), stack.stackSize, stack.getItemDamage()));
+				EntityItem entityitem = new EntityItem(worldIn, (float) pos.getX() + f, (float) pos.getY() + 1 + f1, (float) pos.getZ() + f2, new ItemStack(stack.getItem(), stack.getCount(), stack.getItemDamage()));
 				if (stack.hasTagCompound()) entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
-				worldIn.spawnEntityInWorld(entityitem);
+				worldIn.spawnEntity(entityitem);
 			}
 			stack = te.getStackInSlot(1);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				float f = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				float f1 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				float f2 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityitem = new EntityItem(worldIn, (float) pos.getX() + f, (float) pos.getY() + 1 + f1, (float) pos.getZ() + f2, new ItemStack(stack.getItem(), stack.stackSize, stack.getItemDamage()));
+				EntityItem entityitem = new EntityItem(worldIn, (float) pos.getX() + f, (float) pos.getY() + 1 + f1, (float) pos.getZ() + f2, new ItemStack(stack.getItem(), stack.getCount(), stack.getItemDamage()));
 				if (stack.hasTagCompound()) entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
-				worldIn.spawnEntityInWorld(entityitem);
+				worldIn.spawnEntity(entityitem);
 			}
 		}
 		super.breakBlock(worldIn, pos, state);
@@ -73,7 +71,7 @@ public class BlockMagicChest extends BlockContainerBase {
 		return 10000F;
 	}
 	
-	@Override public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	@Override public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY) {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (te == null || !(te instanceof TileEntityMagicChest)) { return true; }
 		if (worldIn.isRemote) { return true; }

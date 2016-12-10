@@ -1,17 +1,18 @@
 package com.sixonethree.randomutilities.common.recipes;
 
+import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.item.IHeartCanister;
+import com.sixonethree.randomutilities.common.item.ILunchbox;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import com.sixonethree.randomutilities.common.init.ModItems;
-import com.sixonethree.randomutilities.common.item.IHeartCanister;
-import com.sixonethree.randomutilities.common.item.ILunchbox;
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class RecipesUpgrading implements IRecipe {
 	private ItemStack result;
@@ -20,24 +21,25 @@ public class RecipesUpgrading implements IRecipe {
 	@Override public ItemStack getRecipeOutput() { return this.result; }
 	@Override public int getRecipeSize() { return 10; }
 	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
+	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		
+		for (int i = 0; i < nonnulllist.size(); i ++) {
+			nonnulllist.set(i, ForgeHooks.getContainerItem(inv.getStackInSlot(i)));
 		}
-		return retstack;
+		
+		return nonnulllist;
 	}
 	
 	@Override public boolean matches(InventoryCrafting window, World world) {
-		this.result = null;
+		this.result = ItemStack.EMPTY;
 		byte u = 0;
 		byte n = 0;
 		byte b = 0;
-		ItemStack upgrade = null;
+		ItemStack upgrade = ItemStack.EMPTY;
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				if (u == 0 && stack.getItem() == ModItems.HEART_CANISTER && stack.getItemDamage() < 2) {
 					u ++;
 					upgrade = stack;
@@ -53,7 +55,7 @@ public class RecipesUpgrading implements IRecipe {
 				}
 			}
 		}
-		if (u == 1 && n == 1 && b == 1 && upgrade != null) {
+		if (u == 1 && n == 1 && b == 1 && !upgrade.isEmpty()) {
 			byte t = (byte) (upgrade.getItem() == ModItems.LUNCHBOX ? 1 : 0); // 1 Lunchbox, 0 Heart Canister
 			float fs, mfs, hs, mhs;
 			fs = mfs = hs = mhs = 0F;

@@ -1,6 +1,6 @@
 package com.sixonethree.randomutilities.common.container;
 
-import javax.annotation.Nullable;
+import com.sixonethree.randomutilities.client.ValidatingSlot;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,19 +9,17 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.sixonethree.randomutilities.client.ValidatingSlot;
-
 public class ContainerDisplayTable extends Container {
 	private EntityPlayer player;
-	private IInventory inventory;
+	private IInventory displayTable;
 	
 	/* Constructors */
 	
-	public ContainerDisplayTable(IInventory playerInv, IInventory inventory, int xSize, int ySize) {
-		this.player = ((InventoryPlayer) playerInv).player;
-		this.inventory = inventory;
-		inventory.openInventory(player);
-		layoutContainer(playerInv, inventory, xSize, ySize);
+	public ContainerDisplayTable(IInventory playerInventory, IInventory displayTableInventory, int xSize, int ySize) {
+		this.player = ((InventoryPlayer) playerInventory).player;
+		this.displayTable = displayTableInventory;
+		displayTableInventory.openInventory(this.player);
+		this.layoutContainer(playerInventory, displayTableInventory, xSize, ySize);
 	}
 	
 	/* Custom Methods */
@@ -55,25 +53,27 @@ public class ContainerDisplayTable extends Container {
 	/* Overridden */
 	
 	@Override public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.inventory.isUseableByPlayer(playerIn);
+		return this.displayTable.isUsableByPlayer(playerIn);
 	}
 	
 	@Override public void onContainerClosed(EntityPlayer playerIn) {
 		super.onContainerClosed(playerIn);
-		this.inventory.closeInventory(playerIn);
+		this.displayTable.closeInventory(playerIn);
 	}
 	
-	@Override @Nullable public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		ItemStack itemstack = null;
+	@Override public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = (Slot) this.inventorySlots.get(index);
+		
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if (index < this.inventory.getSizeInventory()) {
-				if (!mergeItemStack(itemstack1, this.inventory.getSizeInventory(), this.inventorySlots.size(), true)) { return null; }
-			} else if (!mergeItemStack(itemstack1, 0, this.inventory.getSizeInventory(), false)) { return null; }
-			if (itemstack1.stackSize == 0) {
-				slot.putStack(null);
+			
+			if (index < this.displayTable.getSizeInventory()) {
+				if (!mergeItemStack(itemstack1, this.displayTable.getSizeInventory(), this.inventorySlots.size(), true)) return ItemStack.EMPTY;
+			} else if (!mergeItemStack(itemstack1, 0, this.displayTable.getSizeInventory(), false)) return ItemStack.EMPTY;
+			if (itemstack1.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}

@@ -1,17 +1,18 @@
 package com.sixonethree.randomutilities.common.recipes;
 
+import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.item.IHeartCanister;
+import com.sixonethree.randomutilities.common.item.ILunchbox;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import com.sixonethree.randomutilities.common.init.ModItems;
-import com.sixonethree.randomutilities.common.item.IHeartCanister;
-import com.sixonethree.randomutilities.common.item.ILunchbox;
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class RecipesLunchboxFeeding implements IRecipe {
 	private ItemStack result;
@@ -20,23 +21,24 @@ public class RecipesLunchboxFeeding implements IRecipe {
 	@Override public ItemStack getRecipeOutput() { return this.result; }
 	@Override public int getRecipeSize() { return 10; }
 	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
+	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		
+		for (int i = 0; i < nonnulllist.size(); i ++) {
+			nonnulllist.set(i, ForgeHooks.getContainerItem(inv.getStackInSlot(i)));
 		}
-		return retstack;
+		
+		return nonnulllist;
 	}
 	
 	@Override public boolean matches(InventoryCrafting window, World world) {
-		this.result = null;
+		this.result = ItemStack.EMPTY;
 		byte l = 0; // Number of Lunchboxes or Combines
 		byte f = 0; // Number of Food Items
-		ItemStack s = null; // The Lunchbox or Combined;
+		ItemStack s = ItemStack.EMPTY; // The Lunchbox or Combined;
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				if (stack.getItem() == ModItems.LUNCHBOX || stack.getItem() == ModItems.COMBINED) {
 					s = stack;
 					l ++;
@@ -49,7 +51,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 				}
 			}
 		}
-		if (l == 1 && f >= 1 && s != null) {
+		if (l == 1 && f >= 1 && !s.isEmpty()) {
 			NBTTagCompound tag;
 			this.result = new ItemStack(s.getItem(), 1, s.getItemDamage());
 			if (!this.result.hasTagCompound()) this.result.setTagCompound(new NBTTagCompound());
@@ -75,7 +77,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 			
 			float fta = 0F;
 			for (int i = 0; i < window.getSizeInventory(); i ++) {
-				if (window.getStackInSlot(i) != null) {
+				if (!window.getStackInSlot(i).isEmpty()) {
 					if (window.getStackInSlot(i).getItem() instanceof ItemFood) {
 						fta += ((ItemFood) (window.getStackInSlot(i).getItem())).getHealAmount(window.getStackInSlot(i));
 					}

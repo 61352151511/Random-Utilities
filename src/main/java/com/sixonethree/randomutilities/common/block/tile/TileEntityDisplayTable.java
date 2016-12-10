@@ -2,26 +2,29 @@ package com.sixonethree.randomutilities.common.block.tile;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.util.Constants;
-
+import com.sixonethree.randomutilities.common.container.ContainerDisplayTable;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntityLockableLoot;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+
 // TODO Capability
-public class TileEntityDisplayTable extends TileEntity implements IInventory {
+public class TileEntityDisplayTable extends TileEntityLockableLoot implements ITickable {
 	private EnumFacing facing;
-	private ItemStack[] inventory = new ItemStack[25];
+	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack> withSize(25, ItemStack.EMPTY);
 	
 	/* Constructors */
 	
@@ -34,10 +37,6 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	
 	public EnumFacing getFacing() {
 		return this.facing;
-	}
-	
-	public ItemStack[] getInventory() {
-		return this.inventory;
 	}
 	
 	public void setFacing(EnumFacing newFacing) {
@@ -64,106 +63,81 @@ public class TileEntityDisplayTable extends TileEntity implements IInventory {
 	
 	@Override public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.setFacing(EnumFacing.VALUES[compound.getByte(NBTTagKeys.DISPLAY_TABLE_FACING)]);
-		NBTTagList list = compound.hasKey(NBTTagKeys.DISPLAY_TABLE_INVENTORY) ? compound.getTagList(NBTTagKeys.DISPLAY_TABLE_INVENTORY, Constants.NBT.TAG_COMPOUND) : null;
-		if (list == null) return;
-		for (int i = 0; i < list.tagCount(); i ++) {
-			NBTTagCompound stackCompound = list.getCompoundTagAt(i);
-			int slot = stackCompound.getInteger(NBTTagKeys.DISPLAY_TABLE_INVENTORY_SLOT);
-			if (slot >= 0 && slot < this.inventory.length) {
-				this.inventory[slot] = ItemStack.loadItemStackFromNBT(stackCompound);
-			}
+		
+		this.inventory = NonNullList.<ItemStack> withSize(25, ItemStack.EMPTY);
+		
+		if (!this.checkLootAndRead(compound)) {
+			ItemStackHelper.loadAllItems(compound, this.inventory);
 		}
+		
+		this.setFacing(EnumFacing.VALUES[compound.getByte(NBTTagKeys.DISPLAY_TABLE_FACING)]);
 		this.markDirty();
 	}
 	
 	@Override public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setByte(NBTTagKeys.DISPLAY_TABLE_FACING, (byte) this.getFacing().ordinal());
-		NBTTagList list = new NBTTagList();
-		int slot = 0;
-		for (ItemStack stack : this.inventory) {
-			if (stack != null) {
-				NBTTagCompound stackCompound = new NBTTagCompound();
-				stackCompound.setInteger(NBTTagKeys.DISPLAY_TABLE_INVENTORY_SLOT, slot);
-				stack.writeToNBT(stackCompound);
-				list.appendTag(stackCompound);
-			}
-			slot ++;
+		
+		if (!this.checkLootAndWrite(compound)) {
+			ItemStackHelper.saveAllItems(compound, this.inventory);
 		}
-		compound.setTag(NBTTagKeys.DISPLAY_TABLE_INVENTORY, list);
+		
+		compound.setByte(NBTTagKeys.DISPLAY_TABLE_FACING, (byte) this.getFacing().ordinal());
+		
 		return compound;
 	}
 	
 	/* IInventory */
 	
-	@Override public void clear() {
-		this.inventory = new ItemStack[25];
-		this.markDirty();
-	}
-	
 	@Override public void closeInventory(EntityPlayer player) {
-		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 0);
+		if (this.world == null) return;
+		this.world.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 0);
 	}
 	
-	@Override public ItemStack decrStackSize(int slot, int amount) {
-		if (slot < 0 || slot > this.inventory.length) return null;
-		if (this.inventory[slot] != null) {
-			if (this.inventory[slot].stackSize <= amount) {
-				ItemStack itemstack = inventory[slot];
-				inventory[slot] = null;
-				this.markDirty();
-				return itemstack;
-			}
-			ItemStack itemstack1 = this.inventory[slot].splitStack(amount);
-			if (this.inventory[slot].stackSize == 0) {
-				this.inventory[slot] = null;
-			}
-			this.markDirty();
-			return itemstack1;
-		} else {
-			return null;
-		}
+	@Override public ITextComponent getDisplayName() {
+		return new TextComponentString("Display Table");
 	}
 	
-	@Override public ITextComponent getDisplayName() { return new TextComponentString("Display Table"); }
-	@Override public int getField(int id) { return 0; }
-	@Override public int getFieldCount() { return 0; }
-	@Override public int getInventoryStackLimit() { return 64; }
-	@Override public String getName() { return "Display Table"; }
-	@Override public int getSizeInventory() { return this.inventory.length; }
-	
-	@Override public ItemStack getStackInSlot(int slotIn) {
-		if (slotIn < 0 || slotIn > this.inventory.length) return null;
-		return this.inventory[slotIn];
+	@Override public int getInventoryStackLimit() {
+		return 64;
 	}
 	
-	@Override public boolean hasCustomName() { return false; }
-	@Override public boolean isItemValidForSlot(int index, ItemStack stack) { return true; }
+	@Override public String getName() {
+		return "Display Table";
+	}
 	
-	@Override public boolean isUseableByPlayer(EntityPlayer player) {
-		if (this.worldObj == null) { return true; }
-		if (this.worldObj.getTileEntity(pos) != this) { return false; }
-		if (player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64D) return true;
-		return false;
+	@Override public int getSizeInventory() {
+		return this.inventory.size();
 	}
 	
 	@Override public void openInventory(EntityPlayer player) {
-		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 1);
+		if (this.world == null) return;
+		this.world.addBlockEvent(this.pos, ModBlocks.DISPLAY_TABLE, 1, 1);
 	}
 	
-	@Override public ItemStack removeStackFromSlot(int index) {
-		if (index < 0 || index > this.inventory.length) return null;
-		return this.inventory[index];
+	@Override public boolean isEmpty() {
+		for (ItemStack is : this.inventory) {
+			if (!is.isEmpty()) return false;
+		}
+		
+		return true;
 	}
 	
-	@Override public void setField(int id, int value) {}
+	@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+		this.fillWithLoot(playerIn);
+		return new ContainerDisplayTable(playerInventory, this, 212, 199);
+	}
 	
-	@Override public void setInventorySlotContents(int index, ItemStack stack) {
-		if (index < 0 || index > this.inventory.length) return;
-		this.markDirty();
-		this.inventory[index] = stack;
+	@Override public String getGuiID() {
+		return "randomutilities:displaytable";
+	}
+	
+	@Override public void update() {}
+	
+	@Override protected NonNullList<ItemStack> getItems() {
+		return this.inventory;
+	}
+	
+	public NonNullList<ItemStack> getInventory() {
+		return this.getItems();
 	}
 }

@@ -1,13 +1,13 @@
 package com.sixonethree.randomutilities.common.init;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import com.sixonethree.randomutilities.common.item.ItemBase;
 import com.sixonethree.randomutilities.common.item.ItemCombined;
 import com.sixonethree.randomutilities.common.item.ItemHeartCanister;
 import com.sixonethree.randomutilities.common.item.ItemLunchbox;
 import com.sixonethree.randomutilities.common.item.ItemMagicCard;
 import com.sixonethree.randomutilities.reference.Reference;
+
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @GameRegistry.ObjectHolder(Reference.MOD_ID) public class ModItems {
 	public static final ItemBase LUNCHBOX = new ItemLunchbox();

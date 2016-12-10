@@ -2,6 +2,8 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -13,12 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 public class ItemLunchbox extends ItemBase implements ILunchbox {
 	String[] nameSuffixes = new String[] {"", "_auto"};
@@ -51,7 +52,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT;
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		subItems.add(new ItemStack(itemIn, 1, 0));
 		subItems.add(new ItemStack(itemIn, 1, 1));
 	}
@@ -68,12 +69,12 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		return stack.getItemDamage() == 1;
 	}
 	
-	@Override public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	@Override public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (playerIn.canEat(false)) {
-			playerIn.setActiveHand(hand);
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+			playerIn.setActiveHand(handIn);
+			return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+		return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 	}
 	
 	@Override public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {

@@ -2,17 +2,18 @@ package com.sixonethree.randomutilities.common.recipes;
 
 import java.util.ArrayList;
 
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-
 import com.sixonethree.randomutilities.common.init.ModItems;
 import com.sixonethree.randomutilities.common.item.IHeartCanister;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesCombinedCombining implements IRecipe {
 	private ItemStack result;
@@ -21,24 +22,25 @@ public class RecipesCombinedCombining implements IRecipe {
 	@Override public ItemStack getRecipeOutput() { return this.result; }
 	@Override public int getRecipeSize() { return 10; }
 	
-	@Override public ItemStack[] getRemainingItems(InventoryCrafting window) {
-		ItemStack[] retstack = new ItemStack[window.getSizeInventory()];
-		for (int i = 0; i < retstack.length; i ++) {
-			ItemStack is = window.getStackInSlot(i);
-			retstack[i] = ForgeHooks.getContainerItem(is);
+	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		
+		for (int i = 0; i < nonnulllist.size(); i ++) {
+			nonnulllist.set(i, ForgeHooks.getContainerItem(inv.getStackInSlot(i)));
 		}
-		return retstack;
+		
+		return nonnulllist;
 	}
 	
 	@Override public boolean matches(InventoryCrafting window, World world) {
-		this.result = null;
+		this.result = ItemStack.EMPTY;
 		byte c = 0; // Number of combineds
 		byte h = 0; // Number of heart canisters
 		byte l = 0; // Number of lunchboxes
-		ArrayList<ItemStack> s = new ArrayList<ItemStack>(); // Valid ItemStacks
+		ArrayList<ItemStack> s = new ArrayList<>(); // Valid ItemStacks
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				if (stack.getItem() == ModItems.COMBINED) {
 					c ++;
 					s.add(stack);

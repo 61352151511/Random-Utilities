@@ -8,13 +8,13 @@ import net.minecraft.server.MinecraftServer;
 public class CommandRepair extends ModCommandBase implements ICommand {
 	@Override public void executeCommandPlayer(MinecraftServer server, EntityPlayer player, String[] args) {
 		ItemStack itemStack = player.getHeldItemMainhand();
-		if (itemStack != null) {
+		if (!itemStack.isEmpty()) {
 			if (itemStack.getItem().isDamageable()) {
 				itemStack.setItemDamage(0);
 			}
 		}
 		itemStack = player.getHeldItemOffhand();
-		if (itemStack != null) {
+		if (!itemStack.isEmpty()) {
 			if (itemStack.getItem().isDamageable()) {
 				itemStack.setItemDamage(0);
 			}

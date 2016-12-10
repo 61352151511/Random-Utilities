@@ -1,14 +1,5 @@
 package com.sixonethree.randomutilities;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-
 import com.sixonethree.randomutilities.common.handler.ConfigurationHandler;
 import com.sixonethree.randomutilities.common.init.Commands;
 import com.sixonethree.randomutilities.common.init.ModBlocks;
@@ -17,6 +8,15 @@ import com.sixonethree.randomutilities.common.init.Recipes;
 import com.sixonethree.randomutilities.proxy.ServerProxy;
 import com.sixonethree.randomutilities.reference.Reference;
 import com.sixonethree.randomutilities.utility.LogHelper;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS, guiFactory = Reference.GUI_FACTORY_CLASS) public class RandomUtilities {
 	@Mod.Instance(Reference.MOD_ID) public static RandomUtilities instance;

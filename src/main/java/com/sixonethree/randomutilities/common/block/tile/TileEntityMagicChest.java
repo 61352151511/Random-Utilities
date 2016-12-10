@@ -5,32 +5,35 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.sixonethree.randomutilities.common.container.ContainerMagicChest;
+import com.sixonethree.randomutilities.common.init.ModBlocks;
+import com.sixonethree.randomutilities.common.item.ILunchbox;
+import com.sixonethree.randomutilities.reference.NBTTagKeys;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import com.sixonethree.randomutilities.common.init.ModBlocks;
-import com.sixonethree.randomutilities.common.item.ILunchbox;
-import com.sixonethree.randomutilities.reference.NBTTagKeys;
-
-// TODO Capability
-public class TileEntityMagicChest extends TileEntity implements ITickable, IInventory, ISidedInventory {
+public class TileEntityMagicChest extends TileEntityLockableLoot implements ITickable, ISidedInventory {
 	private String[] owners;
 	private String placer;
 	private int turn;
-	private ItemStack[] inventory = new ItemStack[3];
+	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack> withSize(3, ItemStack.EMPTY);
 	
 	public TileEntityMagicChest() {
 		super();
@@ -41,7 +44,9 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	/* Custom Methods */
 	
-	public String getPlacer() { return this.placer; }
+	public String getPlacer() {
+		return this.placer;
+	}
 	
 	public boolean isOwner(Object compareTo) {
 		if (compareTo instanceof String) {
@@ -75,8 +80,8 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		super.markDirty();
 		this.owners = new String[] {""};
 		this.turn = 0;
-		inventoryCheck: if (this.inventory[1] != null) {
-			ItemStack magicCard = this.inventory[1];
+		inventoryCheck: if (!this.inventory.get(1).isEmpty()) {
+			ItemStack magicCard = this.inventory.get(1);
 			if (!magicCard.hasTagCompound()) break inventoryCheck;
 			NBTTagCompound tag = magicCard.getTagCompound();
 			if (!tag.hasKey(NBTTagKeys.MAGIC_CARD_SIGNERS)) break inventoryCheck;
@@ -92,92 +97,59 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	@Override public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.placer = compound.hasKey(NBTTagKeys.MAGIC_CHEST_PLACER) ? compound.getString(NBTTagKeys.MAGIC_CHEST_PLACER) : "";
-		this.inventory[0] = compound.hasKey(NBTTagKeys.MAGIC_CHEST_STACK) ? ItemStack.loadItemStackFromNBT((NBTTagCompound) compound.getTag(NBTTagKeys.MAGIC_CHEST_STACK)) : null;
-		this.inventory[1] = compound.hasKey(NBTTagKeys.MAGIC_CHEST_CARD) ? ItemStack.loadItemStackFromNBT((NBTTagCompound) compound.getTag(NBTTagKeys.MAGIC_CHEST_CARD)) : null;
+		
+		this.inventory = NonNullList.<ItemStack> withSize(25, ItemStack.EMPTY);
+		
+		if (!this.checkLootAndRead(compound)) {
+			ItemStackHelper.loadAllItems(compound, this.inventory);
+		}
+		
 		this.markDirty();
 	}
 	
 	@Override public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setString(NBTTagKeys.MAGIC_CHEST_PLACER, this.placer);
-		if (this.inventory[0] != null) compound.setTag(NBTTagKeys.MAGIC_CHEST_STACK, this.inventory[0].writeToNBT(new NBTTagCompound()));
-		if (this.inventory[1] != null) compound.setTag(NBTTagKeys.MAGIC_CHEST_CARD, this.inventory[1].writeToNBT(new NBTTagCompound()));
-		if (this.inventory[0] == null && compound.hasKey(NBTTagKeys.MAGIC_CHEST_STACK)) compound.removeTag(NBTTagKeys.MAGIC_CHEST_STACK);
-		if (this.inventory[0] == null && compound.hasKey(NBTTagKeys.MAGIC_CHEST_CARD)) compound.removeTag(NBTTagKeys.MAGIC_CHEST_CARD);
+		
+		if (!this.checkLootAndWrite(compound)) {
+			ItemStackHelper.saveAllItems(compound, this.inventory);
+		}
+		
 		return compound;
 	}
 	
 	/* IInventory */
 	
-	@Override public void clear() {
-		this.inventory[0] = null;
-		this.inventory[1] = null;
-		this.markDirty();
-	}
-	
 	@Override public void closeInventory(EntityPlayer player) {
-		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 0);
+		if (this.world == null) return;
+		this.world.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 0);
 	}
 	
-	@Override public ItemStack decrStackSize(int slot, int amount) {
-		if (slot < 0 || slot > this.inventory.length) return null;
-		if (this.inventory[slot] != null) {
-			if (this.inventory[slot].stackSize <= amount) {
-				ItemStack itemstack = this.inventory[slot];
-				this.inventory[slot] = null;
-				this.markDirty();
-				return itemstack;
-			}
-			ItemStack itemstack1 = this.inventory[slot].splitStack(amount);
-			if (this.inventory[slot].stackSize == 0) {
-				this.inventory[slot] = null;
-			}
-			this.markDirty();
-			return itemstack1;
-		} else {
-			return null;
+	@Override public ITextComponent getDisplayName() {
+		return new TextComponentString("Magic Chest");
+	}
+	
+	@Override public int getInventoryStackLimit() {
+		return 64;
+	}
+	
+	@Override public String getName() {
+		return "Magic Chest";
+	}
+	
+	@Override public int getSizeInventory() {
+		return this.inventory.size();
+	}
+	
+	@Override public boolean isUsableByPlayer(EntityPlayer player) {
+		if (super.isUsableByPlayer(player)) {
+			return this.isOwner(player.getPersistentID());
 		}
-	}
-	
-	@Override public ITextComponent getDisplayName() { return new TextComponentString("Magic Chest"); }
-	@Override public int getField(int id) { return 0; }
-	@Override public int getFieldCount() { return 0; }
-	@Override public int getInventoryStackLimit() { return 64; }
-	@Override public String getName() { return "Magic Chest"; }
-	@Override public int getSizeInventory() { return this.inventory.length; }
-	
-	@Override public ItemStack getStackInSlot(int slot) {
-		if (slot < 0 || slot > this.inventory.length) return null;
-		return this.inventory[slot];
-	}
-	
-	@Override public boolean hasCustomName() { return false; }
-	@Override public boolean isItemValidForSlot(int index, ItemStack stack) { return true; }
-	
-	@Override public boolean isUseableByPlayer(EntityPlayer player) {
-		if (this.worldObj == null) { return true; }
-		if (this.worldObj.getTileEntity(pos) != this) { return false; }
-		if (player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64D) return this.isOwner(player.getPersistentID());
 		return false;
 	}
 	
 	@Override public void openInventory(EntityPlayer player) {
-		if (this.worldObj == null) return;
-		this.worldObj.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 1);
-	}
-	
-	@Override public ItemStack removeStackFromSlot(int slot) {
-		if (slot < 0 || slot > this.inventory.length) return null;
-		return this.inventory[slot];
-	}
-	
-	@Override public void setField(int id, int value) {}
-	
-	@Override public void setInventorySlotContents(int slot, ItemStack content) {
-		if (slot < 0 || slot > this.inventory.length) return;
-		this.inventory[slot] = content;
+		if (this.world == null) return;
+		this.world.addBlockEvent(this.pos, ModBlocks.MAGIC_CHEST, 1, 1);
 	}
 	
 	/* ISidedInventory */
@@ -186,16 +158,16 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		if (side == EnumFacing.NORTH || side == EnumFacing.EAST || side == EnumFacing.SOUTH || side == EnumFacing.WEST) return new int[] {2};
 		return new int[] {};
 	}
-
+	
 	@Override public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
 		if (index == 2) {
-			if (this.inventory[0] != null) {
-				if (this.inventory[0].getItem() instanceof ILunchbox) {
+			if (!this.inventory.get(0).isEmpty()) {
+				if (this.inventory.get(0).getItem() instanceof ILunchbox) {
 					if (itemStackIn.getItem() instanceof ItemFood) {
 						ItemFood foodItem = (ItemFood) itemStackIn.getItem();
-						ILunchbox lunchbox = (ILunchbox) this.inventory[0].getItem();
-						if (lunchbox.getCurrentFoodStorage(this.inventory[0]) <= (lunchbox.getMaxFoodStorage(this.inventory[0]) - foodItem.getHealAmount(itemStackIn))) {
-							lunchbox.setCurrentFoodStorage(this.inventory[0], lunchbox.getCurrentFoodStorage(this.inventory[0]) + foodItem.getHealAmount(itemStackIn));
+						ILunchbox lunchbox = (ILunchbox) this.inventory.get(0).getItem();
+						if (lunchbox.getCurrentFoodStorage(this.inventory.get(0)) <= (lunchbox.getMaxFoodStorage(this.inventory.get(0)) - foodItem.getHealAmount(itemStackIn))) {
+							lunchbox.setCurrentFoodStorage(this.inventory.get(0), lunchbox.getCurrentFoodStorage(this.inventory.get(0)) + foodItem.getHealAmount(itemStackIn));
 							return true;
 						}
 					}
@@ -204,7 +176,7 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 		}
 		return false;
 	}
-
+	
 	@Override public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
 		return false;
 	}
@@ -213,14 +185,14 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 	
 	@Override public void update() {
 		if (this.placer.isEmpty() || this.placer.equalsIgnoreCase("")) return;
-		if (!this.worldObj.isRemote) {
-			if (this.inventory[2] != null) this.inventory[2] = null;
-			List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
+		if (!this.world.isRemote) {
+			if (!this.inventory.get(2).isEmpty()) this.inventory.set(2, ItemStack.EMPTY);
+			List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 			for (EntityPlayerMP player : players) {
 				if (this.isOwner(player.getPersistentID()) && this.turn < this.owners.length) {
 					if (owners[turn].equals(player.getPersistentID().toString())) {
-						if (this.inventory[0] != null && this.inventory[1] != null) {
-							this.inventory[0].getItem().onUpdate(inventory[0], this.worldObj, player, 0, false);
+						if (!this.inventory.get(0).isEmpty() && !this.inventory.get(1).isEmpty()) {
+							this.inventory.get(0).getItem().onUpdate(this.inventory.get(0), this.world, player, 0, false);
 						}
 						break;
 					}
@@ -229,5 +201,25 @@ public class TileEntityMagicChest extends TileEntity implements ITickable, IInve
 			this.turn ++;
 			if (this.turn >= this.owners.length) this.turn = 0;
 		}
+	}
+	
+	@Override public boolean isEmpty() {
+		for (ItemStack is : this.inventory) {
+			if (!is.isEmpty()) return false;
+		}
+		
+		return true;
+	}
+
+	@Override public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+		return new ContainerMagicChest(playerInventory, this, 176, 132);
+	}
+
+	@Override public String getGuiID() {
+		return "randomutilities:magicchest";
+	}
+
+	@Override protected NonNullList<ItemStack> getItems() {
+		return this.inventory;
 	}
 }

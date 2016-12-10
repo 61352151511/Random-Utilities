@@ -1,5 +1,8 @@
 package com.sixonethree.randomutilities.client.render.tileentity;
 
+import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
+import com.sixonethree.randomutilities.utility.GlManager;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -7,9 +10,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-
-import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
-import com.sixonethree.randomutilities.utility.GlManager;
 
 public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDisplayTable> {
 	private RenderManager renderManager;
@@ -44,9 +44,9 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDi
 		
 		for (int i = 0; i < 25; i ++) {
 			ItemStack stack = displayTable.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				ItemStack renderStack = stack.copy();
-				renderStack.stackSize = 1;
+				renderStack.setCount(1);
 				EntityItem ghostItem = new EntityItem(displayTable.getWorld(), x, y, z, renderStack);
 				ghostItem.hoverStart = 0F;
 				if (!(stack.getItem() instanceof ItemBlock)) {

@@ -1,6 +1,7 @@
 package com.sixonethree.randomutilities.common.container;
 
-import javax.annotation.Nullable;
+import com.sixonethree.randomutilities.client.ValidatingSlot;
+import com.sixonethree.randomutilities.common.init.ModItems;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -8,9 +9,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import com.sixonethree.randomutilities.client.ValidatingSlot;
-import com.sixonethree.randomutilities.common.init.ModItems;
 
 public class ContainerMagicChest extends Container {
 	private EntityPlayer player;
@@ -51,7 +49,7 @@ public class ContainerMagicChest extends Container {
 	/* Overridden */
 	
 	@Override public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.chest.isUseableByPlayer(playerIn);
+		return this.chest.isUsableByPlayer(playerIn);
 	}
 	
 	@Override public void onContainerClosed(EntityPlayer playerIn) {
@@ -59,24 +57,23 @@ public class ContainerMagicChest extends Container {
 		this.chest.closeInventory(playerIn);
 	}
 	
-	@Override @Nullable public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		ItemStack itemstack = null;
+	@Override public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = (Slot) this.inventorySlots.get(index);
+		
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if (index < 1) {
-				if (!mergeItemStack(itemstack1, 1, this.inventorySlots.size(), true)) { return null; }
-			} else if (!slot.isItemValid(itemstack1)) {
-				return null;
-			} else if (!mergeItemStack(itemstack1, 0, 1, false)) { return null; }
-			if (itemstack1.stackSize == 0) {
-				slot.putStack(null);
+			
+			if (index < this.chest.getSizeInventory()) {
+				if (!mergeItemStack(itemstack1, this.chest.getSizeInventory(), this.inventorySlots.size(), true)) return ItemStack.EMPTY;
+			} else if (!mergeItemStack(itemstack1, 0, this.chest.getSizeInventory(), false)) return ItemStack.EMPTY;
+			if (itemstack1.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 		}
-		this.chest.markDirty();
 		return itemstack;
 	}
 }
