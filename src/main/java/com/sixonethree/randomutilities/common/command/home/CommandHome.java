@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.sixonethree.randomutilities.common.command.ModCommandBase;
-import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
-import com.sixonethree.randomutilities.utility.homewarp.Location;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -27,14 +25,7 @@ public class CommandHome extends ModCommandBase implements ICommand {
 		if (args.length > 0) {
 			String requestedHome = args[0];
 			if (HomePoint.getHome(playerUUID + requestedHome) != null) {
-				Location loc = HomePoint.getHome(playerUUID + requestedHome).location;
-				LastLocations.set(playerMP, new Location(playerMP));
-				if (loc.dimension != player.dimension) {
-					transferDimension(playerMP, loc);
-				} else {
-					player.setPositionAndUpdate(loc.posX, loc.posY, loc.posZ);
-					player.fallDistance = 0F;
-				}
+				teleportPlayer(playerMP, HomePoint.getHome(playerUUID + requestedHome).location);
 			} else {
 				outputMessage(player, noHomeCalled, true, false, requestedHome);
 			}
@@ -45,8 +36,19 @@ public class CommandHome extends ModCommandBase implements ICommand {
 		}
 	}
 	
-	@Override public boolean canConsoleUseCommand() { return false; }
-	@Override public int getUsageType() { return 0; }
-	@Override public boolean isOpOnly() { return false; }
-	@Override public boolean tabCompletesOnlinePlayers() { return false; }
+	@Override public boolean canConsoleUseCommand() {
+		return false;
+	}
+	
+	@Override public int getUsageType() {
+		return 0;
+	}
+	
+	@Override public boolean isOpOnly() {
+		return false;
+	}
+	
+	@Override public boolean tabCompletesOnlinePlayers() {
+		return false;
+	}
 }

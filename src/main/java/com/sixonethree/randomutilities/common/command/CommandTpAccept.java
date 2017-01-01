@@ -2,7 +2,6 @@ package com.sixonethree.randomutilities.common.command;
 
 import java.util.List;
 
-import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 import com.sixonethree.randomutilities.reference.CommandReference.TeleportRequests;
 import com.sixonethree.randomutilities.utility.homewarp.Location;
 
@@ -21,14 +20,9 @@ public class CommandTpAccept extends ModCommandBase implements ICommand {
 					playerFound = true;
 					EntityPlayerMP teleporter = playerlist.get(i);
 					EntityPlayerMP teleportTo = (EntityPlayerMP) player;
-					LastLocations.set(teleporter, new Location(teleporter));
-					if (teleportTo.dimension != teleporter.dimension) {
-						transferDimension(teleporter, new Location(teleportTo));
-					} else {
-						outputMessage(teleporter, "gotaccepted", true, true);
-						outputMessage(teleportTo, "youaccepted", true, true);
-						teleporter.setPositionAndUpdate(teleportTo.posX, teleportTo.posY, teleportTo.posZ);
-					}
+					teleportPlayer(teleporter, new Location(teleportTo));
+					outputMessage(teleporter, "gotaccepted", true, true);
+					outputMessage(teleportTo, "youaccepted", true, true);
 				}
 			}
 			if (!playerFound) {
@@ -40,8 +34,19 @@ public class CommandTpAccept extends ModCommandBase implements ICommand {
 		}
 	}
 	
-	@Override public boolean canConsoleUseCommand() { return false; }
-	@Override public int getUsageType() { return 1; }
-	@Override public boolean isOpOnly() { return false; }
-	@Override public boolean tabCompletesOnlinePlayers() { return false; }
+	@Override public boolean canConsoleUseCommand() {
+		return false;
+	}
+	
+	@Override public int getUsageType() {
+		return 1;
+	}
+	
+	@Override public boolean isOpOnly() {
+		return false;
+	}
+	
+	@Override public boolean tabCompletesOnlinePlayers() {
+		return false;
+	}
 }

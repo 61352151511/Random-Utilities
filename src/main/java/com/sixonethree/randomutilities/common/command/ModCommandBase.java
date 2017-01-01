@@ -2,6 +2,7 @@ package com.sixonethree.randomutilities.common.command;
 
 import java.util.List;
 
+import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 import com.sixonethree.randomutilities.utility.homewarp.Location;
 import com.sixonethree.randomutilities.utility.homewarp.TeleporterHome;
 
@@ -48,27 +49,22 @@ public abstract class ModCommandBase extends CommandBase {
 		executeCommandConsole(server, (ICommandSender) block, args);
 	}
 	
-	/**
-	 * Determines if the console can use this command.
-	 * @return Can the console use the command?
-	 */
+	/** Determines if the console can use this command.
+	 * @return Can the console use the command? */
 	public abstract boolean canConsoleUseCommand();
-	/**
-	 * Determines if this command is for server operators only.
-	 * @return True if op only, false if anyone can use it.
-	 */
+	
+	/** Determines if this command is for server operators only.
+	 * @return True if op only, false if anyone can use it. */
 	public abstract boolean isOpOnly();
-	/**
-	 * Determines if pressing the tab key fills out player names for arguments.
-	 * @return True if pressing tab fills out online players.
-	 */
+	
+	/** Determines if pressing the tab key fills out player names for arguments.
+	 * @return True if pressing tab fills out online players. */
 	public abstract boolean tabCompletesOnlinePlayers();
-	/**
-	 * The usage type.
-	 * @return 0 for "command.commandname.usage" or 1 for /commandname
-	 */
+	
+	/** The usage type.
+	 * @return 0 for "command.commandname.usage" or 1 for /commandname */
 	public abstract int getUsageType(); // 0 = command.<Command Name>.usage || 1
-										// = /<Command Name>
+	                                    // = /<Command Name>
 	
 	public boolean canCommandBlockUseCommand(TileEntityCommandBlock block) {
 		return canConsoleUseCommand();
@@ -149,14 +145,12 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	/**
-	 * Outputs a message to an ICommandSender
+	/** Outputs a message to an ICommandSender
 	 * @param sender - Who to send the message to
 	 * @param message - The message to send
 	 * @param translatable - Whether the message is translatable or not
 	 * @param appendBase - Append the command base?
-	 * @param formatargs - Translation arguments.
-	 */
+	 * @param formatargs - Translation arguments. */
 	public void outputMessage(ICommandSender sender, String message, boolean translatable, boolean appendBase, Object... formatargs) {
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;
@@ -176,13 +170,21 @@ public abstract class ModCommandBase extends CommandBase {
 		}
 	}
 	
-	/**
-	 * Outputs how to properly use the command.
+	/** Outputs how to properly use the command.
 	 * @param sender - Who are we outputting the message to?
-	 * @param translatable - Is the message translatable?
-	 */
+	 * @param translatable - Is the message translatable? */
 	public void outputUsage(ICommandSender sender, Boolean translatable) {
 		outputMessage(sender, getUsage(sender), translatable, false);
+	}
+	
+	public static void teleportPlayer(EntityPlayerMP player, Location loc) {
+		LastLocations.set(player, new Location(player));
+		if (loc.dimension != player.dimension) {
+			transferDimension(player, loc);
+		} else {
+			player.setPositionAndUpdate(loc.posX, loc.posY, loc.posZ);
+			player.fallDistance = 0F;
+		}
 	}
 	
 	public static void transferDimension(EntityPlayerMP player, Location loc) {

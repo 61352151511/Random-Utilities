@@ -7,13 +7,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class SaveFile  {
+public class SaveFile {
 	public File file;
 	public String name;
 	public String path;
-
-	public ArrayList<String> data = new ArrayList<String>();
-
+	
+	public ArrayList<String> data = new ArrayList<>();
+	
 	public SaveFile(String name, String path) {
 		this.name = name;
 		this.path = path;
@@ -21,12 +21,12 @@ public class SaveFile  {
 	}
 	
 	protected SaveFile() {}
-
+	
 	public void createFile() {
 		if (this.file.exists()) { return; }
 		File pathFile = new File(this.path);
 		pathFile.mkdirs();
-
+		
 		try {
 			this.file.createNewFile();
 		} catch (IOException e) {
@@ -39,7 +39,7 @@ public class SaveFile  {
 		try {
 			PrintWriter out = new PrintWriter(this.file);
 			for (String line : this.data) {
-				for (int i = 0; i < line.length(); i++) {
+				for (int i = 0; i < line.length(); i ++) {
 					char character = line.charAt(i);
 					out.print(character);
 				}
@@ -51,7 +51,7 @@ public class SaveFile  {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void load() {
 		this.createFile();
 		this.clear();
@@ -65,31 +65,33 @@ public class SaveFile  {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void clear() {
 		this.data.clear();
 	}
-
+	
 	public boolean exists() {
 		return this.file.exists();
 	}
-
+	
 	public String getSingleData(String name) {
 		for (String aData : this.data) {
 			if (aData.contains(name)) { return aData; }
 		}
 		return null;
 	}
-
+	
 	public boolean isBoolean(String name) {
 		return (name.contains("true") || name.contains("false")) ? true : false;
 	}
-
-	public boolean getBoolean(String name){
+	
+	public boolean getBoolean(String name) {
 		String aData = this.getSingleData(name);
 		String[] split = null;
 		if (this.isBoolean(aData)) {
 			split = aData.split("=");
+		} else {
+			return false;
 		}
 		return Boolean.parseBoolean(split[1]);
 	}

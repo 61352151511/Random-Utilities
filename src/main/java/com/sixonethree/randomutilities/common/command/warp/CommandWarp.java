@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sixonethree.randomutilities.common.command.ModCommandBase;
-import com.sixonethree.randomutilities.reference.CommandReference.LastLocations;
 import com.sixonethree.randomutilities.utility.homewarp.Location;
 import com.sixonethree.randomutilities.utility.homewarp.WarpPoint;
 
@@ -25,13 +24,7 @@ public class CommandWarp extends ModCommandBase implements ICommand {
 			String requestedWarp = args[0];
 			if (WarpPoint.getWarp(requestedWarp) != null) {
 				Location loc = WarpPoint.getWarp(requestedWarp).location;
-				LastLocations.set((EntityPlayerMP) player, new Location((EntityPlayerMP) player));
-				if (loc.dimension != player.dimension) {
-					transferDimension((EntityPlayerMP) player, loc);
-				} else {
-					player.setPositionAndUpdate(loc.posX, loc.posY, loc.posZ);
-					player.fallDistance = 0F;
-				}
+				teleportPlayer((EntityPlayerMP) player, loc);
 			} else {
 				outputMessage(player, noWarpCalled, true, false, requestedWarp);
 			}
@@ -42,8 +35,19 @@ public class CommandWarp extends ModCommandBase implements ICommand {
 		}
 	}
 	
-	@Override public boolean canConsoleUseCommand() { return false; }
-	@Override public int getUsageType() { return 0; }
-	@Override public boolean isOpOnly() { return false; }
-	@Override public boolean tabCompletesOnlinePlayers() { return false; }
+	@Override public boolean canConsoleUseCommand() {
+		return false;
+	}
+	
+	@Override public int getUsageType() {
+		return 0;
+	}
+	
+	@Override public boolean isOpOnly() {
+		return false;
+	}
+	
+	@Override public boolean tabCompletesOnlinePlayers() {
+		return false;
+	}
 }
