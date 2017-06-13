@@ -2,16 +2,6 @@ package com.sixonethree.randomutilities.common.init;
 
 import java.util.ArrayList;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.RecipeSorter.Category;
-
 import com.sixonethree.randomutilities.api.ItemCombiningRecipeRegistry;
 import com.sixonethree.randomutilities.common.recipes.RecipesCombinedCombining;
 import com.sixonethree.randomutilities.common.recipes.RecipesCombinedCreating;
@@ -21,7 +11,17 @@ import com.sixonethree.randomutilities.common.recipes.RecipesLunchboxFeeding;
 import com.sixonethree.randomutilities.common.recipes.RecipesUpgrading;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.reference.Reference;
+import com.sixonethree.randomutilities.utility.RecipeHelper;
 import com.sixonethree.randomutilities.utility.Utilities;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 
 public class Recipes {
 	public static void init() {
@@ -35,18 +35,18 @@ public class Recipes {
 		RecipeSorter.register(Reference.RESOURCE_PREFIX + "lunchbox_feeding", RecipesLunchboxFeeding.class, shapelessCategory, shapelessDependency);
 		RecipeSorter.register(Reference.RESOURCE_PREFIX + "upgrading", RecipesUpgrading.class, shapelessCategory, shapelessDependency);
 		
-		GameRegistry.addRecipe(new RecipesCombinedCombining());
-		GameRegistry.addRecipe(new RecipesCombinedCreating());
-		GameRegistry.addRecipe(new RecipesCombining());
-		GameRegistry.addRecipe(new RecipesLunchboxDyeing());
-		GameRegistry.addRecipe(new RecipesLunchboxFeeding());
-		GameRegistry.addRecipe(new RecipesUpgrading());
+		/* GameRegistry.addRecipe(new RecipesCombinedCombining());
+		 * GameRegistry.addRecipe(new RecipesCombinedCreating());
+		 * GameRegistry.addRecipe(new RecipesCombining());
+		 * GameRegistry.addRecipe(new RecipesLunchboxDyeing());
+		 * GameRegistry.addRecipe(new RecipesLunchboxFeeding());
+		 * GameRegistry.addRecipe(new RecipesUpgrading()); */
 		
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 0), "qdq", "igi", "qdq", 'q', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 0), 'd', new ItemStack(Items.DIAMOND, 1, 0), 'i', new ItemStack(Items.IRON_INGOT), 'g', new ItemStack(Items.GOLDEN_APPLE));
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 1), "gdg", "nen", "gdg", 'g', new ItemStack(Blocks.GOLD_BLOCK, 1, 0), 'd', new ItemStack(Blocks.DIAMOND_BLOCK, 1, 0), 'n', new ItemStack(Items.NETHER_STAR), 'e', new ItemStack(Items.GOLDEN_APPLE));
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.lunchbox, 1, 0), " s ", "iii", "cgb", 's', new ItemStack(Items.STICK), 'i', new ItemStack(Items.IRON_INGOT), 'c', new ItemStack(Items.CARROT), 'g', new ItemStack(Items.GOLDEN_APPLE), 'b', new ItemStack(Items.BREAD));
-		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.magicChest), "ccc", "cnc", "ccc", 'c', new ItemStack(Blocks.CHEST), 'n', new ItemStack(Items.NETHER_STAR));
-		GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.displayTable), "ccc", "w w", "w w", 'c', new ItemStack(Blocks.CRAFTING_TABLE), 'w', new ItemStack(Blocks.PLANKS));
+		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 0), 3, 3, Blocks.QUARTZ_BLOCK, Items.DIAMOND, Blocks.QUARTZ_BLOCK, Items.IRON_INGOT, Items.GOLDEN_APPLE, Items.IRON_INGOT, Blocks.QUARTZ_BLOCK, Items.DIAMOND, Blocks.QUARTZ_BLOCK);
+		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.heartCanister, 1, 1), 3, 3, Blocks.GOLD_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.GOLD_BLOCK, Items.NETHER_STAR, Items.GOLDEN_APPLE, Items.NETHER_STAR, Blocks.GOLD_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.GOLD_BLOCK);
+		RecipeHelper.addShapedRecipe(new ItemStack(ModItems.lunchbox, 1, 0), 3, 3, ItemStack.EMPTY, Items.STICK, ItemStack.EMPTY, Items.IRON_INGOT, Items.IRON_INGOT, Items.IRON_INGOT, Items.CARROT, Items.GOLDEN_APPLE, Items.BREAD);
+		RecipeHelper.addShapedRecipe(new ItemStack(ModBlocks.magicChest), 3, 3, Blocks.CHEST, Blocks.CHEST, Blocks.CHEST, Blocks.CHEST, Items.NETHER_STAR, Blocks.CHEST, Blocks.CHEST, Blocks.CHEST, Blocks.CHEST);
+		RecipeHelper.addShapedRecipe(new ItemStack(ModBlocks.displayTable), 3, 3, Blocks.CRAFTING_TABLE, Blocks.CRAFTING_TABLE, Blocks.CRAFTING_TABLE, Blocks.PLANKS, ItemStack.EMPTY, Blocks.PLANKS, Blocks.PLANKS, ItemStack.EMPTY, Blocks.PLANKS);
 		
 		ArrayList<ItemStack> UpgradeComponents = new ArrayList<ItemStack>() {
 			private static final long serialVersionUID = -4349640254907860210L;

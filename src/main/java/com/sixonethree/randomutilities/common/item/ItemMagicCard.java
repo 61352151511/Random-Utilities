@@ -5,8 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -27,7 +30,7 @@ public class ItemMagicCard extends ItemBase {
 	
 	/* Overridden */
 	
-	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String signers1 = this.tagOrDefault(stack, NBTTagKeys.MAGIC_CARD_SIGNERS, "");
 		String[] signers = signers1.split(";");
 		tooltip.add("Signers: ");

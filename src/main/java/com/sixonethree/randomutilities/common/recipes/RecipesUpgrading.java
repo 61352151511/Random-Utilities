@@ -17,12 +17,20 @@ import net.minecraftforge.common.ForgeHooks;
 public class RecipesUpgrading implements IRecipe {
 	private ItemStack result = ItemStack.EMPTY;
 	
-	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
-	@Override public ItemStack getRecipeOutput() { return this.result; }
-	@Override public int getRecipeSize() { return 10; }
+	@Override public ItemStack getCraftingResult(InventoryCrafting window) {
+		return this.result.copy();
+	}
+	
+	@Override public ItemStack getRecipeOutput() {
+		return this.result;
+	}
+	
+	@Override public boolean func_194133_a(int p_194133_1_, int p_194133_2_) {
+		return p_194133_1_ >= 3 && p_194133_2_ >= 3;
+	}
 	
 	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack> withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 		
 		for (int i = 0; i < nonnulllist.size(); i ++) {
 			nonnulllist.set(i, ForgeHooks.getContainerItem(inv.getStackInSlot(i)));
@@ -56,16 +64,22 @@ public class RecipesUpgrading implements IRecipe {
 			}
 		}
 		if (u == 1 && n == 1 && b == 1 && !upgrade.isEmpty()) {
-			byte t = (byte) (upgrade.getItem() == ModItems.lunchbox ? 1 : 0); // 1 Lunchbox, 0 Heart Canister
+			byte t = (byte) (upgrade.getItem() == ModItems.lunchbox ? 1 : 0); // 1
+			                                                                  // Lunchbox,
+			                                                                  // 0
+			                                                                  // Heart
+			                                                                  // Canister
 			float fs, mfs, hs, mhs;
 			fs = mfs = hs = mhs = 0F;
 			int c = -1;
 			ILunchbox cast1 = null;
 			IHeartCanister cast2 = null;
-			try { cast1 = (ILunchbox) upgrade.getItem(); }
-			catch (ClassCastException e) {}
-			try { cast2 = (IHeartCanister) upgrade.getItem(); }
-			catch (ClassCastException e) {}
+			try {
+				cast1 = (ILunchbox) upgrade.getItem();
+			} catch (ClassCastException e) {}
+			try {
+				cast2 = (IHeartCanister) upgrade.getItem();
+			} catch (ClassCastException e) {}
 			if (cast1 != null) {
 				fs += cast1.getCurrentFoodStorage(upgrade);
 				mfs += cast1.getMaxFoodStorage(upgrade);

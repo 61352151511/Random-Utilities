@@ -1,14 +1,14 @@
 package com.sixonethree.randomutilities.client.gui;
 
+import com.sixonethree.randomutilities.common.container.ContainerDisplayTable;
+import com.sixonethree.randomutilities.common.container.ContainerMagicChest;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
-
-import com.sixonethree.randomutilities.common.container.ContainerDisplayTable;
-import com.sixonethree.randomutilities.common.container.ContainerMagicChest;
 
 // TODO Clean this up
 public class GuiManager extends GuiContainer {
@@ -36,8 +36,10 @@ public class GuiManager extends GuiContainer {
 			this.guiResourceList = guiResourceList;
 		}
 		
-		public static GuiManager buildGUI(GUI type, IInventory playerInventory, IInventory source) { return new GuiManager(type, playerInventory, source); }
-
+		public static GuiManager buildGUI(GUI type, IInventory playerInventory, IInventory source) {
+			return new GuiManager(type, playerInventory, source);
+		}
+		
 		protected Container makeContainer(GUI type, IInventory player, IInventory chest) {
 			if (type == MAGIC) return new ContainerMagicChest(player, chest, xSize, ySize);
 			if (type == DISPLAYTABLE) return new ContainerDisplayTable(player, chest, xSize, ySize);
@@ -58,7 +60,7 @@ public class GuiManager extends GuiContainer {
 	}
 	
 	@Override protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		if (this.type == GUI.MAGIC) this.fontRendererObj.drawString(I18n.format(this.chest.getDisplayName().getFormattedText(), new Object[0]), 8, 6, 4210752);
+		if (this.type == GUI.MAGIC) this.fontRenderer.drawString(I18n.format(this.chest.getDisplayName().getFormattedText(), new Object[0]), 8, 6, 4210752);
 	}
 	
 	@Override protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {

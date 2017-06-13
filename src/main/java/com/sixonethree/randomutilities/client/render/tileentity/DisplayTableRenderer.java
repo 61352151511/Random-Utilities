@@ -22,9 +22,9 @@ public class DisplayTableRenderer extends TileEntitySpecialRenderer<TileEntityDi
 	
 	/* Overridden */
 	
-	@Override public void renderTileEntityAt(TileEntityDisplayTable displayTable, double x, double y, double z, float partialTicks, int destroyStage) {
+	@Override public void func_192841_a(TileEntityDisplayTable displayTable, double x, double y, double z, float partialTicks, int destroyStage, float p_192841_10_) {
 		EnumFacing facing = displayTable.getFacing();
-
+		
 		/* RENDER THE ITEMS ON TOP */
 		
 		GlStateManager.pushMatrix();

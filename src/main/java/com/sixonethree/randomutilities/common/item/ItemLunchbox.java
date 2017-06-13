@@ -2,15 +2,17 @@ package com.sixonethree.randomutilities.common.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -34,7 +36,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 	
 	/* Overridden */
 	
-	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	@Override @SideOnly(Side.CLIENT) public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(TextFormatting.AQUA + I18n.format("tooltip.lunchbox.stores"));
 		float storedFood = this.getCurrentFoodStorage(stack);
 		float maximum = this.getMaxFoodStorage(stack);
@@ -52,9 +54,9 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT;
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(itemIn, 1, 0));
-		subItems.add(new ItemStack(itemIn, 1, 1));
+	@Override @SideOnly(Side.CLIENT) public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		subItems.add(new ItemStack(this, 1, 0));
+		subItems.add(new ItemStack(this, 1, 1));
 	}
 	
 	@Override public String getUnlocalizedName(ItemStack stack) {

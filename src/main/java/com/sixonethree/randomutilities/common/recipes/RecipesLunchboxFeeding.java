@@ -17,12 +17,20 @@ import net.minecraftforge.common.ForgeHooks;
 public class RecipesLunchboxFeeding implements IRecipe {
 	private ItemStack result = ItemStack.EMPTY;
 	
-	@Override public ItemStack getCraftingResult(InventoryCrafting window) { return this.result.copy(); }
-	@Override public ItemStack getRecipeOutput() { return this.result; }
-	@Override public int getRecipeSize() { return 10; }
+	@Override public ItemStack getCraftingResult(InventoryCrafting window) {
+		return this.result.copy();
+	}
+	
+	@Override public ItemStack getRecipeOutput() {
+		return this.result;
+	}
+	
+	@Override public boolean func_194133_a(int p_194133_1_, int p_194133_2_) {
+		return p_194133_1_ >= 3 && p_194133_2_ >= 3;
+	}
 	
 	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack>withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		NonNullList<ItemStack> nonnulllist = NonNullList.<ItemStack> withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 		
 		for (int i = 0; i < nonnulllist.size(); i ++) {
 			nonnulllist.set(i, ForgeHooks.getContainerItem(inv.getStackInSlot(i)));
@@ -58,10 +66,12 @@ public class RecipesLunchboxFeeding implements IRecipe {
 			tag = this.result.getTagCompound();
 			ILunchbox cast1 = null;
 			IHeartCanister cast2 = null;
-			try { cast1 = (ILunchbox) s.getItem(); }
-			catch (ClassCastException e) {}
-			try { cast2 = (IHeartCanister) s.getItem(); }
-			catch (ClassCastException e) {}
+			try {
+				cast1 = (ILunchbox) s.getItem();
+			} catch (ClassCastException e) {}
+			try {
+				cast2 = (IHeartCanister) s.getItem();
+			} catch (ClassCastException e) {}
 			float fs, mfs, hs, mhs;
 			fs = mfs = hs = mhs = 0F;
 			int c = -1;

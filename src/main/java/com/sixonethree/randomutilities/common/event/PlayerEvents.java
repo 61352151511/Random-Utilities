@@ -47,8 +47,8 @@ public class PlayerEvents {
 			Entity ent = event.getEntity();
 			if (ent instanceof EntityItem) {
 				EntityItem drop = (EntityItem) ent;
-				if (!drop.getEntityItem().isEmpty()) {
-					if (drop.getEntityItem().getItem() == Items.PAPER) {
+				if (!drop.getItem().isEmpty()) {
+					if (drop.getItem().getItem() == Items.PAPER) {
 						boolean switchItem = false;
 						for (int x = -1; x <= 1; x ++) {
 							for (int y = -1; y <= 1; y ++) {
@@ -61,13 +61,13 @@ public class PlayerEvents {
 							}
 						}
 						if (switchItem) {
-							drop.setEntityItemStack(new ItemStack(ModItems.magicCard));
+							drop.setItem(new ItemStack(ModItems.magicCard));
 						}
 					}
 				}
 			}
 		}
-    }
+	}
 	
 	@SubscribeEvent public void onPlayerInteract(PlayerInteractEvent event) {
 		EntityPlayer player = event.getEntityPlayer();

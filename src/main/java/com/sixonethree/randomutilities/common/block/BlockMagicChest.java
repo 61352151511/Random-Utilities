@@ -43,7 +43,7 @@ public class BlockMagicChest extends BlockContainerBase {
 				float f1 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				float f2 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				EntityItem entityitem = new EntityItem(worldIn, (float) pos.getX() + f, (float) pos.getY() + 1 + f1, (float) pos.getZ() + f2, new ItemStack(stack.getItem(), stack.getCount(), stack.getItemDamage()));
-				if (stack.hasTagCompound()) entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+				if (stack.hasTagCompound()) entityitem.getItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
 				worldIn.spawnEntity(entityitem);
 			}
 			stack = te.getStackInSlot(1);
@@ -52,7 +52,7 @@ public class BlockMagicChest extends BlockContainerBase {
 				float f1 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				float f2 = worldIn.rand.nextFloat() * 0.8F + 0.1F;
 				EntityItem entityitem = new EntityItem(worldIn, (float) pos.getX() + f, (float) pos.getY() + 1 + f1, (float) pos.getZ() + f2, new ItemStack(stack.getItem(), stack.getCount(), stack.getItemDamage()));
-				if (stack.hasTagCompound()) entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+				if (stack.hasTagCompound()) entityitem.getItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
 				worldIn.spawnEntity(entityitem);
 			}
 		}
