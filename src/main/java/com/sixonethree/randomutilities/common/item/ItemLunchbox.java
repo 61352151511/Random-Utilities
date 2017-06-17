@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.sixonethree.randomutilities.common.creativetab.CreativeTab;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 import net.minecraft.client.resources.I18n;
@@ -30,6 +31,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 	
 	public ItemLunchbox() {
 		super();
+		this.setCreativeTab(CreativeTab.RANDOM_UTILITIES);
 		this.setHasSubtypes(true);
 		this.setNames("lunchbox");
 	}
@@ -55,6 +57,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (!this.isInCreativeTab(tab)) return;
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
 	}

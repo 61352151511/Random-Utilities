@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.sixonethree.randomutilities.common.creativetab.CreativeTab;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,6 +26,7 @@ public class ItemMagicCard extends ItemBase {
 	
 	public ItemMagicCard() {
 		super();
+		this.setCreativeTab(CreativeTab.RANDOM_UTILITIES);
 		this.setNames("magic_card");
 	}
 	

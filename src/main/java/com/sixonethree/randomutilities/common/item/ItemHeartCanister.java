@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.sixonethree.randomutilities.common.creativetab.CreativeTab;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 import net.minecraft.client.resources.I18n;
@@ -27,6 +28,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	
 	public ItemHeartCanister() {
 		super();
+		this.setCreativeTab(CreativeTab.RANDOM_UTILITIES);
 		this.setHasSubtypes(true);
 		this.setNames("heart_canister");
 	}
@@ -55,6 +57,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 	}
 	
 	@Override @SideOnly(Side.CLIENT) public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (!this.isInCreativeTab(tab)) return;
 		for (int i = 0; i <= 3; i ++)
 			subItems.add(new ItemStack(this, 1, i));
 	}

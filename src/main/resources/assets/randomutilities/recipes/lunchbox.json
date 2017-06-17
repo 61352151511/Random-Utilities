@@ -16,13 +16,15 @@
 	  "item": "minecraft:carrot"
 	},
 	"G": {
-	  "item": "minecraft:golden_apple"
+	  "item": "minecraft:golden_apple",
+      "data": 0
 	},
 	"B": {
 	  "item": "minecraft:bread"
 	}
   },
   "result": {
-    "item": "randomutilities:lunchbox"
+    "item": "randomutilities:lunchbox",
+    "data": 0
   }
 }

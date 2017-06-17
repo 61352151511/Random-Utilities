@@ -16,8 +16,9 @@
 	  "item": "minecraft:nether_star"
 	},
 	"A": {
-	  "item": "minecraft:golden_apple"
-	}
+	  "item": "minecraft:golden_apple",
+      "data": 0
+    }
   },
   "result": {
     "item": "randomutilities:heart_canister",

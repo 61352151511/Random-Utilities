@@ -1,6 +1,5 @@
 package com.sixonethree.randomutilities.common.item;
 
-import com.sixonethree.randomutilities.common.creativetab.CreativeTab;
 import com.sixonethree.randomutilities.reference.Reference;
 
 import net.minecraft.item.Item;
@@ -14,7 +13,6 @@ public class ItemBase extends Item {
 	
 	public ItemBase() {
 		super();
-		this.setCreativeTab(CreativeTab.RANDOM_UTILITIES);
 		this.setMaxStackSize(1);
 		this.setNoRepair();
 	}

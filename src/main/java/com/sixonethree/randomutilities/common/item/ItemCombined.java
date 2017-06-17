@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.sixonethree.randomutilities.common.creativetab.CreativeTab;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 import net.minecraft.client.resources.I18n;
@@ -22,6 +23,7 @@ public class ItemCombined extends ItemBase implements ILunchbox, IHeartCanister 
 	
 	public ItemCombined() {
 		super();
+		this.setCreativeTab(CreativeTab.RANDOM_UTILITIES);
 		this.setNames("combined");
 	}
 	
