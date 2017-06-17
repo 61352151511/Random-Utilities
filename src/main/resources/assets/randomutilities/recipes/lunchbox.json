@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "III",
+    "CGB"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+	"I": {
+	  "item": "minecraft:iron_ingot"
+	},
+	"C": {
+	  "item": "minecraft:carrot"
+	},
+	"G": {
+	  "item": "minecraft:golden_apple"
+	},
+	"B": {
+	  "item": "minecraft:bread"
+	}
+  },
+  "result": {
+    "item": "randomutilities:lunchbox"
+  }
+}

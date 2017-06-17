@@ -20,7 +20,7 @@ public class MagicChestRenderer extends TileEntitySpecialRenderer<TileEntityMagi
 	
 	/* Overridden */
 	
-	@Override public void func_192841_a(TileEntityMagicChest magicChest, double x, double y, double z, float partialTicks, int destroyStage, float p_192841_10_) {
+	@Override public void render(TileEntityMagicChest magicChest, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		
 		/* RENDER THE INSIDE */
 		

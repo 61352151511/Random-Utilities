@@ -10,7 +10,7 @@ public class GuiFactory implements IModGuiFactory {
 	
 	/* Overridden */
 	
-	@Override public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
+	@Override @Deprecated public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
 	

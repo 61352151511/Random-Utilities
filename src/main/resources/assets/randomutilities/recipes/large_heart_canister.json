@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GDG",
+    "NAN",
+    "GDG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+	"D": {
+	  "item": "minecraft:diamond_block"
+	},
+	"N": {
+	  "item": "minecraft:nether_star"
+	},
+	"A": {
+	  "item": "minecraft:golden_apple"
+	}
+  },
+  "result": {
+    "item": "randomutilities:heart_canister",
+	"data": 1
+  }
+}

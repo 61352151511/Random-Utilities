@@ -4,6 +4,7 @@ import com.sixonethree.randomutilities.common.init.ModItems;
 import com.sixonethree.randomutilities.common.item.IHeartCanister;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
+import com.sixonethree.randomutilities.reference.Reference;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -11,11 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class RecipesUpgrading implements IRecipe {
 	private ItemStack result = ItemStack.EMPTY;
+	private ResourceLocation registryName = new ResourceLocation(Reference.MOD_ID, "recipe_upgrading");
 	
 	@Override public ItemStack getCraftingResult(InventoryCrafting window) {
 		return this.result.copy();
@@ -23,10 +26,6 @@ public class RecipesUpgrading implements IRecipe {
 	
 	@Override public ItemStack getRecipeOutput() {
 		return this.result;
-	}
-	
-	@Override public boolean func_194133_a(int p_194133_1_, int p_194133_2_) {
-		return p_194133_1_ >= 3 && p_194133_2_ >= 3;
 	}
 	
 	@Override public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
@@ -101,5 +100,22 @@ public class RecipesUpgrading implements IRecipe {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override public IRecipe setRegistryName(ResourceLocation name) {
+		this.setRegistryName(name);
+		return this;
+	}
+	
+	@Override public ResourceLocation getRegistryName() {
+		return registryName;
+	}
+	
+	@Override public Class<IRecipe> getRegistryType() {
+		return IRecipe.class;
+	}
+	
+	@Override public boolean canFit(int width, int height) {
+		return width >= 2 && height >= 2;
 	}
 }
