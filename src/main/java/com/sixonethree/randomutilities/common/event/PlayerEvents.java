@@ -2,7 +2,7 @@ package com.sixonethree.randomutilities.common.event;
 
 import java.util.List;
 
-import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.reference.CommandReference.AfkPlayers;
 import com.sixonethree.randomutilities.utility.homewarp.HomePoint;
 import com.sixonethree.randomutilities.utility.homewarp.SaveFile;
@@ -61,7 +61,7 @@ public class PlayerEvents {
 							}
 						}
 						if (switchItem) {
-							drop.setItem(new ItemStack(ModItems.magicCard));
+							drop.setItem(new ItemStack(ModRegistry.magicCard));
 						}
 					}
 				}

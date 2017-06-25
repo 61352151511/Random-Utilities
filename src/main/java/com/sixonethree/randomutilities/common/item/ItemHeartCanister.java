@@ -56,7 +56,7 @@ public class ItemHeartCanister extends ItemBase implements IHeartCanister {
 		tooltip.add(I18n.format("tooltip.heartcanister.stored", storedAsString, maxStorageString));
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	@Override public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		if (!this.isInCreativeTab(tab)) return;
 		for (int i = 0; i <= 3; i ++)
 			subItems.add(new ItemStack(this, 1, i));

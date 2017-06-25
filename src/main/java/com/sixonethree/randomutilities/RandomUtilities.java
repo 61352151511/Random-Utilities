@@ -2,8 +2,6 @@ package com.sixonethree.randomutilities;
 
 import com.sixonethree.randomutilities.common.handler.ConfigurationHandler;
 import com.sixonethree.randomutilities.common.init.Commands;
-import com.sixonethree.randomutilities.common.init.ModBlocks;
-import com.sixonethree.randomutilities.common.init.ModItems;
 import com.sixonethree.randomutilities.common.init.Recipes;
 import com.sixonethree.randomutilities.proxy.ServerProxy;
 import com.sixonethree.randomutilities.reference.Reference;
@@ -23,9 +21,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY) public static ServerProxy proxy;
 	
 	@Mod.EventHandler public void preInit(FMLPreInitializationEvent event) {
-		ModBlocks.init();
-		ModItems.init();
-		
 		proxy.preInit(event);
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		MinecraftForge.EVENT_BUS.register(new ConfigurationHandler());
@@ -37,13 +32,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 		proxy.init(event);
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-		Recipes.init();
 		LogHelper.info("Init Complete");
 	}
 	
 	@Mod.EventHandler public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
-		Recipes.initLunchboxRecipes();
 		LogHelper.info("Post-Init Complete");
 	}
 	

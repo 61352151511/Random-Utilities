@@ -56,7 +56,7 @@ public class ItemLunchbox extends ItemBase implements ILunchbox {
 		return this.isLunchboxAutomatic(stack) ? EnumAction.NONE : EnumAction.EAT;
 	}
 	
-	@Override @SideOnly(Side.CLIENT) public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+	@Override public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		if (!this.isInCreativeTab(tab)) return;
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));

@@ -1,6 +1,6 @@
 package com.sixonethree.randomutilities.common.recipes;
 
-import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.common.item.IHeartCanister;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
@@ -46,7 +46,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
+				if (stack.getItem() == ModRegistry.lunchbox || stack.getItem() == ModRegistry.combined) {
 					s = stack;
 					l ++;
 				} else {
@@ -97,7 +97,7 @@ public class RecipesLunchboxFeeding implements IRecipe {
 				tag.setFloat(NBTTagKeys.CURRENT_FOOD_STORED, fs + fta);
 				tag.setFloat(NBTTagKeys.MAX_FOOD_STORED, mfs);
 				if (c > -1) tag.setInteger(NBTTagKeys.COLOR, c);
-				if (this.result.getItem() == ModItems.combined) {
+				if (this.result.getItem() == ModRegistry.combined) {
 					tag.setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, hs);
 					tag.setFloat(NBTTagKeys.MAX_HEALTH_STORED, mhs);
 				}

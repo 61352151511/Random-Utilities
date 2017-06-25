@@ -2,7 +2,7 @@ package com.sixonethree.randomutilities.common.recipes;
 
 import java.util.ArrayList;
 
-import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.common.item.IHeartCanister;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
@@ -48,11 +48,11 @@ public class RecipesCombining implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if ((m == -1 && stack.getItem() == ModItems.lunchbox) || (stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == m)) {
+				if ((m == -1 && stack.getItem() == ModRegistry.lunchbox) || (stack.getItem() == ModRegistry.lunchbox && stack.getItemDamage() == m)) {
 					l ++;
 					s.add(stack);
 					if (m == -1) m = (byte) stack.getItemDamage();
-				} else if ((m == -1 && stack.getItem() == ModItems.heartCanister) || (stack.getItem() == ModItems.heartCanister && stack.getItemDamage() == m)) {
+				} else if ((m == -1 && stack.getItem() == ModRegistry.heartCanister) || (stack.getItem() == ModRegistry.heartCanister && stack.getItemDamage() == m)) {
 					h ++;
 					s.add(stack);
 					if (m == -1) m = (byte) stack.getItemDamage();
@@ -70,18 +70,18 @@ public class RecipesCombining implements IRecipe {
 			float mhs = 0F;
 			int c = -1;
 			for (ItemStack stack : s) {
-				if (t == 1 && stack.getItem() == ModItems.lunchbox) {
+				if (t == 1 && stack.getItem() == ModRegistry.lunchbox) {
 					ILunchbox cast = (ILunchbox) stack.getItem();
 					fs += cast.getCurrentFoodStorage(stack);
 					mfs += cast.getMaxFoodStorage(stack);
 					if (c == -1 && cast.hasColor(stack)) c = cast.getColor(stack);
-				} else if (t == 0 && stack.getItem() == ModItems.heartCanister) {
+				} else if (t == 0 && stack.getItem() == ModRegistry.heartCanister) {
 					IHeartCanister cast = (IHeartCanister) stack.getItem();
 					hs += cast.getCurrentHealthStorage(stack);
 					mhs += cast.getMaxHealthStorage(stack);
 				}
 			}
-			this.result = new ItemStack(t == 0 ? ModItems.heartCanister : ModItems.lunchbox, 1, s.get(0).getItemDamage());
+			this.result = new ItemStack(t == 0 ? ModRegistry.heartCanister : ModRegistry.lunchbox, 1, s.get(0).getItemDamage());
 			NBTTagCompound tag = new NBTTagCompound();
 			if (t == 0) tag.setFloat(NBTTagKeys.CURRENT_HEALTH_STORED, hs);
 			if (t == 0) tag.setFloat(NBTTagKeys.MAX_HEALTH_STORED, mhs);

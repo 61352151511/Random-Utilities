@@ -1,6 +1,6 @@
 package com.sixonethree.randomutilities.common.recipes;
 
-import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.reference.Reference;
 
@@ -45,7 +45,7 @@ public class RecipesLunchboxDyeing implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (stack.getItem() == ModItems.lunchbox || stack.getItem() == ModItems.combined) {
+				if (stack.getItem() == ModRegistry.lunchbox || stack.getItem() == ModRegistry.combined) {
 					s = stack;
 					l ++;
 				} else if (stack.getItem() == Items.DYE) {

@@ -1,6 +1,6 @@
 package com.sixonethree.randomutilities.common.recipes;
 
-import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.common.item.IHeartCanister;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
@@ -47,10 +47,10 @@ public class RecipesUpgrading implements IRecipe {
 		for (int i = 0; i < window.getSizeInventory(); i ++) {
 			ItemStack stack = window.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (u == 0 && stack.getItem() == ModItems.heartCanister && stack.getItemDamage() < 2) {
+				if (u == 0 && stack.getItem() == ModRegistry.heartCanister && stack.getItemDamage() < 2) {
 					u ++;
 					upgrade = stack;
-				} else if (u == 0 && stack.getItem() == ModItems.lunchbox && stack.getItemDamage() == 0) {
+				} else if (u == 0 && stack.getItem() == ModRegistry.lunchbox && stack.getItemDamage() == 0) {
 					u ++;
 					upgrade = stack;
 				} else if (stack.getItem() == Items.NETHER_STAR) {
@@ -63,7 +63,7 @@ public class RecipesUpgrading implements IRecipe {
 			}
 		}
 		if (u == 1 && n == 1 && b == 1 && !upgrade.isEmpty()) {
-			byte t = (byte) (upgrade.getItem() == ModItems.lunchbox ? 1 : 0); // 1
+			byte t = (byte) (upgrade.getItem() == ModRegistry.lunchbox ? 1 : 0); // 1
 			                                                                  // Lunchbox,
 			                                                                  // 0
 			                                                                  // Heart

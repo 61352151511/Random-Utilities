@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.sixonethree.randomutilities.common.container.ContainerMagicChest;
-import com.sixonethree.randomutilities.common.init.ModBlocks;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.common.item.ILunchbox;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 import com.sixonethree.randomutilities.utility.LogHelper;
@@ -122,7 +122,7 @@ public class TileEntityMagicChest extends TileEntityLockableLoot implements ITic
 	
 	@Override public void closeInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.magicChest, 1, 0);
+		this.world.addBlockEvent(this.pos, ModRegistry.magicChest, 1, 0);
 	}
 	
 	@Override public ITextComponent getDisplayName() {
@@ -150,7 +150,7 @@ public class TileEntityMagicChest extends TileEntityLockableLoot implements ITic
 	
 	@Override public void openInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.magicChest, 1, 1);
+		this.world.addBlockEvent(this.pos, ModRegistry.magicChest, 1, 1);
 	}
 	
 	/* ISidedInventory */

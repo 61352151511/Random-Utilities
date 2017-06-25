@@ -7,8 +7,7 @@ import com.sixonethree.randomutilities.client.render.tileentity.DisplayTableRend
 import com.sixonethree.randomutilities.client.render.tileentity.MagicChestRenderer;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityDisplayTable;
 import com.sixonethree.randomutilities.common.block.tile.TileEntityMagicChest;
-import com.sixonethree.randomutilities.common.init.ModBlocks;
-import com.sixonethree.randomutilities.common.init.ModItems;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -22,23 +21,33 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends ServerProxy {
-	@Override public void preInit(FMLPreInitializationEvent event) {
-		super.preInit(event);
-		this.registerRenderersPreInit();
-	}
-	
-	@Override public void init(FMLInitializationEvent event) {
-		super.init(event);
-		this.registerRenderersInit();
+	@Override public void registerModels() {
+		this.registerItem(ModRegistry.lunchbox, 0);
+		this.registerItem(ModRegistry.lunchbox, 1);
+		this.registerItem(ModRegistry.heartCanister, 0);
+		this.registerItem(ModRegistry.heartCanister, 1);
+		this.registerItem(ModRegistry.heartCanister, 2);
+		this.registerItem(ModRegistry.heartCanister, 3);
+		this.registerItem(ModRegistry.combined);
+		this.registerItem(ModRegistry.magicCard);
+		this.registerBlock(ModRegistry.magicChest);
+		this.registerBlock(ModRegistry.displayTable);
+		
+		TileEntitySpecialRenderer<TileEntityDisplayTable> dtr = new DisplayTableRenderer(Minecraft.getMinecraft().getRenderManager());
+		TileEntitySpecialRenderer<TileEntityMagicChest> mcr = new MagicChestRenderer(Minecraft.getMinecraft().getRenderManager());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicChest.class, mcr);
 	}
 	
 	@Override public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.lunchbox, ModRegistry.lunchbox);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.heartCanister, ModRegistry.heartCanister);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.combined, ModRegistry.combined);
 	}
 	
 	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -53,29 +62,6 @@ public class ClientProxy extends ServerProxy {
 		return FMLClientHandler.instance().getClient().world;
 	}
 	
-	private void registerRenderersPreInit() {
-		this.registerItem(ModItems.lunchbox, 0);
-		this.registerItem(ModItems.lunchbox, 1);
-		this.registerItem(ModItems.heartCanister, 0);
-		this.registerItem(ModItems.heartCanister, 1);
-		this.registerItem(ModItems.heartCanister, 2);
-		this.registerItem(ModItems.heartCanister, 3);
-		this.registerItem(ModItems.combined);
-		this.registerItem(ModItems.magicCard);
-		this.registerBlock(ModBlocks.magicChest);
-		this.registerBlock(ModBlocks.displayTable);
-	}
-	
-	private void registerRenderersInit() {
-		TileEntitySpecialRenderer<TileEntityDisplayTable> dtr = new DisplayTableRenderer(Minecraft.getMinecraft().getRenderManager());
-		TileEntitySpecialRenderer<TileEntityMagicChest> mcr = new MagicChestRenderer(Minecraft.getMinecraft().getRenderManager());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayTable.class, dtr);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMagicChest.class, mcr);
-		
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.lunchbox, ModItems.lunchbox);
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.heartCanister, ModItems.heartCanister);
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(RandomUtilitiesItemColors.combined, ModItems.combined);
-	}
 	
 	private void registerBlock(Block block) {
 		this.registerItem(Item.getItemFromBlock(block));

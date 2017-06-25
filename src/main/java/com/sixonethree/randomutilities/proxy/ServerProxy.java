@@ -30,6 +30,8 @@ public class ServerProxy implements IGuiHandler {
 	
 	public void postInit(FMLPostInitializationEvent event) {}
 	
+	public void registerModels() {}
+	
 	@Override public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return null;
 	}

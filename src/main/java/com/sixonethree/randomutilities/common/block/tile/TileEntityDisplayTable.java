@@ -3,7 +3,7 @@ package com.sixonethree.randomutilities.common.block.tile;
 import javax.annotation.Nullable;
 
 import com.sixonethree.randomutilities.common.container.ContainerDisplayTable;
-import com.sixonethree.randomutilities.common.init.ModBlocks;
+import com.sixonethree.randomutilities.common.init.ModRegistry;
 import com.sixonethree.randomutilities.reference.NBTTagKeys;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,7 +90,7 @@ public class TileEntityDisplayTable extends TileEntityLockableLoot implements IT
 	
 	@Override public void closeInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.displayTable, 1, 0);
+		this.world.addBlockEvent(this.pos, ModRegistry.displayTable, 1, 0);
 	}
 	
 	@Override public ITextComponent getDisplayName() {
@@ -111,7 +111,7 @@ public class TileEntityDisplayTable extends TileEntityLockableLoot implements IT
 	
 	@Override public void openInventory(EntityPlayer player) {
 		if (this.world == null) return;
-		this.world.addBlockEvent(this.pos, ModBlocks.displayTable, 1, 1);
+		this.world.addBlockEvent(this.pos, ModRegistry.displayTable, 1, 1);
 	}
 	
 	@Override public boolean isEmpty() {
